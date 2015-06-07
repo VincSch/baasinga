@@ -13,6 +13,7 @@
         <module>repository</module>
         <module>service</module>
         <module>web</module>
+        <module>datarestex</module>
     </modules>
     <name>Baasinga Core Artifact</name>
 

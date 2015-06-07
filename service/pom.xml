@@ -13,8 +13,14 @@
     <artifactId>service</artifactId>
     <properties>
         <baasinga.repository>1.0-SNAPSHOT</baasinga.repository>
+        <spring.context>4.1.6.RELEASE</spring.context>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.context}</version>
+        </dependency>
         <dependency>
             <groupId>com.stroodel</groupId>
             <artifactId>repository</artifactId>
