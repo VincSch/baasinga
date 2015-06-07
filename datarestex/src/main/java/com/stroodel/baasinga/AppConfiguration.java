@@ -1,11 +1,9 @@
 package com.stroodel.baasinga;
 
-;
-
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -15,36 +13,27 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Configuration
-@EnableTransactionManagement
-public class InfrastructureConfig {
+import javax.sql.DataSource;
 
-    /**
-     * Bootstraps an in-memory HSQL database.
-     *
-     * @return
-     * @see http
-     * ://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/html/jdbc.html#jdbc-embedded-database
-     * -support
-     */
+@Configuration
+@ComponentScan
+@EnableJpaRepositories
+@EnableTransactionManagement
+public class AppConfiguration {
+
     @Bean
     public DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
         return builder.setType(EmbeddedDatabaseType.HSQL).build();
     }
 
-    /**
-     * Sets up a {@link LocalContainerEntityManagerFactoryBean} to use Hibernate. Activates picking up entities from the
-     * project's base package.
-     *
-     * @return
-     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabase(Database.HSQL);
         vendorAdapter.setGenerateDdl(true);
+        vendorAdapter.setShowSql(true);
+
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
@@ -54,12 +43,11 @@ public class InfrastructureConfig {
         return factory;
     }
 
+
     @Bean
     public PlatformTransactionManager transactionManager() {
-
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
     }
 }
-
