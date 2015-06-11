@@ -3,6 +3,7 @@ package com.stroodel.baasinga.service.compile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
@@ -16,7 +17,7 @@ import java.net.URLClassLoader;
 /**
  * Created by vs on 25.05.15.
  */
-@Component
+@Service
 public class CompileUtility {
 
     public boolean compile(){
@@ -25,7 +26,7 @@ public class CompileUtility {
 
 // Save source in .java file.
         File folder = null;
-        folder = new FileSystemResource("/Users/vs/code").getFile();
+        folder = new FileSystemResource("/Users/vs/codee").getFile();
 
         File[] listOfFiles = folder.listFiles();
         File root = new File(folder.getPath()); // On Windows running on C:\, this is C:\java.

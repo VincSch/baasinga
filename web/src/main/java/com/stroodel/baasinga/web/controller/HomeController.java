@@ -1,6 +1,7 @@
 package com.stroodel.baasinga.web.controller;
 
 import com.stroodel.baasinga.service.compile.CompileUtility;
+import com.stroodel.baasinga.service.compile.Terminal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,11 +18,13 @@ public class HomeController {
 
     @Autowired
     CompileUtility compileUtility;
+    @Autowired
+    Terminal terminal;
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
         model.addAttribute("title", "Hello world!");
-        compileUtility.compile();
+        terminal.mvnCleanInstall("/Users/vs/release/baasinga");
         return "home";
     }
 

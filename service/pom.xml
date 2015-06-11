@@ -14,6 +14,7 @@
     <properties>
         <baasinga.repository>1.0-SNAPSHOT</baasinga.repository>
         <spring.context>4.1.6.RELEASE</spring.context>
+        <slf4j.version>1.7.12</slf4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -25,6 +26,14 @@
             <groupId>com.stroodel</groupId>
             <artifactId>repository</artifactId>
             <version>${baasinga.repository}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
     </dependencies>
 </project>
