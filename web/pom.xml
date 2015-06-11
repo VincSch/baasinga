@@ -40,10 +40,5 @@
             <artifactId>service</artifactId>
             <version>${baasinga.service}</version>
         </dependency>
-        <dependency>
-            <groupId>com.stroodel</groupId>
-            <artifactId>spring-data-rest-ex</artifactId>
-            <version>${baasinga.service}</version>
-        </dependency>
     </dependencies>
 </project>
