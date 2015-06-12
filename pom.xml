@@ -16,6 +16,12 @@
     </modules>
     <name>Baasinga Core Artifact</name>
 
+    <properties>
+        <!-- loggin version -->
+        <slf4j.version>1.7.12</slf4j.version>
+        <project.build.sourceencoding>UTF-8</project.build.sourceencoding>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <!-- Log -->
