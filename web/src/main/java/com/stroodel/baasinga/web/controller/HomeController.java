@@ -23,16 +23,21 @@ public class HomeController {
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
-        model.addAttribute("title", "Hello world!");
-        terminal.mvnCleanInstall("/Users/vs/release/baasinga");
+        model.addAttribute("title", "Prototyp Maven CLI Tests");
         return "home";
     }
 
     @RequestMapping("/list")
-    public String showList(ModelMap model) {
+    public String compile(ModelMap model) {
         model.addAttribute("title", "Hello world!");
         model.addAttribute("title2", "Hello world222222!");
         return "home2";
+    }
+
+    @RequestMapping("/compile")
+    public String compile(){
+        terminal.mvn("/Users/vs/release/baasinga/web");
+        return "home";
     }
 
 }
