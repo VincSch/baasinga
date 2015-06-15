@@ -50,4 +50,5 @@ public class AppConfiguration {
         txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
     }
+
 }

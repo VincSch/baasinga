@@ -14,6 +14,7 @@
     <properties>
         <baasinga.repository>1.0-SNAPSHOT</baasinga.repository>
         <spring.context>4.1.6.RELEASE</spring.context>
+        <slf4j.version>1.7.12</slf4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -25,6 +26,30 @@
             <groupId>com.stroodel</groupId>
             <artifactId>repository</artifactId>
             <version>${baasinga.repository}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-embedder</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.aether</groupId>
+            <artifactId>aether-connector-wagon</artifactId>
+            <version>0.9.0.M2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-http-lightweight</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 </project>
