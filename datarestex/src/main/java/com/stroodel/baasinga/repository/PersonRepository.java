@@ -1,4 +1,4 @@
-package com.stroodel.baasinga.service;
+package com.stroodel.baasinga.repository;
 
 import com.stroodel.baasinga.model.Person;
 import org.springframework.data.repository.CrudRepository;

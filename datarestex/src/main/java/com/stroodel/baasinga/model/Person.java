@@ -1,16 +1,35 @@
 package com.stroodel.baasinga.model;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 /**
  * Created by vs on 07.06.15.
  */
 
 @Entity
-public class Person extends AbstractEntity{
+public class Person extends AbstractEntity {
 
     private String name;
-    private String address;
+    private String birthday;
+    @OneToOne
+    private Address address;
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public String getName() {
         return name;
@@ -20,11 +39,4 @@ public class Person extends AbstractEntity{
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }

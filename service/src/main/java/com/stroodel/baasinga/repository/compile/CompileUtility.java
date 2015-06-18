@@ -1,8 +1,6 @@
-package com.stroodel.baasinga.service.compile;
+package com.stroodel.baasinga.repository.compile;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.tools.JavaCompiler;

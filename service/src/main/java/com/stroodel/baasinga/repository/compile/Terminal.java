@@ -1,4 +1,4 @@
-package com.stroodel.baasinga.service.compile;
+package com.stroodel.baasinga.repository.compile;
 
 import org.apache.maven.cli.MavenCli;
 import org.slf4j.LoggerFactory;

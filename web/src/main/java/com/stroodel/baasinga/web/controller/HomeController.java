@@ -1,14 +1,16 @@
 package com.stroodel.baasinga.web.controller;
 
-import com.stroodel.baasinga.service.compile.CompileUtility;
-import com.stroodel.baasinga.service.compile.Terminal;
+import com.stroodel.baasinga.repository.compile.CompileUtility;
+import com.stroodel.baasinga.repository.compile.FreeMarkerRenderer;
+import com.stroodel.baasinga.repository.compile.Terminal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.ServletContext;
 
 /**
  * Created by vs on 21.05.15.
@@ -16,10 +18,14 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
+    private final Logger LOG = LoggerFactory.getLogger(HomeController.class);
+
     @Autowired
     CompileUtility compileUtility;
     @Autowired
     Terminal terminal;
+    @Autowired
+    FreeMarkerRenderer freeMarkerRenderer;
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
@@ -37,6 +43,17 @@ public class HomeController {
     @RequestMapping("/compile")
     public String compile(){
         terminal.mvn("/Users/vs/release/baasinga/web");
+        return "home";
+    }
+
+    @Autowired
+    ServletContext servletContext;
+
+    @RequestMapping("/freemarker")
+    public String freemarker(){
+        //LOG.info(servletContext.getServerInfo());
+        String fullPath = servletContext.getRealPath("/WEB-INF/classes");
+        freeMarkerRenderer.renderClass(fullPath);
         return "home";
     }
 
