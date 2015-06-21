@@ -1,6 +1,5 @@
 package com.vschwarzer.baasinga.service.generator.engine.impl;
 
-import com.sun.tools.internal.jxc.ap.Const;
 import com.vschwarzer.baasinga.service.common.AbstractService;
 import com.vschwarzer.baasinga.service.generator.common.Constants;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
