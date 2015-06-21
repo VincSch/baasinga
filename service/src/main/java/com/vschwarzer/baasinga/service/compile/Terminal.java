@@ -1,4 +1,4 @@
-package com.stroodel.baasinga.repository.compile;
+package com.vschwarzer.baasinga.service.compile;
 
 import org.apache.maven.cli.MavenCli;
 import org.slf4j.LoggerFactory;
@@ -41,9 +41,10 @@ public class Terminal {
         }
     }
 
-    public void mvn(String path) {
+    public int mvn(String path) {
         MavenCli cli = new MavenCli();
         int result = cli.doMain(new String[]{"clean", "install", "-l /Users/vs/build.txt", "-X", "-V"}, path, System.out, System.err);
         LOG.info("Job ran with code: " + result);
+        return result;
     }
 }

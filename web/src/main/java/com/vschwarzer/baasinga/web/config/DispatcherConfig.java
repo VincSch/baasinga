@@ -1,4 +1,4 @@
-package com.stroodel.baasinga.web.config;
+package com.vschwarzer.baasinga.web.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

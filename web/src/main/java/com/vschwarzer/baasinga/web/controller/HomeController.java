@@ -1,8 +1,8 @@
-package com.stroodel.baasinga.web.controller;
+package com.vschwarzer.baasinga.web.controller;
 
-import com.stroodel.baasinga.repository.compile.CompileUtility;
-import com.stroodel.baasinga.repository.compile.FreeMarkerRenderer;
-import com.stroodel.baasinga.repository.compile.Terminal;
+import com.vschwarzer.baasinga.service.generator.ApplicationGenerator;
+import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
+import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +21,11 @@ public class HomeController {
     private final Logger LOG = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
-    CompileUtility compileUtility;
+    TemplateRenderer templateRenderer;
     @Autowired
-    Terminal terminal;
+    MavenCompiler mavenCompiler;
     @Autowired
-    FreeMarkerRenderer freeMarkerRenderer;
+    ApplicationGenerator applicationGenerator;
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
@@ -34,15 +34,15 @@ public class HomeController {
     }
 
     @RequestMapping("/list")
-    public String compile(ModelMap model) {
+    public String list(ModelMap model) {
         model.addAttribute("title", "Hello world!");
         model.addAttribute("title2", "Hello world222222!");
         return "home2";
     }
 
     @RequestMapping("/compile")
-    public String compile(){
-        terminal.mvn("/Users/vs/release/baasinga/web");
+    public String compile(ModelMap model){
+        model.addAttribute("title", "Maven mit exit code " + mavenCompiler.mvn("/Users/vs/release/baasinga/web") + " ausgeführt!");
         return "home";
     }
 
@@ -50,10 +50,20 @@ public class HomeController {
     ServletContext servletContext;
 
     @RequestMapping("/freemarker")
-    public String freemarker(){
+    public String freemarker(ModelMap model){
         //LOG.info(servletContext.getServerInfo());
         String fullPath = servletContext.getRealPath("/WEB-INF/classes");
-        freeMarkerRenderer.renderClass(fullPath);
+        templateRenderer.renderClass(fullPath);
+        model.addAttribute("title", "Template wurde generiert");
+        return "home";
+    }
+
+    @RequestMapping("/generate")
+    public String generate(ModelMap model){
+        //LOG.info(servletContext.getServerInfo());
+        String fullPath = servletContext.getRealPath("/WEB-INF/classes");
+        applicationGenerator.generateApplication(fullPath);
+        model.addAttribute("title", "App wurde generiert");
         return "home";
     }
 

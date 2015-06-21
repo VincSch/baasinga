@@ -1,7 +1,9 @@
 package com.stroodel.baasinga.model;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.util.List;
 
 /**
  * Created by vs on 07.06.15.
@@ -12,8 +14,12 @@ public class Person extends AbstractEntity {
 
     private String name;
     private String birthday;
+
     @OneToOne
     private Address address;
+
+    @OneToMany
+    private List<Contact> contacts;
 
     public String getBirthday() {
         return birthday;

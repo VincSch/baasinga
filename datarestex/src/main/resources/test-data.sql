@@ -1,1 +1,0 @@
-INSERT INTO Address (id, city, street) VALUE (1, 'Berlin', 'Hammerweg 21');

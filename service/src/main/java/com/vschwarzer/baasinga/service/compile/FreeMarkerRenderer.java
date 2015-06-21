@@ -1,10 +1,8 @@
-package com.stroodel.baasinga.repository.compile;
+package com.vschwarzer.baasinga.service.compile;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;

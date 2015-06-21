@@ -1,4 +1,4 @@
-package com.stroodel.baasinga.repository.compile;
+package com.vschwarzer.baasinga.service.compile;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
