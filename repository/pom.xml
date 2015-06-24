@@ -22,6 +22,11 @@
             <version>${spring.core.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.core.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.stroodel</groupId>
             <artifactId>domain</artifactId>
             <version>${baasinga.domain}</version>
