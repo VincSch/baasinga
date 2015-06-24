@@ -14,7 +14,7 @@
         <module>service</module>
         <module>web</module>
     </modules>
-    <name>Baasinga Core Artifact</name>
+    <name>Baasinga Artifact</name>
 
     <properties>
         <!-- loggin version -->

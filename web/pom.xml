@@ -36,7 +36,7 @@
             <version>${spring.web.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.stroodel</groupId>
+            <groupId>com.vschwarzer</groupId>
             <artifactId>service</artifactId>
             <version>${baasinga.service}</version>
         </dependency>

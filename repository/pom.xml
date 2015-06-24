@@ -27,7 +27,7 @@
             <version>${spring.core.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.stroodel</groupId>
+            <groupId>com.vschwarzer</groupId>
             <artifactId>domain</artifactId>
             <version>${baasinga.domain}</version>
         </dependency>
