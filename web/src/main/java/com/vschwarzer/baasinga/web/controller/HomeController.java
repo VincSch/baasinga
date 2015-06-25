@@ -1,5 +1,9 @@
 package com.vschwarzer.baasinga.web.controller;
 
+import com.vschwarzer.baasinga.domain.model.render.Application;
+import com.vschwarzer.baasinga.domain.model.render.Version;
+import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
+import com.vschwarzer.baasinga.repository.render.VersionDAO;
 import com.vschwarzer.baasinga.service.generator.ApplicationGenerator;
 import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
@@ -26,9 +30,24 @@ public class HomeController {
     MavenCompiler mavenCompiler;
     @Autowired
     ApplicationGenerator applicationGenerator;
+    @Autowired
+    ApplicationDAO applicationDAO;
+    @Autowired
+    VersionDAO versionDAO;
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
+        Version version = new Version();
+        version.setName("1.0");
+        version.setDescription("TestVersion");
+        versionDAO.create(version);
+
+        Application application = new Application();
+        application.setName("TestApp");
+        application.setPort(22);
+        application.setVersion(version);
+        applicationDAO.create(application);
+
         model.addAttribute("title", "Prototyp Maven CLI Tests");
         return "home";
     }

@@ -11,10 +11,10 @@ import java.util.List;
 /**
  * Entity class for a role representing the corresponding database table.
  *
- * @author <a href="mailto:s0541962@htw-berlin.de">Vincent Schwarzer</a>
+ * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
 @Entity
-@Table(name = "SYS_ROLE")
+@Table(name = "ba_role")
 public class Role extends AbstractBaseEntity {
 
     /**
@@ -41,7 +41,7 @@ public class Role extends AbstractBaseEntity {
 
     private static final long serialVersionUID = -219754255462744875L;
 
-    @Column(name = "NAME", unique = true)
+    @Column(unique = true)
     private String name;
 
     /**

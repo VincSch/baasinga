@@ -7,20 +7,18 @@ import javax.persistence.*;
 /**
  * Entity class for a user and his role/s recipes corresponding database table.
  *
- * @author <a href="mailto:s0541962@htw-berlin.de">Vincent Schwarzer</a>
+ * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
 @Entity
-@Table(name = "SYS_USER_ROLE")
+@Table(name = "ba_userrole")
 public class UserRole extends AbstractBaseAuditEntity {
 
     private static final long serialVersionUID = 1517204631630105586L;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private User user;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")
     private Role role;
 
     /**

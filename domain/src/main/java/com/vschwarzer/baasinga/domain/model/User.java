@@ -14,44 +14,42 @@ import java.util.Set;
 /**
  * Entity class for a user representing the corresponding database table.
  *
- * @author <a href="mailto:s0541962@stroodel.com">Vincent Schwarzer</a>
+ * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
 @Entity
-@Table(name = "SYS_USER")
+@Table(name = "ba_user")
 public class User extends AbstractBaseAuditEntity implements UserDetails {
 
     private static final long serialVersionUID = 3719799602561353931L;
 
     // Used as username
-    @Column(name = "EMAIL", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(name = "FIRST_NAME", nullable = false)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(name = "LAST_NAME", nullable = false)
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(nullable = false)
     private String password;
 
 //    @Embedded
 //    @Column(nullable = true)
 //    private PhotographerData photographerData;
 
-    @Column(name = "SEC_TOKEN", nullable = true)
+    @Column(nullable = true)
     private String secToken;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<UserRole> userRoles;
 
-    @Column(name = "IS_ACCOUNT_NON_LOCKED")
     private boolean accountNonLocked;
 
-    @Column(name = "IS_ENABLED")
     private boolean enabled;
 
-    @Column(name = "LOST_PASSWORD_TOKEN", nullable = true)
+    @Column(nullable = true)
     private String passwordResetToken;
 
     /**
