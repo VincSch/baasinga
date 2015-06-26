@@ -1,6 +1,8 @@
 package com.vschwarzer.baasinga.domain.model.render;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import org.hibernate.annotations.CollectionId;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,20 +19,26 @@ public class Model extends AbstractBaseAuditEntity{
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private Application application;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
     private List<Annotation> annotations;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
     private List<Attribute> attributes;
 
     @OneToMany(fetch = FetchType.EAGER)
-    //@JoinTable(name = "ba_repositoryimport")
+    @JoinTable(name = "ba_model_import",
+            joinColumns = @JoinColumn(unique = false, name = "modelId"),
+            inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
+    )
+    @OrderColumn(name = "id")
     private List<Import> imports;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "versionId", referencedColumnName = "id")
     private Version version;
 
     public String getName() {

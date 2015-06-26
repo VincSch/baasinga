@@ -30,24 +30,9 @@ public class HomeController {
     MavenCompiler mavenCompiler;
     @Autowired
     ApplicationGenerator applicationGenerator;
-    @Autowired
-    ApplicationDAO applicationDAO;
-    @Autowired
-    VersionDAO versionDAO;
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
-        Version version = new Version();
-        version.setName("1.0");
-        version.setDescription("TestVersion");
-        versionDAO.create(version);
-
-        Application application = new Application();
-        application.setName("TestApp");
-        application.setPort(22);
-        application.setVersion(version);
-        applicationDAO.create(application);
-
         model.addAttribute("title", "Prototyp Maven CLI Tests");
         return "home";
     }
@@ -86,4 +71,25 @@ public class HomeController {
         return "home";
     }
 
+    @Autowired
+    ApplicationDAO applicationDAO;
+    @Autowired
+    VersionDAO versionDAO;
+
+    @RequestMapping("/insert")
+    public String insert(ModelMap model){
+        Version version = new Version();
+        version.setName("1.0");
+        version.setDescription("TestVersion");
+        versionDAO.create(version);
+
+        Application application = new Application();
+        application.setName("TestApp");
+        application.setCloudEnabled(false);
+        application.setSecEnabled(false);
+        application.setVersion(versionDAO.findByName("1.0"));
+        applicationDAO.create(application);
+        model.addAttribute("title", "Daten wurden eingespielt.");
+        return "home";
+    }
 }

@@ -18,22 +18,28 @@ public class Repository extends AbstractBaseAuditEntity{
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private Application application;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="repository", fetch = FetchType.EAGER)
     private List<Annotation> annotations;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="repository",fetch = FetchType.EAGER)
     private List<Method> methods;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="repository", fetch = FetchType.EAGER)
     private List<Attribute> attributes;
 
-    //@JoinTable(name = "ba_repositoryimport")
     @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "ba_repository_import",
+            joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
+            inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
+    )
+    @OrderColumn(name = "id")
     private List<Import> imports;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "versionId", referencedColumnName = "id")
     private Version version;
 
 

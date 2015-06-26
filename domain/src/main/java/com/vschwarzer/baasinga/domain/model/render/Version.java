@@ -20,7 +20,7 @@ public class Version extends AbstractBaseAuditEntity{
     private String description;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     public String getDescription() {

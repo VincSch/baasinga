@@ -11,7 +11,7 @@ import java.util.List;
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
 @Entity
-@Table(name = "ba_model")
+@Table(name = "ba_method")
 public class Method extends AbstractBaseAuditEntity {
 
     @Column(nullable = false)
@@ -24,12 +24,14 @@ public class Method extends AbstractBaseAuditEntity {
     private String returnValue;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "repositoryId", referencedColumnName = "id")
     private Repository repository;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="method", fetch = FetchType.EAGER)
     private List<Annotation> annotations;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "versionId", referencedColumnName = "id")
     private Version version;
 
     public Version getVersion() {

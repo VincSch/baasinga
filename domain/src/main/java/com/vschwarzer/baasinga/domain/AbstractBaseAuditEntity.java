@@ -19,12 +19,14 @@ public abstract class AbstractBaseAuditEntity extends AbstractBaseEntity {
     private Date createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "createdByUserId", referencedColumnName = "id")
     private User createdBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updatedByUserId", referencedColumnName = "id")
     private User updatedBy;
 
     /**

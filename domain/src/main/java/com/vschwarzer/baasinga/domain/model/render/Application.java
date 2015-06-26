@@ -27,16 +27,18 @@ public class Application extends AbstractBaseAuditEntity{
     @Column(nullable = false)
     private boolean secEnabled;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="application", fetch = FetchType.EAGER)
     private List<Model> models;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="application", fetch = FetchType.EAGER)
     private List<Repository> repositories;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "versionId", referencedColumnName = "id")
     private Version version;
 
     public String getName() {

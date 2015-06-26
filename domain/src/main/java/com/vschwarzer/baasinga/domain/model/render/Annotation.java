@@ -23,15 +23,19 @@ public class Annotation extends AbstractBaseAuditEntity {
     private Type type;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "repositoryId", referencedColumnName = "id")
     private Repository repository;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "methodId", referencedColumnName = "id")
     private Method method;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "modelId", referencedColumnName = "id")
     private Model model;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "attributeId", referencedColumnName = "id")
     private Attribute attribute;
 
     public String getName() {

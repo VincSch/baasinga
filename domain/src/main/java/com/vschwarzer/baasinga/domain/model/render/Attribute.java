@@ -20,16 +20,19 @@ public class Attribute extends AbstractBaseAuditEntity{
     @Column(nullable = false)
     private DataType dataType;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="attribute", fetch = FetchType.EAGER)
     private List<Annotation> annotations;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "versionId", referencedColumnName = "id")
     private Version version;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "modelId", referencedColumnName = "id")
     private Model model;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "repositoryId", referencedColumnName = "id")
     private Repository repository;
 
     public String getName() {
