@@ -1,8 +1,5 @@
 package com.stroodel.baasinga;
 
-import com.stroodel.baasinga.model.Address;
-import com.stroodel.baasinga.repository.AddressRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

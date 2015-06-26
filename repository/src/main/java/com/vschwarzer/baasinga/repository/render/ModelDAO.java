@@ -1,7 +1,6 @@
 package com.vschwarzer.baasinga.repository.render;
 
 import com.vschwarzer.baasinga.domain.model.render.Model;
-import com.vschwarzer.baasinga.domain.model.render.Version;
 import com.vschwarzer.baasinga.repository.GenericDAO;
 
 /**

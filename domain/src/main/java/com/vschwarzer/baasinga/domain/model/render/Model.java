@@ -1,8 +1,6 @@
 package com.vschwarzer.baasinga.domain.model.render;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
-import org.hibernate.annotations.CollectionId;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.List;

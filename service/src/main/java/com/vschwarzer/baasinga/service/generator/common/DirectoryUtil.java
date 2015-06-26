@@ -1,9 +1,7 @@
 package com.vschwarzer.baasinga.service.generator.common;
 
 
-import com.vschwarzer.baasinga.service.generator.ApplicationGenerator;
 import com.vschwarzer.baasinga.service.generator.config.PathConfig;
-import com.vschwarzer.baasinga.service.generator.common.Constants;
 import com.vschwarzer.baasinga.service.generator.model.ApplicationData;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;

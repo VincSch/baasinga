@@ -1,9 +1,9 @@
 package com.vschwarzer.baasinga.service.generator;
 
 import com.vschwarzer.baasinga.service.common.AbstractService;
+import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.model.ApplicationData;
-import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;

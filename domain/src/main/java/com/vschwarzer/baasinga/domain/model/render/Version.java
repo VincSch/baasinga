@@ -1,6 +1,5 @@
 package com.vschwarzer.baasinga.domain.model.render;
 
-import com.sun.istack.internal.NotNull;
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 
 import javax.persistence.Column;
@@ -19,7 +18,6 @@ public class Version extends AbstractBaseAuditEntity{
     @Column
     private String description;
 
-    @NotNull
     @Column(nullable = false, unique = true)
     private String name;
 

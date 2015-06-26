@@ -1,10 +1,8 @@
 package com.vschwarzer.baasinga.repository.render.impl;
 
 import com.vschwarzer.baasinga.domain.model.render.Model;
-import com.vschwarzer.baasinga.domain.model.render.Version;
 import com.vschwarzer.baasinga.repository.GenericDAOImpl;
 import com.vschwarzer.baasinga.repository.render.ModelDAO;
-import com.vschwarzer.baasinga.repository.render.VersionDAO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;

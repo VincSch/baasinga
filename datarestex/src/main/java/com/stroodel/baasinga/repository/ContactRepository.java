@@ -1,6 +1,5 @@
 package com.stroodel.baasinga.repository;
 
-import com.stroodel.baasinga.model.Address;
 import com.stroodel.baasinga.model.Contact;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RestResource;
