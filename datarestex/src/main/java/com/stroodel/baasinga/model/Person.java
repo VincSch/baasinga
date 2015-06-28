@@ -1,30 +1,24 @@
 package com.stroodel.baasinga.model;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import java.util.List;
 
 /**
  * Created by vs on 07.06.15.
  */
 
 @Entity
-public class Person extends AbstractEntity{
+public class Person extends AbstractEntity {
 
-    private String name;
-    private String address;
+    public String name;
+    public String birthday;
 
-    public String getName() {
-        return name;
-    }
+    @OneToOne
+    public Address address;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @OneToMany
+    public List<Contact> contacts;
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }

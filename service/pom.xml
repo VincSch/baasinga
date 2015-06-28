@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>baasinga</artifactId>
-        <groupId>com.stroodel</groupId>
+        <groupId>com.vschwarzer</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <name>Baasinga Business Artifact</name>
@@ -23,7 +23,7 @@
             <version>${spring.context}</version>
         </dependency>
         <dependency>
-            <groupId>com.stroodel</groupId>
+            <groupId>com.vschwarzer</groupId>
             <artifactId>repository</artifactId>
             <version>${baasinga.repository}</version>
         </dependency>
@@ -35,7 +35,16 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.20</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-embedder</artifactId>

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>baasinga</artifactId>
-        <groupId>com.stroodel</groupId>
+        <groupId>com.vschwarzer</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -17,6 +17,10 @@
         <baasinga.service>1.0-SNAPSHOT</baasinga.service>
         <thymeleaf>2.1.4.RELEASE</thymeleaf>
         <servlet-api>3.1.0</servlet-api>
+        <!-- Spring related version -->
+        <springframework.version>4.1.6.RELEASE</springframework.version>
+        <hsqldb.version>2.3.2</hsqldb.version>
+        <spring-data-jpa.version>1.8.0.RELEASE</spring-data-jpa.version>
     </properties>
     <dependencies>
         <dependency>
@@ -36,9 +40,34 @@
             <version>${spring.web.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.stroodel</groupId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring-data-jpa.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vschwarzer</groupId>
             <artifactId>service</artifactId>
             <version>${baasinga.service}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.187</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
