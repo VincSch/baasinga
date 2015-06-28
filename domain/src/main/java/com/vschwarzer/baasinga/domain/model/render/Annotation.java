@@ -16,27 +16,13 @@ public class Annotation extends AbstractBaseAuditEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String value;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private Type type;
 
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "repositoryId", referencedColumnName = "id")
-    private Repository repository;
-
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "methodId", referencedColumnName = "id")
-    private Method method;
-
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "modelId", referencedColumnName = "id")
-    private Model model;
-
-    @ManyToOne(optional = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "attributeId", referencedColumnName = "id")
-    private Attribute attribute;
 
     public String getName() {
 
@@ -61,38 +47,6 @@ public class Annotation extends AbstractBaseAuditEntity {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public Repository getRepository() {
-        return repository;
-    }
-
-    public void setRepository(Repository repository) {
-        this.repository = repository;
-    }
-
-    public Method getMethod() {
-        return method;
-    }
-
-    public void setMethod(Method method) {
-        this.method = method;
-    }
-
-    public Model getModel() {
-        return model;
-    }
-
-    public void setModel(Model model) {
-        this.model = model;
-    }
-
-    public Attribute getAttribute() {
-        return attribute;
-    }
-
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
     }
 
     public enum Type {

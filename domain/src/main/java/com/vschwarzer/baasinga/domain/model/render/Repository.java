@@ -21,7 +21,16 @@ public class Repository extends AbstractBaseAuditEntity{
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private Application application;
 
-    @OneToMany(mappedBy="repository", fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "modelId", referencedColumnName = "id")
+    private Model model;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "ba_repository_annotation",
+            joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
+            inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
+    )
+    @OrderColumn(name = "id")
     private List<Annotation> annotations;
 
     @OneToMany(mappedBy="repository",fetch = FetchType.EAGER)
@@ -57,6 +66,14 @@ public class Repository extends AbstractBaseAuditEntity{
 
     public void setApplication(Application application) {
         this.application = application;
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 
     public List<Annotation> getAnnotations() {

@@ -1,12 +1,13 @@
 package com.vschwarzer.baasinga.web.controller;
 
+import com.vschwarzer.baasinga.domain.model.User;
 import com.vschwarzer.baasinga.domain.model.render.Application;
-import com.vschwarzer.baasinga.domain.model.render.Version;
+import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
-import com.vschwarzer.baasinga.repository.render.VersionDAO;
 import com.vschwarzer.baasinga.service.generator.ApplicationGenerator;
 import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
+import com.vschwarzer.baasinga.web.config.common.DataGeneratorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class HomeController {
 
     @RequestMapping("/compile")
     public String compile(ModelMap model){
-        model.addAttribute("title", "Maven mit exit code " + mavenCompiler.mvn("/Users/vs/release/baasinga/web") + " ausgeführt!");
+        model.addAttribute("title", "Maven mit exit code " + mavenCompiler.cleanInstall("/Users/vs/release/baasinga/web") + " ausgeführt!");
         return "home";
     }
 
@@ -64,32 +65,34 @@ public class HomeController {
 
     @RequestMapping("/generate")
     public String generate(ModelMap model){
-        //LOG.info(servletContext.getServerInfo());
-        String fullPath = servletContext.getRealPath("/WEB-INF/classes");
-        applicationGenerator.generateApplication(fullPath);
+        User user = userDAO.findByEmail("vs@stroodel.com");
+        Application application = applicationDAO.findByUser(user);
+        applicationGenerator.generateApplication(application);
         model.addAttribute("title", "App wurde generiert");
         return "home";
     }
 
     @Autowired
-    ApplicationDAO applicationDAO;
-    @Autowired
-    VersionDAO versionDAO;
+    DataGeneratorUtil dataGeneratorUtil;
 
     @RequestMapping("/insert")
     public String insert(ModelMap model){
-        Version version = new Version();
-        version.setName("1.0");
-        version.setDescription("TestVersion");
-        versionDAO.create(version);
-
-        Application application = new Application();
-        application.setName("TestApp");
-        application.setCloudEnabled(false);
-        application.setSecEnabled(false);
-        application.setVersion(versionDAO.findByName("1.0"));
-        applicationDAO.create(application);
         model.addAttribute("title", "Daten wurden eingespielt.");
+        dataGeneratorUtil.addTestApplication();
+        return "home";
+    }
+
+    @Autowired
+    ApplicationDAO applicationDAO;
+
+    @Autowired
+    UserDAO userDAO;
+
+    @RequestMapping("/fullgen")
+    public String fullgen(ModelMap model){
+        model.addAttribute("title", "Full gen");
+        User user = userDAO.findByEmail("vs@stroodel.com");
+        Application application = applicationDAO.findByUser(user);
         return "home";
     }
 }

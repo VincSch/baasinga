@@ -12,15 +12,21 @@ import java.util.List;
  */
 @Entity
 @Table(name = "ba_attribute")
-public class Attribute extends AbstractBaseAuditEntity{
+public class Attribute extends AbstractBaseAuditEntity {
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private DataType dataType;
 
-    @OneToMany(mappedBy="attribute", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "ba_attribute_annotation",
+            joinColumns = @JoinColumn(unique = false, name = "attributeId"),
+            inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
+    )
+    @OrderColumn(name = "id")
     private List<Annotation> annotations;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -85,26 +91,31 @@ public class Attribute extends AbstractBaseAuditEntity{
 
     public enum DataType {
 
-        STRING(1L),
-        INTEGER(2L),
-        BOOLEAN(3L),
-        DOUBLE(4L);
+        STRING(0L, "String"),
+        INTEGER(1L, "int"),
+        BOOLEAN(2L, "boolean"),
+        DOUBLE(3L, "double");
 
         private Long id;
+        private String name;
 
-        DataType(Long id) {
+        DataType(Long id, String name) {
             this.id = id;
+            this.name = name;
         }
 
         public static DataType getById(Long id) {
-            for(DataType e : values()) {
-                if(e.id.equals(id)) return e;
+            for (DataType e : values()) {
+                if (e.id.equals(id)) return e;
             }
             return null;
         }
 
-        public java.lang.Long getId() {
+        public Long getId() {
             return id;
+        }
+        public String getName() {
+            return name;
         }
     }
 }

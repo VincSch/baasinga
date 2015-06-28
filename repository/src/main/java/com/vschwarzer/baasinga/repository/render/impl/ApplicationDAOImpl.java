@@ -1,6 +1,7 @@
 package com.vschwarzer.baasinga.repository.render.impl;
 
 import com.vschwarzer.baasinga.domain.model.Role;
+import com.vschwarzer.baasinga.domain.model.User;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.GenericDAOImpl;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
@@ -35,4 +36,16 @@ public class ApplicationDAOImpl extends GenericDAOImpl<Application> implements A
         query.setParameter("name", name);
         return (Application) query.getSingleResult();
     }
+
+    @Override
+    public Application findByUser(User user) {
+        String queryString = "SELECT application FROM Application application "
+                + "WHERE application.user = :user";
+
+        Query query = createQuery(queryString);
+        query.setParameter("user", user);
+        return (Application) query.getSingleResult();
+    }
+
+
 }

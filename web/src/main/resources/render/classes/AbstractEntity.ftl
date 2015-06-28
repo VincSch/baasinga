@@ -1,5 +1,4 @@
-package com.stroodel.baasinga.model;
-
+package ${package};
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,10 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 /**
- * Base class to derive entity classes from.
- *
- * @author Vincent Schwarzer
- */
+* Base class to derive entity classes from.
+*
+* @author Vincent Schwarzer
+*/
 @MappedSuperclass
 public class AbstractEntity {
 
@@ -19,18 +18,18 @@ public class AbstractEntity {
     private Long id;
 
     /**
-     * Returns the identifier of the entity.
-     *
-     * @return the id
-     */
+    * Returns the identifier of the entity.
+    *
+    * @return the id
+    */
     public Long getId() {
         return id;
     }
 
     /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
+    * (non-Javadoc)
+    * @see java.lang.Object#equals(java.lang.Object)
+    */
     @Override
     public boolean equals(Object obj) {
 
@@ -48,12 +47,11 @@ public class AbstractEntity {
     }
 
     /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
+    * (non-Javadoc)
+    * @see java.lang.Object#hashCode()
+    */
     @Override
     public int hashCode() {
         return id == null ? 0 : id.hashCode();
     }
 }
-

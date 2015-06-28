@@ -1,11 +1,11 @@
 package com.vschwarzer.baasinga.service.generator.engine.impl;
 
+import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.service.common.AbstractService;
 import com.vschwarzer.baasinga.service.generator.common.Constants;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import com.vschwarzer.baasinga.service.generator.config.PathConfig;
 import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
-import com.vschwarzer.baasinga.service.generator.model.ApplicationData;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -75,48 +75,38 @@ public class TemplateRendererImpl extends AbstractService implements TemplateRen
         }
     }
 
-
     @Override
-    public boolean renderConfigClasses(String pathToTemplate, ApplicationData applicationData) throws IOException, TemplateException {
-        Configuration cfg = new Configuration();
-        cfg.setDirectoryForTemplateLoading(new File(pathToTemplate + Constants.TEMPLATE_SUB_DIR));
+    public void renderConfiguration(Application application) throws TemplateException, IOException {
+        renderConfigClasses(application);
+        renderPom(application);
 
-        Template appConfig = cfg.getTemplate(Constants.APP_CONFIG_CLASSNAME + ".ftl");
+    }
 
-        // Build the data-model
+
+    private boolean renderConfigClasses(Application application) throws IOException, TemplateException {
+
         Map<String, Object> data = new HashMap<String, Object>();
-        data.put("package", Constants.ROOT_PACKAGE_NAME.replace("/", ".").substring(1));
-        // File output
-        String outputPath = directoryUtil.getMavenRootDir(applicationData) + Constants.MVN_JAVA_DIR + Constants.ROOT_PACKAGE_NAME;
-        Writer file = new FileWriter(new File(outputPath + "/" + Constants.APP_CONFIG_CLASSNAME + ".java"));
-        appConfig.process(data, file);
-        file.flush();
-        file.close();
+        data.put("package", directoryUtil.getRootPackage());
+        String appConfigOutputPath = directoryUtil.getApiBaseDir(application) + "/" + Constants.APP_CONFIG_TARGET_FILENAME;
+        render(Constants.APP_CONFIG_TEMPLATE, data, appConfigOutputPath);
 
-        Template webConfig = cfg.getTemplate(Constants.WEBAPP_INITIALIZER_CLASSNAME + ".ftl");
+        data.put("package", directoryUtil.getRootPackage());
+        String webInitOutputPath = directoryUtil.getApiBaseDir(application) + "/" + Constants.WEBAPP_INITIALIZER_TARGET_FILENAME;
+        render(Constants.WEBAPP_INITIALIZER_TEMPLATE, data, webInitOutputPath);
 
-        // Build the data-model
-        Map<String, Object> data2 = new HashMap<String, Object>();
-        data2.put("package", Constants.ROOT_PACKAGE_NAME.replace("/", ".").substring(1));
-        // File output
-        Writer file2 = new FileWriter(new File(outputPath + "/" + Constants.WEBAPP_INITIALIZER_CLASSNAME + ".java"));
-        webConfig.process(data2, file2);
-        file2.flush();
-        file2.close();
+        Map<String, Object> abstractEntityData = new HashMap<String, Object>();
+        abstractEntityData.put("package", directoryUtil.getPackage(DirectoryUtil.PackageType.Model));
+        String abstractEntityOutputPath = directoryUtil.getModelBaseDir(application) + "/" + Constants.ABSTRACT_ENTITY_TARGET_FILENAME;
+        render(Constants.ABSTRACT_ENTITY_TEMPLATE, abstractEntityData, abstractEntityOutputPath);
 
         return true;
     }
 
-    @Override
-    public boolean renderPom(String pathToTemplate, ApplicationData applicationData) throws IOException, TemplateException {
-        Configuration cfg = new Configuration();
-        cfg.setDirectoryForTemplateLoading(new File(pathToTemplate + Constants.TEMPLATE_SUB_DIR));
+    private boolean renderPom(Application application) throws IOException, TemplateException {
 
-        Template appConfig = cfg.getTemplate("pom.ftl");
-
-        // Build the data-model
         Map<String, Object> data = new HashMap<String, Object>();
-        data.put("appName", applicationData.getApplicationName());
+        data.put("appName", application.getName());
+        data.put("appVersion", application.getVersion().getName());
         data.put("hibernate", Constants.HIBERNATE_VERSION);
         data.put("springframework", Constants.SPRING_FW_VERSION);
         data.put("springdatajpa", Constants.SPRING_DATA_JPA_VERSION);
@@ -129,13 +119,19 @@ public class TemplateRendererImpl extends AbstractService implements TemplateRen
         data.put("jdkversion", Constants.TARGET_JDK_VERSION);
         data.put("warplugin", Constants.MAVEN_WAR_PLUGIN_VERSION);
 
+        String outputPath = directoryUtil.getMavenRootDir(application) + "/" + Constants.POM_TARGET_FILENAME;
+        render(Constants.POM_TEMPLATE, data, outputPath);
+        return true;
+    }
 
-        // File output
-        String outputPath = directoryUtil.getMavenRootDir(applicationData);
-        Writer file = new FileWriter(new File(outputPath + "/pom.xml"));
-        appConfig.process(data, file);
+    @Override
+    public void render(String template, Map<String, Object> data, String outputPath) throws IOException, TemplateException {
+        Configuration cfg = new Configuration();
+        cfg.setDirectoryForTemplateLoading(new File(directoryUtil.getTemplateDir()));
+        Template templateConfig = cfg.getTemplate(template);
+        Writer file = new FileWriter(new File(outputPath));
+        templateConfig.process(data, file);
         file.flush();
         file.close();
-        return true;
     }
 }

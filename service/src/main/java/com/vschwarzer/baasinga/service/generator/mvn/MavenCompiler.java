@@ -9,5 +9,5 @@ public interface MavenCompiler {
      * @param path
      * @return
      */
-    int mvn(String path);
+    int cleanInstall(String path);
 }

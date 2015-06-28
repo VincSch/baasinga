@@ -11,13 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class MvnCompilerImpl extends AbstractService implements MavenCompiler {
 
-    private MavenCli mavenCli = new MavenCli();
+    private MavenCli cli = new MavenCli();
 
     @Override
-    public int mvn(String path) {
-        MavenCli cli = new MavenCli();
+    public int cleanInstall(String path) {
         int result = cli.doMain(new String[]{"clean", "install"}, path, System.out, System.err);
-        LOG.info("Job ran with code: " + result);
+        LOG.info("Maven clean install finished with code: " + result);
         return result;
     }
 }

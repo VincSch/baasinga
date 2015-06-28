@@ -13,7 +13,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ba_import")
-public class Import extends AbstractBaseAuditEntity{
+public class Import extends AbstractBaseAuditEntity {
 
     @Column(nullable = false)
     private String packageName;

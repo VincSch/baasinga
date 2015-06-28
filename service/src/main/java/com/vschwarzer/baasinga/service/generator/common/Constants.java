@@ -5,6 +5,15 @@ package com.vschwarzer.baasinga.service.generator.common;
  */
 public final class Constants {
 
+
+    /**
+     * commom
+     */
+    public static final String TEMPLATE_FILE_ENDING = ".ftl";
+    public static final String JAVA_FILE_ENDING = ".java";
+
+
+
     /**
      * Path's
      */
@@ -17,11 +26,23 @@ public final class Constants {
 
 
     /**
-     * Class names
+     * Template names
      */
-    public static final String APP_CONFIG_CLASSNAME = "AppConfiguration";
-    public static final String WEBAPP_INITIALIZER_CLASSNAME = "WebAppInitializer";
+    public static final String APP_CONFIG_TEMPLATE = "/classes/AppConfiguration.ftl";
+    public static final String POM_TEMPLATE= "/config/pom.ftl";
+    public static final String WEBAPP_INITIALIZER_TEMPLATE = "/classes/WebAppInitializer.ftl";
+    public static final String ABSTRACT_ENTITY_TEMPLATE = "/classes/AbstractEntity.ftl";
+    public static final String ENTITY_TEMPLATE = "/classes/Entity.ftl";
+    public static final String REPOSITORY_TEMPLATE = "/classes/Repository.ftl";
 
+    /**
+     * Target file names
+     */
+    public static final String APP_CONFIG_TARGET_FILENAME = "AppConfiguration.java";
+    public static final String WEBAPP_INITIALIZER_TARGET_FILENAME = "WebAppInitializer.java";
+    public static final String ABSTRACT_ENTITY_TARGET_FILENAME = "AbstractEntity.java";
+    public static final String LOG4J_PROPERTIES= "/config/log4j.properties";
+    public static final String POM_TARGET_FILENAME = "pom.xml";
 
     /**
      * POM Versions
@@ -38,4 +59,5 @@ public final class Constants {
     public static final String MAVEN_COMPILER_VERSION = "3.1";
     public static final String MAVEN_WAR_PLUGIN_VERSION = "2.6";
     public static final String TARGET_JDK_VERSION = "1.8";
+
 }

@@ -12,37 +12,13 @@ import java.util.List;
 @Entity
 public class Person extends AbstractEntity {
 
-    private String name;
-    private String birthday;
+    public String name;
+    public String birthday;
 
     @OneToOne
-    private Address address;
+    public Address address;
 
     @OneToMany
-    private List<Contact> contacts;
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public List<Contact> contacts;
 
 }

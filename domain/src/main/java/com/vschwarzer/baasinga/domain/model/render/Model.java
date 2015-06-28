@@ -21,7 +21,12 @@ public class Model extends AbstractBaseAuditEntity{
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private Application application;
 
-    @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "ba_model_annotation",
+            joinColumns = @JoinColumn(unique = false, name = "modelId"),
+            inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
+    )
+    @OrderColumn(name = "id")
     private List<Annotation> annotations;
 
     @OneToMany(mappedBy="model", fetch = FetchType.EAGER)

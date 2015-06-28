@@ -19,7 +19,7 @@ public class Terminal {
 
     public void mvnCleanInstall(String path){
         String gitClone =  "git clone git@vschwarzer.com:/home/git/baasinga.git";
-        String [] cmds = {"mvn clean install"};
+        String [] cmds = {"cleanInstall clean install"};
         String [] env = {"MVN_HOME"};
         Process p = null;
         try {
