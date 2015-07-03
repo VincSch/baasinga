@@ -15,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletContext;
-
 /**
  * Created by vs on 21.05.15.
  */
@@ -48,18 +46,6 @@ public class HomeController {
     @RequestMapping("/compile")
     public String compile(ModelMap model){
         model.addAttribute("title", "Maven mit exit code " + mavenCompiler.cleanInstall("/Users/vs/release/baasinga/web") + " ausgeführt!");
-        return "home";
-    }
-
-    @Autowired
-    ServletContext servletContext;
-
-    @RequestMapping("/freemarker")
-    public String freemarker(ModelMap model){
-        //LOG.info(servletContext.getServerInfo());
-        String fullPath = servletContext.getRealPath("/WEB-INF/classes");
-        templateRenderer.renderClass(fullPath);
-        model.addAttribute("title", "Template wurde generiert");
         return "home";
     }
 

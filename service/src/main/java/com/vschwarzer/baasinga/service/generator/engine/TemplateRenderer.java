@@ -11,8 +11,6 @@ import java.util.Map;
  */
 public interface TemplateRenderer {
 
-    void renderClass(String pathToTemplate);
-
     /**
      * Add configuration objects like pom and WebInit classes
      *

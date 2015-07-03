@@ -12,10 +12,11 @@ import freemarker.template.TemplateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,51 +30,6 @@ public class TemplateRendererImpl extends AbstractService implements TemplateRen
 
     @Autowired
     DirectoryUtil directoryUtil;
-
-    @Override
-    public void renderClass(String pathToTemplate) {
-        LOG.info(pathConfig.templateRootDir);
-        //Freemarker configuration object
-        Configuration cfg = new Configuration();
-        try {
-
-            //cfg.setDirectoryForTemplateLoading(new File("/Users/vs/templates"));
-            cfg.setDirectoryForTemplateLoading(new File(pathToTemplate));
-            //Load template from source folder
-            //File templateFile = new ClassPathResource("entity.ftl").getFile();
-            Template template = cfg.getTemplate("entity.ftl");
-
-            // Build the data-model
-            Map<String, Object> data = new HashMap<String, Object>();
-            data.put("className", "Test");
-            data.put("methodName", "Test");
-
-            //List parsing
-            List<String> methods = new ArrayList<String>();
-            methods.add("System.out.println('Hello');");
-            methods.add("System.out.println('World');");
-
-            data.put("methods", methods);
-
-
-            // Console output
-            Writer out = new OutputStreamWriter(System.out);
-
-            template.process(data, out);
-            out.flush();
-
-            // File output
-            Writer file = new FileWriter(new File("/Users/vs/Desktop/entity.java"));
-            template.process(data, file);
-            file.flush();
-            file.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TemplateException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void renderConfiguration(Application application) throws TemplateException, IOException {

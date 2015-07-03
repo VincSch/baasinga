@@ -1,8 +1,10 @@
 package com.vschwarzer.baasinga.domain.model.render;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import com.vschwarzer.baasinga.domain.model.common.DomainType;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Entity class for annotations.
@@ -19,9 +21,17 @@ public class Annotation extends AbstractBaseAuditEntity {
     @Column(nullable = true)
     private String value;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "ba_annotation_import",
+            joinColumns = @JoinColumn(unique = false, name = "annotationId"),
+            inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
+    )
+    @OrderColumn(name = "id")
+    private List<Import> imports;
+
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    private Type type;
+    private DomainType type;
 
 
     public String getName() {
@@ -41,36 +51,19 @@ public class Annotation extends AbstractBaseAuditEntity {
         this.value = value;
     }
 
-    public Type getType() {
+    public DomainType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(DomainType type) {
         this.type = type;
     }
 
-    public enum Type {
+    public List<Import> getImports() {
+        return imports;
+}
 
-        METHOD(1L),
-        MODEL(2L),
-        REPOSITORY(3L),
-        ATTRIBUTE(4L);
-
-        private Long id;
-
-        Type(Long id) {
-            this.id = id;
-        }
-
-        public static Type getById(Long id) {
-            for(Type e : values()) {
-                if(e.id.equals(id)) return e;
-            }
-            return null;
-        }
-
-        public java.lang.Long getId() {
-            return id;
-        }
+    public void setImports(List<Import> imports) {
+        this.imports = imports;
     }
 }
