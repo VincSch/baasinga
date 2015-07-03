@@ -1,6 +1,8 @@
 package com.vschwarzer.baasinga.service.generator;
 
+import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.Application;
+import com.vschwarzer.baasinga.domain.model.render.Import;
 import com.vschwarzer.baasinga.domain.model.render.Model;
 import com.vschwarzer.baasinga.domain.model.render.Repository;
 import com.vschwarzer.baasinga.service.common.AbstractService;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,6 +97,8 @@ public class ApplicationGeneratorImpl extends AbstractService implements Applica
         for(Repository repository : application.getRepositories()){
             Map<String, Object> data = new HashMap<String, Object>();
             data.put("package", directoryUtil.getPackage(DirectoryUtil.PackageType.Repository));
+
+            //TODO SAMMLE ALLE IMPORTS VON KINDERN EIN
             data.put("imports", repository.getImports());
             data.put("annotations", repository.getAnnotations());
             data.put("interfaceName", repository.getName());
@@ -109,5 +114,9 @@ public class ApplicationGeneratorImpl extends AbstractService implements Applica
                 e.printStackTrace();
             }
         }
+    }
+
+    private List<Import> gatherImports(Application application, DomainType domainType){
+        return null;
     }
 }

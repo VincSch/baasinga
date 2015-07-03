@@ -1,6 +1,7 @@
 package com.vschwarzer.baasinga.web.config.common;
 
 import com.vschwarzer.baasinga.domain.model.User;
+import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.*;
@@ -54,13 +55,35 @@ public class DataGeneratorUtil {
                 "@RestResource"
         };
 
+        String[] repositoryImportArray = {
+                "com.baasinga.api.model.Person",
+                "org.springframework.data.repository.CrudRepository",
+        };
+
+        String[] entityImportArray = {
+
+        };
+
+        String[] annotationImportArray = {
+                "javax.persistence.Entity",
+                "org.springframework.data.rest.core.annotation.RestResource"
+
+        };
+
         List<Annotation> entityAnnotations = new ArrayList<>();
         List<Annotation> repositoryAnnotations = new ArrayList<>();
 
         for (String an : Arrays.asList(entityAnnotationArray)) {
             Annotation annotation = new Annotation();
             annotation.setName(an);
-            annotation.setType(Annotation.Type.MODEL);
+            annotation.setType(DomainType.MODEL);
+
+            List<Import> imports = new ArrayList();
+            Import importModel = new Import();
+            importModel.setPackageName(annotationImportArray[0]);
+            importDAO.create(importModel);
+            imports.add(importModel);
+            annotation.setImports(imports);
             annotationDAO.create(annotation);
             entityAnnotations.add(annotation);
         }
@@ -68,23 +91,17 @@ public class DataGeneratorUtil {
         for (String an : Arrays.asList(repositoryAnnoationArray)) {
             Annotation annotation = new Annotation();
             annotation.setName(an);
-            annotation.setType(Annotation.Type.REPOSITORY);
+            annotation.setType(DomainType.REPOSITORY);
+            List<Import> imports = new ArrayList();
+            Import importModel = new Import();
+            importModel.setPackageName(annotationImportArray[1]);
+            importDAO.create(importModel);
+            imports.add(importModel);
+            annotation.setImports(imports);
             annotationDAO.create(annotation);
             repositoryAnnotations.add(annotation);
         }
 
-        String[] entityImportArray = {
-                "javax.persistence.Entity",
-                "javax.persistence.OneToMany",
-                "javax.persistence.OneToOne",
-                "java.util.List"
-        };
-
-        String[] repositoryImportArray = {
-                "com.baasinga.api.model.Person",
-                "org.springframework.data.repository.CrudRepository",
-                "org.springframework.data.rest.core.annotation.RestResource"
-        };
 
         List<Import> entityImports = new ArrayList<>();
         List<Import> repositoryImports = new ArrayList<>();

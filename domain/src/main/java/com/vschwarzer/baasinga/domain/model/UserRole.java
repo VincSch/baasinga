@@ -2,7 +2,10 @@ package com.vschwarzer.baasinga.domain.model;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Entity class for a user and his role/s recipes corresponding database table.
