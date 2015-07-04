@@ -33,7 +33,7 @@ public class HomeController {
     @RequestMapping("/")
     public String showHome(ModelMap model) {
         model.addAttribute("title", "Prototyp Maven CLI Tests");
-        return "home";
+        return "index";
     }
 
     @RequestMapping("/list")

@@ -1,5 +1,6 @@
 package com.vschwarzer.baasinga.service.generator.engine.impl;
 
+import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.service.common.AbstractService;
 import com.vschwarzer.baasinga.service.generator.common.Constants;
@@ -51,7 +52,7 @@ public class TemplateRendererImpl extends AbstractService implements TemplateRen
         render(Constants.WEBAPP_INITIALIZER_TEMPLATE, data, webInitOutputPath);
 
         Map<String, Object> abstractEntityData = new HashMap<String, Object>();
-        abstractEntityData.put("package", directoryUtil.getPackage(DirectoryUtil.PackageType.Model));
+        abstractEntityData.put("package", directoryUtil.getPackage(DomainType.MODEL));
         String abstractEntityOutputPath = directoryUtil.getModelBaseDir(application) + "/" + Constants.ABSTRACT_ENTITY_TARGET_FILENAME;
         render(Constants.ABSTRACT_ENTITY_TEMPLATE, abstractEntityData, abstractEntityOutputPath);
 
