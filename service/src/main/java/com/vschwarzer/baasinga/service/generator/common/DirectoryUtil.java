@@ -1,6 +1,7 @@
 package com.vschwarzer.baasinga.service.generator.common;
 
 
+import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.service.generator.config.PathConfig;
 import org.apache.commons.io.FileUtils;
@@ -18,11 +19,6 @@ public class DirectoryUtil {
 
     @Autowired
     PathConfig pathConfig;
-
-    public enum PackageType {
-        Model,
-        Repository
-    }
 
     public void createMavenProjectStructure(Application app) throws IOException {
         String mavenRootDir = pathConfig.outputDir + "/" + app.getName();
@@ -73,11 +69,11 @@ public class DirectoryUtil {
         return Constants.ROOT_PACKAGE_NAME.replace("/", ".").substring(1);
     }
 
-    public String getPackage(PackageType type) {
+    public String getPackage(DomainType type) {
         switch (type) {
-            case Model:
+            case MODEL:
                 return parseToPackage(Constants.ROOT_PACKAGE_NAME + Constants.MODEL_PACKAGE_NAME);
-            case Repository:
+            case REPOSITORY:
                 return parseToPackage(Constants.ROOT_PACKAGE_NAME + Constants.REPOSITORY_PACKAGE_NAME);
             default:
                 return "";

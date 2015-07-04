@@ -1,10 +1,7 @@
 package com.vschwarzer.baasinga.service.generator;
 
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
-import com.vschwarzer.baasinga.domain.model.render.Application;
-import com.vschwarzer.baasinga.domain.model.render.Import;
-import com.vschwarzer.baasinga.domain.model.render.Model;
-import com.vschwarzer.baasinga.domain.model.render.Repository;
+import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.service.common.AbstractService;
 import com.vschwarzer.baasinga.service.generator.common.Constants;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
@@ -17,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Vincent Schwarzer on 20.06.15.
@@ -72,11 +67,11 @@ public class ApplicationGeneratorImpl extends AbstractService implements Applica
         }
     }
 
-    private void renderEntites(Application application){
-        for(Model model : application.getModels()){
+    private void renderEntites(Application application) {
+        for (Model model : application.getModels()) {
             Map<String, Object> data = new HashMap<String, Object>();
-            data.put("package", directoryUtil.getPackage(DirectoryUtil.PackageType.Model));
-            data.put("imports", model.getImports());
+            data.put("package", directoryUtil.getPackage(DomainType.MODEL));
+            data.put("imports", gatherModelImports(model));
             data.put("annotations", model.getAnnotations());
             data.put("className", model.getName());
             data.put("attributes", model.getAttributes());
@@ -93,13 +88,11 @@ public class ApplicationGeneratorImpl extends AbstractService implements Applica
         }
     }
 
-    private void renderRepositories(Application application){
-        for(Repository repository : application.getRepositories()){
+    private void renderRepositories(Application application) {
+        for (Repository repository : application.getRepositories()) {
             Map<String, Object> data = new HashMap<String, Object>();
-            data.put("package", directoryUtil.getPackage(DirectoryUtil.PackageType.Repository));
-
-            //TODO SAMMLE ALLE IMPORTS VON KINDERN EIN
-            data.put("imports", repository.getImports());
+            data.put("package", directoryUtil.getPackage(DomainType.REPOSITORY));
+            data.put("imports", gatherRepositoryImports(repository));
             data.put("annotations", repository.getAnnotations());
             data.put("interfaceName", repository.getName());
             data.put("modelName", repository.getModel().getName());
@@ -116,7 +109,41 @@ public class ApplicationGeneratorImpl extends AbstractService implements Applica
         }
     }
 
-    private List<Import> gatherImports(Application application, DomainType domainType){
-        return null;
+    private Set<Import> gatherModelImports(Model model) {
+        Set<Import> imports = new HashSet<>();
+        imports.addAll(model.getImports());
+        for (Annotation annotation : model.getAnnotations()) {
+            imports.addAll(annotation.getImports());
+        }
+
+        for (Attribute attribute : model.getAttributes()) {
+            for (Annotation annotation : attribute.getAnnotations()) {
+                imports.addAll(annotation.getImports());
+            }
+        }
+
+        return imports;
+    }
+
+    private Set<Import> gatherRepositoryImports(Repository repository) {
+        Set<Import> imports = new HashSet<>();
+        imports.addAll(repository.getImports());
+        for (Annotation annotation : repository.getAnnotations()) {
+            imports.addAll(annotation.getImports());
+        }
+
+        for (Attribute attribute : repository.getAttributes()) {
+            for (Annotation annotation : attribute.getAnnotations()) {
+                imports.addAll(annotation.getImports());
+            }
+        }
+
+        for (Method method : repository.getMethods()) {
+            for (Annotation annotation : method.getAnnotations()) {
+                imports.addAll(annotation.getImports());
+            }
+        }
+
+        return imports;
     }
 }
