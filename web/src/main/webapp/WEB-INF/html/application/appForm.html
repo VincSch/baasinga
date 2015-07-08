@@ -1,0 +1,74 @@
+<!-- Create application -->
+<form action="#" th:action="@{/build/application}" th:object="${app}" method="post" role="form" class="form-horizontal">
+    <h2>About you're application</h2>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="contact-form-wrapper">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="Name"><b>Name</b></label>
+
+                    <div class="col-sm-9">
+                        <input type="text" th:field="*{name}" placeholder="" id="Name" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><b>Select a version</b></label>
+
+                    <div class="col-sm-9">
+                        <select class="form-control" th:field="*{version}">
+                            <option th:each="version : ${versions}"
+                                    th:value="${version.id}"
+                                    th:text="${version.name}">[Placeholder]
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="secEnabled"><b>Deploy?</b></label>
+
+                    <div class="col-sm-9">
+                        <input type="checkbox" id="secEnabled" th:field="*{secEnabled}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="cloudEnabled"><b>Secure?</b></label>
+
+                    <div class="col-sm-9">
+                        <input type="checkbox" id="cloudEnabled" th:field="*{cloudEnabled}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="contact-form-wrapper">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="Description"><b>Description</b></label>
+
+                    <div class="col-sm-9">
+                        <textarea rows="8" type="text" placeholder="" id="Description" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Create Application Info -->
+    </div>
+
+    <h2>Create you're data model</h2>
+
+    <div class="col-sm-12">
+        <button class="btn btn-primary btn-lg pull-left" name="addModel" type="submit">Add new model</button>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div th:include="application/modelForm"></div>
+        </div>
+        <!-- End Create model Info -->
+    </div>
+
+    <div style="margin-top:20px;" class="form-group pull-right">
+        <div class="col-sm-12">
+            <button class="btn btn-primary btn-lg" name="save" type="submit">Save Application</button>
+        </div>
+    </div>
+</form>

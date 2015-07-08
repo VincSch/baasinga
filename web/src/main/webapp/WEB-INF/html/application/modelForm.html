@@ -1,0 +1,47 @@
+<div class="pricing-plan col-sm-6" th:each="model,modelStat : *{models}">
+    <div class="ribbon-wrapper">
+        <div class="price-ribbon ribbon-green" th:text="${'# ' + modelStat.count}">#</div>
+    </div>
+    <div class="col-sm-3 form-group pull-left">
+        <div class="col-sm-12">
+            <button class="glyphicon glyphicon-remove btn" name="removeModel" th:value="${modelStat.index}"
+                    type="submit">
+            </button>
+        </div>
+    </div>
+
+    <div class="contact-form-wrapper">
+        <div class="col-sm-12 pull-left form-group">
+            <label class="col-sm-2 control-label" for="Name"><b>Name</b></label>
+
+            <div class="col-sm-10">
+                <input type="text" th:field="*{models[__${modelStat.index}__].name}" placeholder="" id="Name"
+                       class="form-control"/>
+            </div>
+        </div>
+
+        <div class="col-sm-3 form-group pull-left">
+            <label class="col-sm-12 control-label"><b>Attributes:</b></label>
+        </div>
+
+        <div class="col-sm-12 form-group" th:each="attribute,attributeStat : *{models[__${modelStat.index}__].attributes}">
+            <div class="col-sm-9">
+                <input type="text"
+                       th:field="*{models[__${modelStat.index}__].attributes[__${attributeStat.index}__].name}"
+                       placeholder="attribute name" id="Name"
+                       class="form-control"/>
+            </div>
+            <div class="col-sm-3">
+                <button class="glyphicon glyphicon-remove btn pull-right" type="submit" th:value="${attributeStat.index}"
+                        name="removeAttribute">
+                </button>
+                <input type="hidden" th:value="${modelStat.index}" name="modelId"/>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <button class="btn btn-sm pull-left" name="addAttribute" th:value="${modelStat.index}" type="submit">
+                Add new attribute
+            </button>
+        </div>
+    </div>
+</div>
