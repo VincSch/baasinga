@@ -17,6 +17,8 @@
         <baasinga.service>1.0-SNAPSHOT</baasinga.service>
         <thymeleaf>2.1.4.RELEASE</thymeleaf>
         <servlet-api>3.1.0</servlet-api>
+        <spring.sec>4.0.1.RELEASE</spring.sec>
+        <spring.sec.web>4.0.1.RELEASE</spring.sec.web>
         <!-- Spring related version -->
         <springframework.version>4.1.6.RELEASE</springframework.version>
         <hsqldb.version>2.3.2</hsqldb.version>
@@ -38,6 +40,21 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.web.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring.sec}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.sec.web}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.sec.web}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

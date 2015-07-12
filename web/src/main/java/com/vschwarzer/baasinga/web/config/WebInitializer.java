@@ -1,13 +1,17 @@
 package com.vschwarzer.baasinga.web.config;
 
+import com.sun.org.apache.xerces.internal.parsers.SecurityConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
@@ -16,30 +20,32 @@ import javax.servlet.ServletRegistration;
  * Created by vs on 23.05.15.
  */
 @Configuration
-public class WebInitializer implements WebApplicationInitializer {
+public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     private final Logger LOG = LoggerFactory.getLogger(WebInitializer.class);
 
     @Override
-    public void onStartup(ServletContext container) throws ServletException {
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        super.onStartup(servletContext);
+    }
 
-        // Create the 'root' Spring application context
-        AnnotationConfigWebApplicationContext rootContext =
-                new AnnotationConfigWebApplicationContext();
-        rootContext.register(AppConfig.class);
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[]{AppConfig.class, SecurityConfig.class};
+    }
 
-        // Manage the lifecycle of the root application context
-        container.addListener(new ContextLoaderListener(rootContext));
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[]{DispatcherConfig.class};
+    }
 
-        // Create the dispatcher servlet's Spring application context
-        AnnotationConfigWebApplicationContext dispatcherContext =
-                new AnnotationConfigWebApplicationContext();
-        dispatcherContext.register(DispatcherConfig.class);
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
 
-        // Register and map the dispatcher servlet
-        ServletRegistration.Dynamic dispatcher =
-                container.addServlet("dispatcher", new DispatcherServlet(dispatcherContext));
-        dispatcher.setLoadOnStartup(1);
-        dispatcher.addMapping("/");
+    @Override
+    protected Filter[] getServletFilters() {
+        return new Filter[]{new DelegatingFilterProxy("springSecurityFilterChain")};
     }
 }

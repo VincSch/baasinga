@@ -68,6 +68,7 @@
 
     <div style="margin-top:20px;" class="form-group pull-right">
         <div class="col-sm-12">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button class="btn btn-primary btn-lg" name="save" type="submit">Save Application</button>
         </div>
     </div>

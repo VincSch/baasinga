@@ -1,5 +1,6 @@
 package com.vschwarzer.baasinga.web.controller;
 
+import com.vschwarzer.baasinga.domain.model.User;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.repository.render.VersionDAO;
@@ -11,6 +12,8 @@ import com.vschwarzer.baasinga.web.form.application.AppDTO;
 import com.vschwarzer.baasinga.web.form.application.AttributeDTO;
 import com.vschwarzer.baasinga.web.form.application.ModelDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +43,7 @@ public class AppController extends BaseController {
 
     @RequestMapping("/application")
     public String show(ModelMap model) {
+        //User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AppDTO app = new AppDTO();
         app.getModels().add(new ModelDTO());
         app.getModels().get(0).getAttributes().add(new AttributeDTO());
@@ -51,6 +55,9 @@ public class AppController extends BaseController {
 
     @RequestMapping(value = "/application", params = {"save"}, method = RequestMethod.POST)
     public String processForm(final AppDTO app) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(user != null)
+         LOG.info("firstname" + user.getFirstName());
         LOG.info(app.getName());
         LOG.info(String.valueOf(app.getPort()));
         LOG.info(app.getVersion());

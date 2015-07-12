@@ -6,6 +6,8 @@ import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -126,7 +128,8 @@ public class DataGeneratorUtil {
         user.setUsername("vs@stroodel.com");
         user.setFirstName("Ping");
         user.setLastName("jfjf");
-        user.setPassword("abc");
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode("abc"));
         userDAO.create(user);
 
         Version version = new Version();

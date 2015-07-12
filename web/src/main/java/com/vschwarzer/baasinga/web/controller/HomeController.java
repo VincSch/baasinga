@@ -12,6 +12,7 @@ import com.vschwarzer.baasinga.web.controller.common.BaseController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Created by vs on 21.05.15.
  */
 @Controller
-public class HomeController extends BaseController{
+public class HomeController extends BaseController {
 
     @Autowired
     TemplateRenderer templateRenderer;
@@ -37,6 +38,9 @@ public class HomeController extends BaseController{
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (email != null && !email.equals("anonymousUser"))
+            LOG.info(userDAO.findByEmail(email).getFirstName());
         model.addAttribute("title", "Prototyp Maven CLI Tests");
         model.addAttribute("content", "index/content");
         return "index/index";
@@ -44,7 +48,7 @@ public class HomeController extends BaseController{
 
 
     @RequestMapping("/generate")
-    public String generate(ModelMap model){
+    public String generate(ModelMap model) {
         User user = userDAO.findByEmail("vs@stroodel.com");
         Application application = applicationDAO.findByUser(user);
         applicationGenerator.generateApplication(application);
@@ -53,7 +57,7 @@ public class HomeController extends BaseController{
     }
 
     @RequestMapping("/insert")
-    public String insertTestData(ModelMap model){
+    public String insertTestData(ModelMap model) {
         dataGeneratorUtil.addTestApplication();
         model.addAttribute("title", "Prototyp Maven CLI Tests");
         model.addAttribute("content", "index/content");
