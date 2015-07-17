@@ -24,7 +24,8 @@
             <label class="col-sm-12 control-label"><b>Attributes:</b></label>
         </div>
 
-        <div class="col-sm-12 form-group" th:each="attribute,attributeStat : *{models[__${modelStat.index}__].attributes}">
+        <div class="col-sm-12 form-group"
+             th:each="attribute,attributeStat : *{models[__${modelStat.index}__].attributes}">
             <div class="col-sm-9">
                 <input type="text"
                        th:field="*{models[__${modelStat.index}__].attributes[__${attributeStat.index}__].name}"
@@ -32,7 +33,8 @@
                        class="form-control"/>
             </div>
             <div class="col-sm-3">
-                <button class="glyphicon glyphicon-remove btn pull-right" type="submit" th:value="${attributeStat.index}"
+                <button class="glyphicon glyphicon-remove btn pull-right" type="submit"
+                        th:value="${attributeStat.index}"
                         name="removeAttribute">
                 </button>
                 <input type="hidden" th:value="${modelStat.index}" name="modelId"/>
@@ -41,6 +43,43 @@
         <div class="col-sm-12">
             <button class="btn btn-sm pull-left" name="addAttribute" th:value="${modelStat.index}" type="submit">
                 Add new attribute
+            </button>
+        </div>
+
+        <div class="col-sm-3 form-group pull-left">
+            <label class="col-sm-12 control-label"><b>Relations:</b></label>
+        </div>
+
+        <div class="col-sm-12 form-group"
+             th:each="attribute,attributeStat : *{models[__${modelStat.index}__].attributes}">
+            <div class="col-sm-4">
+                <select name="relationType" size="1">
+                    <option>has got one</option>
+                    <option>has got many</option>
+                </select>
+            </div>
+
+            <div class="col-sm-4">
+                <select name="relationTo" size="1">
+                    <option th:each="model,modelStat : *{models}" th:text="${model.name}"></option>
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <button class="glyphicon glyphicon-remove btn pull-right" type="submit"
+                        th:value="${attributeStat.index}"
+                        name="removeAttribute">
+                </button>
+                <input type="hidden" th:value="${modelStat.index}" name="modelId"/>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <button class="btn btn-sm pull-left" name="addRelation" th:value="${modelStat.index}" type="submit">
+                Add new relation
+            </button>
+        </div>
+        <div class="col-sm-12">
+            <button class="btn pull-right" name="saveModel" th:value="${modelStat.index}" type="submit">
+                Save
             </button>
         </div>
     </div>

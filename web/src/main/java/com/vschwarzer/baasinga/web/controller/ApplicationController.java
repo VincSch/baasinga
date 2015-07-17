@@ -1,6 +1,7 @@
 package com.vschwarzer.baasinga.web.controller;
 
-import com.vschwarzer.baasinga.domain.model.User;
+import com.vschwarzer.baasinga.domain.model.authentication.User;
+import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.repository.render.VersionDAO;
@@ -12,10 +13,10 @@ import com.vschwarzer.baasinga.web.form.application.AppDTO;
 import com.vschwarzer.baasinga.web.form.application.AttributeDTO;
 import com.vschwarzer.baasinga.web.form.application.ModelDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,8 +26,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by vs on 21.05.15.
  */
 @Controller
-@RequestMapping("/build")
-public class AppController extends BaseController {
+public class ApplicationController extends BaseController {
 
     @Autowired
     TemplateRenderer templateRenderer;
@@ -43,7 +43,6 @@ public class AppController extends BaseController {
 
     @RequestMapping("/application")
     public String show(ModelMap model) {
-        //User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AppDTO app = new AppDTO();
         app.getModels().add(new ModelDTO());
         app.getModels().get(0).getAttributes().add(new AttributeDTO());
@@ -53,11 +52,31 @@ public class AppController extends BaseController {
         return "index/index";
     }
 
+    @RequestMapping(value = {"/application/{appId}"}, method = RequestMethod.GET)
+    public String editApp(@PathVariable(value = "appId") final String appId, ModelMap model) {
+        int appIdAsInt = Integer.valueOf(appId);
+        Application app = applicationDAO.findOne(appIdAsInt);
+        model.addAttribute("user", getSessionUser());
+        model.addAttribute("app", app);
+        model.addAttribute("versions", versionDAO.findAll());
+        model.addAttribute("content", "application/content");
+        return "index/index";
+    }
+
+    @RequestMapping(value = {"/application/details/{appId}"}, method = RequestMethod.GET)
+    public String details(@PathVariable(value = "appId") final String appId, ModelMap model) {
+        int appIdAsInt = Integer.valueOf(appId);
+        model.addAttribute("user", getSessionUser());
+        model.addAttribute("applications", applicationDAO.findAll());
+        model.addAttribute("content", "application/details/content");
+        return "index/index";
+    }
+
     @RequestMapping(value = "/application", params = {"save"}, method = RequestMethod.POST)
     public String processForm(final AppDTO app) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user != null)
-         LOG.info("firstname" + user.getFirstName());
+        if (user != null)
+            LOG.info("firstname" + user.getFirstName());
         LOG.info(app.getName());
         LOG.info(String.valueOf(app.getPort()));
         LOG.info(app.getVersion());
@@ -66,7 +85,7 @@ public class AppController extends BaseController {
 
         for (ModelDTO model : app.getModels()) {
             LOG.info(model.getName());
-            for(AttributeDTO attribute : model.getAttributes()){
+            for (AttributeDTO attribute : model.getAttributes()) {
                 LOG.info(attribute.getName());
             }
 
@@ -80,6 +99,14 @@ public class AppController extends BaseController {
         ModelDTO modelDTO = new ModelDTO();
         modelDTO.getAttributes().add(new AttributeDTO());
         app.getModels().add(modelDTO);
+        model.addAttribute("app", app);
+        model.addAttribute("versions", versionDAO.findAll());
+        model.addAttribute("content", "application/content");
+        return "index/index";
+    }
+
+    @RequestMapping(value = "/application", params = {"saveModel"})
+    public String saveModel(final AppDTO app, ModelMap model) {
         model.addAttribute("app", app);
         model.addAttribute("versions", versionDAO.findAll());
         model.addAttribute("content", "application/content");

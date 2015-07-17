@@ -1,6 +1,6 @@
 package com.vschwarzer.baasinga.domain;
 
-import com.vschwarzer.baasinga.domain.model.User;
+import com.vschwarzer.baasinga.domain.model.authentication.User;
 
 import javax.persistence.*;
 import java.util.Date;

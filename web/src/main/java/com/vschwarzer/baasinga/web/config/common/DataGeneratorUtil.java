@@ -1,6 +1,6 @@
 package com.vschwarzer.baasinga.web.config.common;
 
-import com.vschwarzer.baasinga.domain.model.User;
+import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
@@ -126,8 +126,8 @@ public class DataGeneratorUtil {
         user.setAccountNonLocked(true);
         user.setEnabled(true);
         user.setUsername("vs@stroodel.com");
-        user.setFirstName("Ping");
-        user.setLastName("jfjf");
+        user.setFirstName("Vincent");
+        user.setLastName("Schwarzer");
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode("abc"));
         userDAO.create(user);

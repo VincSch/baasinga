@@ -1,6 +1,6 @@
 package com.vschwarzer.baasinga.web.controller;
 
-import com.vschwarzer.baasinga.domain.model.User;
+import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
@@ -9,10 +9,7 @@ import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import com.vschwarzer.baasinga.web.config.common.DataGeneratorUtil;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,9 +35,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (email != null && !email.equals("anonymousUser"))
-            LOG.info(userDAO.findByEmail(email).getFirstName());
+        model.addAttribute("user", getSessionUser());
         model.addAttribute("title", "Prototyp Maven CLI Tests");
         model.addAttribute("content", "index/content");
         return "index/index";

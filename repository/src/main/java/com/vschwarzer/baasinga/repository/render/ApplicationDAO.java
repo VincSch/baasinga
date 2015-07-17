@@ -1,6 +1,6 @@
 package com.vschwarzer.baasinga.repository.render;
 
-import com.vschwarzer.baasinga.domain.model.User;
+import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.GenericDAO;
 

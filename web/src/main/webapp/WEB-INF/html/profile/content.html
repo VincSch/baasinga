@@ -1,0 +1,142 @@
+<div class="section section-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Dashboard</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <a th:href="@{/application}">
+                    <div align="center" class="well">
+                        <h3 class="glyphicon glyphicon-play"></h3>
+                        <h4>New App</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a th:href="@{/profile/edit}">
+                    <div align="center" class="well">
+                        <h3 class="glyphicon glyphicon-user"></h3>
+                        <h4>Profile</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="#">
+                    <div align="center" class="well">
+                        <h3 class="glyphicon glyphicon-cloud"></h3>
+                        <h4>You're Cloud</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="#">
+                    <div align="center" class="well">
+                        <h3 class="glyphicon glyphicon-question-sign"></h3>
+                        <h4>FAQ</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">Quick-View</div>
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <a class="list-group-item" href="#">
+                                <i class="fa fa-comment fa-fw"></i> Applications
+                                    <span class="pull-right badge small">10
+                                    </span>
+                            </a>
+                            <a class="list-group-item" href="#">
+                                <i class="fa fa-comment fa-fw"></i> Models
+                                    <span class="pull-right badge small">30
+                                    </span>
+                            </a>
+                            <a class="list-group-item" href="#">
+                                <i class="fa fa-comment fa-fw"></i> Relations
+                                    <span class="pull-right badge small">5
+                                    </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">About you</div>
+                    <div class="panel-body">
+                        <p th:text="'Welcome ' + ${user.firstName} + ' ' + ${user.lastName}"></p>
+
+                        <p th:text="'Member since: ' + ${user.createdAt}"></p>
+
+                        <p th:text="'Firstname: ' + ${user.firstName}"></p>
+
+                        <p th:text="'Lastname: ' + ${user.lastName}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">Applications</div>
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Security enabled</th>
+                                <th>Cloud hosting</th>
+                                <th>Created at</th>
+                                <th>updated at</th>
+                                <th>version</th>
+                                <th>Models</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="app : ${applications}">
+                                <td th:text="${app.name}"></td>
+                                <td align="center">
+                                    <span class="glyphicon glyphicon-ok-circle" th:if="${app.secEnabled}"></span>
+                                    <span class="glyphicon glyphicon-remove-circle"
+                                          th:unless="${app.secEnabled}"></span>
+                                </td>
+                                <td align="center">
+                                    <span class="glyphicon glyphicon-ok-circle" th:if="${app.cloudEnabled}"></span>
+                                    <span class="glyphicon glyphicon-remove-circle"
+                                          th:unless="${app.cloudEnabled}"></span>
+                                </td>
+                                <td th:text="${app.createdAt}"></td>
+                                <td th:text="${app.updatedAt}"></td>
+                                <td>
+                                    <div class="badge" th:text="${app.version.name}"></div>
+                                </td>
+                                <td>
+                                    <div class="badge" th:text="30"></div>
+                                </td>
+                                <td align="center"><a title="See details" class="glyphicon glyphicon-pencil"
+                                                      th:href="@{/application/details/{id}/(id=${app.id})}"></a></td>
+                                <td align="center"><a title="Create new version" class="glyphicon glyphicon-plus"
+                                                      th:href="@{/application/{id}/(id=${app.id})}"></a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

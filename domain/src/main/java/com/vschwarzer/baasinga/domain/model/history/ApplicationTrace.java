@@ -1,19 +1,22 @@
-package com.vschwarzer.baasinga.domain.model.render;
+package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
+import com.vschwarzer.baasinga.domain.model.render.*;
+import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
 import java.util.List;
 
 /**
- * Entity class for applications.
+ * Entity class for applications history
  *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
-@Entity
-@Table(name = "ba_application")
-public class Application extends AbstractBaseAuditEntity{
+//@Entity
+//@Table(name = "ba_application_trace")
+public class ApplicationTrace extends AbstractBaseAuditEntity {
+
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -31,11 +34,11 @@ public class Application extends AbstractBaseAuditEntity{
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy="application", fetch = FetchType.EAGER)
-    private List<Model> models;
+    @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
+    private List<ModelTrace> models;
 
-    @OneToMany(mappedBy="application", fetch = FetchType.EAGER)
-    private List<Repository> repositories;
+    @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
+    private List<RepositoryTrace> repositories;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -81,19 +84,19 @@ public class Application extends AbstractBaseAuditEntity{
         this.user = user;
     }
 
-    public List<Model> getModels() {
+    public List<ModelTrace> getModels() {
         return models;
     }
 
-    public void setModels(List<Model> models) {
+    public void setModels(List<ModelTrace> models) {
         this.models = models;
     }
 
-    public List<Repository> getRepositories() {
+    public List<RepositoryTrace> getRepositories() {
         return repositories;
     }
 
-    public void setRepositories(List<Repository> repositories) {
+    public void setRepositories(List<RepositoryTrace> repositories) {
         this.repositories = repositories;
     }
 
@@ -105,3 +108,4 @@ public class Application extends AbstractBaseAuditEntity{
         this.version = version;
     }
 }
+

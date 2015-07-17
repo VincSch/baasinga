@@ -3,24 +3,24 @@
     <div class="container">
         <nav id="mainmenu" class="mainmenu">
             <ul>
-                <li class="logo-wrapper"><a href="/"><img src="../../img/logo2.jpg"
+                <li class="logo-wrapper"><a href="/"><img th:src="@{/img/logo2.jpg}"
                                                           alt="BaaSinga"/></a>
                 </li>
                 <li class="active">
-                    <a href="/">Home</a>
+                    <a href="/"><h3 title="Home" class="glyphicon glyphicon-home"></h3></a>
                 </li>
                 <li>
-                    <a href="/insert" th:href="@{/insert}">Insert test data</a>
+                    <a href="/documentation" th:href="@{/documentation}"><h3 title="Documentation" class="glyphicon glyphicon-question-sign"></h3></a>
                 </li>
-                <li>
-                    <a href="/generate" th:href="@{/generate}">Generate Example</a>
+                <li th:if="${user} != null">
+                    <a href="/profile" th:href="@{/profile}"><h3 title="Dashboard" class="glyphicon glyphicon-dashboard"></h3></a>
                 </li>
-                <li>
-                    <a href="/build/application" th:href="@{/build/application}">Build you're App</a>
+                <li th:if="${user} == null">
+                    <a href="/login" th:href="@{/login}"><h3 title="Login" class="glyphicon glyphicon-log-in"></h3></a>
                 </li>
-                <li>
+                <li th:if="${user} != null">
                     <form role="form" th:action="@{/logout}" method="post">
-                        <button type="submit" class="btn pull-right">Logout</button>
+                        <button type="submit" class="btn-link"><h3 title="Logout" class="glyphicon glyphicon-log-out"></h3></button>
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     </form>
                 </li>

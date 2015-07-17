@@ -1,6 +1,6 @@
 package com.vschwarzer.baasinga.repository.authorization;
 
-import com.vschwarzer.baasinga.domain.model.Role;
+import com.vschwarzer.baasinga.domain.model.authentication.Role;
 import com.vschwarzer.baasinga.repository.GenericDAO;
 
 import java.util.List;

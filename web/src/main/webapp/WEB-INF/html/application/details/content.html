@@ -1,0 +1,105 @@
+<div class="section section-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <a th:href="@{/application}">
+                    <div align="center" class="well">
+                        <h3 class="glyphicon glyphicon-open"></h3>
+                        <h4>New version</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="#">
+                    <div align="center" class="well">
+                        <h3 class="glyphicon glyphicon-minus-sign"></h3>
+                        <h4>Delete app</h4>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-3">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">Version history</div>
+                    <div class="panel-body">
+                        <table align="center" class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Security enabled</th>
+                                <th>Cloud hosting</th>
+                                <th>version</th>
+                                <th>Models</th>
+                                <th>Details</th>
+                                <th>Docker</th>
+                                <th>War</th>
+                                <th>Source</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="app : ${applications}">
+                                <td th:text="${app.name}"></td>
+                                <td align="center">
+                                    <h3 class="glyphicon glyphicon-ok-circle" th:if="${app.secEnabled}"></h3>
+                                    <h3 class="glyphicon glyphicon-remove-circle"
+                                          th:unless="${app.secEnabled}"></h3>
+                                </td>
+                                <td align="center">
+                                    <h3 class="glyphicon glyphicon-ok-circle" th:if="${app.cloudEnabled}"></h3>
+                                    <h3 class="glyphicon glyphicon-remove-circle"
+                                          th:unless="${app.cloudEnabled}"></h3>
+                                </td>
+                                <td>
+                                    <div class="badge" th:text="${app.version.name}"></div>
+                                </td>
+                                <td>
+                                    <div class="badge" th:text="30"></div>
+                                </td>
+                                <td align="center">
+                                    <a href="" ><h3 class="glyphicon glyphicon-zoom-in"></h3></a>
+                                </td>
+                                <td align="center">
+                                    <a href="" ><img width="25px" height="25px" th:src="@{/img/docker-icon-bw.png}" /></a>
+                                </td>
+                                <td align="center">
+                                    <a href="" ><h3 class="glyphicon glyphicon-compressed"></h3></a>
+                                </td>
+                                <td align="center">
+                                    <a href="" ><h3 class="glyphicon glyphicon-folder-open"></h3></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div th:include="application/details/timeline"></div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">Details</div>
+                    <div class="panel-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
