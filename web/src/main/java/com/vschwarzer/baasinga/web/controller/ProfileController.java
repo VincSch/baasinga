@@ -4,6 +4,7 @@ import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
 import com.vschwarzer.baasinga.web.form.application.AppDTO;
 import com.vschwarzer.baasinga.web.form.application.AttributeDTO;
+import com.vschwarzer.baasinga.web.form.application.ChangePasswordDTO;
 import com.vschwarzer.baasinga.web.form.application.ModelDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,21 +17,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ProfileController extends BaseController {
 
-    @Autowired
-    ApplicationDAO applicationDAO;
-
-    @RequestMapping("/profile")
-    public String show(ModelMap model) {
+    @RequestMapping("/profile/edit")
+    public String edit(ModelMap model) {
+        model.addAttribute("pw", new ChangePasswordDTO());
         model.addAttribute("user", getSessionUser());
-        model.addAttribute("applications", applicationDAO.findAll());
-        model.addAttribute("content", "profile/content");
+        model.addAttribute("content", "profile/edit");
         return "index/index";
     }
 
-    @RequestMapping("/profile/edit")
-    public String edit(ModelMap model) {
+    @RequestMapping("/profile/changepw")
+    public String changePassword(ModelMap model) {
         model.addAttribute("user", getSessionUser());
-        model.addAttribute("content", "profile/edit");
+        model.addAttribute("content", "dashboard/content");
         return "index/index";
     }
 }

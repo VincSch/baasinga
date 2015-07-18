@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Defining repository access methods for users
+ *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
 public interface UserDAO extends UserDetailsService, GenericDAO<User> {
@@ -67,9 +68,8 @@ public interface UserDAO extends UserDetailsService, GenericDAO<User> {
     /**
      * Returns all users by role which enabled .
      *
-     *
      * @param roleName
-     * @param enabled true, false
+     * @param enabled  true, false
      * @return not admin users
      */
     List<User> findByRoleAndEnabled(final String roleName, boolean enabled);

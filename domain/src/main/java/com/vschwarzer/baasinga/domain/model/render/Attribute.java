@@ -64,7 +64,7 @@ public class Attribute extends AbstractBaseAuditEntity {
     public void setAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
     }
-
+    
     public Version getVersion() {
         return version;
     }
@@ -114,6 +114,7 @@ public class Attribute extends AbstractBaseAuditEntity {
         public Long getId() {
             return id;
         }
+
         public String getName() {
             return name;
         }

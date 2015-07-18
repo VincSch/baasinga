@@ -1,14 +1,14 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
-import com.vschwarzer.baasinga.domain.model.render.*;
+import com.vschwarzer.baasinga.domain.model.render.Annotation;
+import com.vschwarzer.baasinga.domain.model.render.Repository;
 
 import javax.persistence.*;
-import javax.persistence.Version;
 import java.util.List;
 
 /**
- * Entity class for methods.
+ * Entity class for methods history
  *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
@@ -27,10 +27,10 @@ public class MethodTrace extends AbstractBaseAuditEntity {
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "repositoryId", referencedColumnName = "id")
-    private Repository repository;
+    private RepositoryTrace repository;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "ba_method_annotation",
+    @JoinTable(name = "ba_method_annotation_trace",
             joinColumns = @JoinColumn(unique = false, name = "methodId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
@@ -57,11 +57,11 @@ public class MethodTrace extends AbstractBaseAuditEntity {
         this.annotations = annotations;
     }
 
-    public Repository getRepository() {
+    public RepositoryTrace getRepository() {
         return repository;
     }
 
-    public void setRepository(Repository repository) {
+    public void setRepository(RepositoryTrace repository) {
         this.repository = repository;
     }
 

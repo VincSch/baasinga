@@ -2,7 +2,6 @@ package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
-import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;

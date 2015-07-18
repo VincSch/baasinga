@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Defining repository access methods for user roles
+ *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
 public interface UserRoleDAO extends GenericDAO<UserRole> {

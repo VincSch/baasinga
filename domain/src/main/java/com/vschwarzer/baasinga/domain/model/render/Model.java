@@ -29,6 +29,9 @@ public class Model extends AbstractBaseAuditEntity{
     @OrderColumn(name = "id")
     private List<Annotation> annotations;
 
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    private List<Relation> relations;
+
     @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
     private List<Attribute> attributes;
 
@@ -74,6 +77,14 @@ public class Model extends AbstractBaseAuditEntity{
 
     public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
+    }
+
+    public List<Relation> getRelations() {
+        return relations;
+    }
+
+    public void setRelations(List<Relation> relations) {
+        this.relations = relations;
     }
 
     public List<Import> getImports() {

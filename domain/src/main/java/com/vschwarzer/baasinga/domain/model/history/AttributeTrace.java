@@ -1,8 +1,8 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
-import com.vschwarzer.baasinga.domain.model.render.*;
-import com.vschwarzer.baasinga.domain.model.render.Version;
+import com.vschwarzer.baasinga.domain.model.render.Annotation;
+import com.vschwarzer.baasinga.domain.model.render.Attribute;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,7 +24,7 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
     private Attribute.DataType dataType;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "ba_attribute_annotation",
+    @JoinTable(name = "ba_attribute_annotation_trace",
             joinColumns = @JoinColumn(unique = false, name = "attributeId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
@@ -33,15 +33,15 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
-    private com.vschwarzer.baasinga.domain.model.render.Version version;
+    private Version version;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "modelId", referencedColumnName = "id")
-    private Model model;
+    private ModelTrace model;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "repositoryId", referencedColumnName = "id")
-    private Repository repository;
+    private RepositoryTrace repository;
 
     public String getName() {
         return name;
@@ -67,7 +67,7 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
         this.annotations = annotations;
     }
 
-    public com.vschwarzer.baasinga.domain.model.render.Version getVersion() {
+    public Version getVersion() {
         return version;
     }
 
@@ -75,19 +75,19 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
         this.version = version;
     }
 
-    public Model getModel() {
+    public ModelTrace getModel() {
         return model;
     }
 
-    public void setModel(Model model) {
+    public void setModel(ModelTrace model) {
         this.model = model;
     }
 
-    public Repository getRepository() {
+    public RepositoryTrace getRepository() {
         return repository;
     }
 
-    public void setRepository(Repository repository) {
+    public void setRepository(RepositoryTrace repository) {
         this.repository = repository;
     }
 }

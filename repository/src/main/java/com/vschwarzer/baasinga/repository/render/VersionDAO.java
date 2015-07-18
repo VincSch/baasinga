@@ -12,6 +12,7 @@ public interface VersionDAO extends GenericDAO<Version> {
 
     /**
      * Find an version by its name
+     *
      * @param name version name
      * @return version
      */

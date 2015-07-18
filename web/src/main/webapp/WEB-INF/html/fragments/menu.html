@@ -13,7 +13,7 @@
                     <a href="/documentation" th:href="@{/documentation}"><h3 title="Documentation" class="glyphicon glyphicon-question-sign"></h3></a>
                 </li>
                 <li th:if="${user} != null">
-                    <a href="/profile" th:href="@{/profile}"><h3 title="Dashboard" class="glyphicon glyphicon-dashboard"></h3></a>
+                    <a href="/profile" th:href="@{/dashboard}"><h3 title="Dashboard" class="glyphicon glyphicon-dashboard"></h3></a>
                 </li>
                 <li th:if="${user} == null">
                     <a href="/login" th:href="@{/login}"><h3 title="Login" class="glyphicon glyphicon-log-in"></h3></a>

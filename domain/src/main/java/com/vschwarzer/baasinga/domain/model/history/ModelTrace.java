@@ -1,14 +1,15 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
-import com.vschwarzer.baasinga.domain.model.render.*;
+import com.vschwarzer.baasinga.domain.model.render.Annotation;
+import com.vschwarzer.baasinga.domain.model.render.Import;
+import com.vschwarzer.baasinga.domain.model.render.Relation;
 
 import javax.persistence.*;
-import javax.persistence.Version;
 import java.util.List;
 
 /**
- * Entity class for models.
+ * Entity class for models history
  *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
@@ -19,23 +20,26 @@ public class ModelTrace extends AbstractBaseAuditEntity {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
-    private Application application;
+    private ApplicationTrace application;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "ba_model_annotation",
+    @JoinTable(name = "ba_model_annotation_trace",
             joinColumns = @JoinColumn(unique = false, name = "modelId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
     @OrderColumn(name = "id")
     private List<Annotation> annotations;
 
-    @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
-    private List<Attribute> attributes;
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    private List<RelationTrace> relations;
+
+    @OneToMany(mappedBy = "model", fetch = FetchType.EAGER)
+    private List<AttributeTrace> attributes;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "ba_model_import",
+    @JoinTable(name = "ba_model_import_trace",
             joinColumns = @JoinColumn(unique = false, name = "modelId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
@@ -44,7 +48,7 @@ public class ModelTrace extends AbstractBaseAuditEntity {
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
-    private com.vschwarzer.baasinga.domain.model.render.Version version;
+    private Version version;
 
     public String getName() {
         return name;
@@ -54,11 +58,11 @@ public class ModelTrace extends AbstractBaseAuditEntity {
         this.name = name;
     }
 
-    public Application getApplication() {
+    public ApplicationTrace getApplication() {
         return application;
     }
 
-    public void setApplication(Application application) {
+    public void setApplication(ApplicationTrace application) {
         this.application = application;
     }
 
@@ -70,12 +74,20 @@ public class ModelTrace extends AbstractBaseAuditEntity {
         this.annotations = annotations;
     }
 
-    public List<Attribute> getAttributes() {
+    public List<AttributeTrace> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<Attribute> attributes) {
+    public void setAttributes(List<AttributeTrace> attributes) {
         this.attributes = attributes;
+    }
+
+    public List<RelationTrace> getRelations() {
+        return relations;
+    }
+
+    public void setRelations(List<RelationTrace> relations) {
+        this.relations = relations;
     }
 
     public List<Import> getImports() {
@@ -86,11 +98,11 @@ public class ModelTrace extends AbstractBaseAuditEntity {
         this.imports = imports;
     }
 
-    public com.vschwarzer.baasinga.domain.model.render.Version getVersion() {
+    public Version getVersion() {
         return version;
     }
 
-    public void setVersion(com.vschwarzer.baasinga.domain.model.render.Version version) {
+    public void setVersion(Version version) {
         this.version = version;
     }
 }

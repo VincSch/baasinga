@@ -1,47 +1,49 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
-import com.vschwarzer.baasinga.domain.model.render.*;
+import com.vschwarzer.baasinga.domain.model.render.Annotation;
+import com.vschwarzer.baasinga.domain.model.render.Import;
+import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
 import java.util.List;
 
 /**
- * Entity class for repositories.
+ * Entity class for repositories history
  *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
 //@Entity
 //@Table(name = "ba_repository_trace")
-public class RepositoryTrace extends AbstractBaseAuditEntity{
+public class RepositoryTrace extends AbstractBaseAuditEntity {
 
     @Column
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
-    private Application application;
+    private ApplicationTrace application;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "modelId", referencedColumnName = "id")
-    private Model model;
+    private ModelTrace model;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "ba_repository_annotation",
+    @JoinTable(name = "ba_repository_annotation_trace",
             joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
     @OrderColumn(name = "id")
     private List<Annotation> annotations;
 
-    @OneToMany(mappedBy="repository",fetch = FetchType.EAGER)
-    private List<Method> methods;
+    @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
+    private List<MethodTrace> methods;
 
-    @OneToMany(mappedBy="repository", fetch = FetchType.EAGER)
-    private List<Attribute> attributes;
+    @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
+    private List<AttributeTrace> attributes;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "ba_repository_import",
+    @JoinTable(name = "ba_repository_import_trace",
             joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
@@ -50,7 +52,7 @@ public class RepositoryTrace extends AbstractBaseAuditEntity{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
-    private com.vschwarzer.baasinga.domain.model.render.Version version;
+    private Version version;
 
 
     public String getName() {
@@ -61,19 +63,19 @@ public class RepositoryTrace extends AbstractBaseAuditEntity{
         this.name = name;
     }
 
-    public Application getApplication() {
+    public ApplicationTrace getApplication() {
         return application;
     }
 
-    public void setApplication(Application application) {
+    public void setApplication(ApplicationTrace application) {
         this.application = application;
     }
 
-    public Model getModel() {
+    public ModelTrace getModel() {
         return model;
     }
 
-    public void setModel(Model model) {
+    public void setModel(ModelTrace model) {
         this.model = model;
     }
 
@@ -85,19 +87,19 @@ public class RepositoryTrace extends AbstractBaseAuditEntity{
         this.annotations = annotations;
     }
 
-    public List<Method> getMethods() {
+    public List<MethodTrace> getMethods() {
         return methods;
     }
 
-    public void setMethods(List<Method> methods) {
+    public void setMethods(List<MethodTrace> methods) {
         this.methods = methods;
     }
 
-    public List<Attribute> getAttributes() {
+    public List<AttributeTrace> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<Attribute> attributes) {
+    public void setAttributes(List<AttributeTrace> attributes) {
         this.attributes = attributes;
     }
 

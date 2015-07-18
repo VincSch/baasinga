@@ -12,6 +12,7 @@ public interface ImportDAO extends GenericDAO<Import> {
 
     /**
      * Find an Import by its name
+     *
      * @param name Import name
      * @return Import
      */
