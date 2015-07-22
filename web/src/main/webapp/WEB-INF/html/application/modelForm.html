@@ -73,7 +73,7 @@
 
             <div class="col-sm-4">
                 <button class="glyphicon glyphicon-remove btn pull-right" type="submit"
-                        th:value="${relationStat.index}"
+                        th:value="${modelStat.index} + '-' + ${relationStat.index}"
                         name="removeRelation">
                 </button>
             </div>

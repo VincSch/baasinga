@@ -12,6 +12,7 @@ import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import com.vschwarzer.baasinga.web.common.Endpoints;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
+import com.vschwarzer.baasinga.web.controller.common.RequestParser;
 import com.vschwarzer.baasinga.web.form.application.AppDTO;
 import com.vschwarzer.baasinga.web.form.application.AttributeDTO;
 import com.vschwarzer.baasinga.web.form.application.ModelDTO;
@@ -35,6 +36,8 @@ import java.util.List;
 public class ApplicationController extends BaseController {
 
     @Autowired
+    RequestParser requestParser;
+    @Autowired
     TemplateRenderer templateRenderer;
     @Autowired
     MavenCompiler mavenCompiler;
@@ -48,8 +51,6 @@ public class ApplicationController extends BaseController {
     VersionDAO versionDAO;
 
     public String show(ModelMap model) {
-//        AppDTO appDTO = (AppDTO) model.get("app");
-//        model.addAttribute("allModels", appDTO.getModels());
         model.addAttribute("user", getSessionUser());
         model.addAttribute("versions", versionDAO.findAll());
         model.addAttribute("allRelationTypes", getAsList());
@@ -119,9 +120,10 @@ public class ApplicationController extends BaseController {
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_RemoveAttribute})
     public String removeAttributeFromModel(final AppDTO app, final HttpServletRequest req, ModelMap model) {
-        final Integer attributeId = Integer.valueOf(req.getParameter("removeAttribute"));
-        final Integer modelId = Integer.valueOf(req.getParameter("modelId"));
-        app.getModels().get(modelId.intValue()).getAttributes().remove(attributeId.intValue());
+        final String reqString = req.getParameter("removeAttribute");
+        int modelId = requestParser.getModelIndex(reqString);
+        int attribtueId = requestParser.getAttributeOrRelationIndex(reqString);
+        app.getModels().get(modelId).getAttributes().remove(attribtueId);
         model.addAttribute("app", app);
         return show(model);
     }
@@ -136,9 +138,10 @@ public class ApplicationController extends BaseController {
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_RemoveRelation})
     public String removeRelationFromModel(final AppDTO app, final HttpServletRequest req, ModelMap model) {
-        final Integer relationId = Integer.valueOf(req.getParameter("removeRelation"));
-        final Integer modelId = Integer.valueOf(req.getParameter("modelId"));
-        app.getModels().get(modelId.intValue()).getRelations().remove(relationId.intValue());
+        final String reqString = req.getParameter("removeRelation");
+        int modelId = requestParser.getModelIndex(reqString);
+        int relationId = requestParser.getAttributeOrRelationIndex(reqString);
+        app.getModels().get(modelId).getRelations().remove(relationId);
         model.addAttribute("app", app);
         return show(model);
     }

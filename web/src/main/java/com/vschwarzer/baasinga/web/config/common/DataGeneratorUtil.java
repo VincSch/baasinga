@@ -2,6 +2,7 @@ package com.vschwarzer.baasinga.web.config.common;
 
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
+import com.vschwarzer.baasinga.domain.model.common.RelationType;
 import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.*;
@@ -44,6 +45,9 @@ public class DataGeneratorUtil {
 
     @Autowired
     AnnotationDAO annotationDAO;
+
+    @Autowired
+    RelationDAO relationDAO;
 
 
     public void addTestApplication() {
@@ -150,6 +154,21 @@ public class DataGeneratorUtil {
         model.setImports(entityImports);
         model.setAnnotations(entityAnnotations);
         modelDAO.create(model);
+
+        Model model2 = new Model();
+        model2.setName("Contact");
+        model2.setVersion(version);
+        model2.setApplication(application);
+        model2.setImports(entityImports);
+        //model2.setAnnotations(entityAnnotations);
+        modelDAO.create(model2);
+
+        Relation relation = new Relation();
+        relation.setVersion(version);
+        relation.setChild(model2);
+        relation.setOwner(model);
+        relation.setRelationType(RelationType.OneToMany);
+        relationDAO.create(relation);
 
         Attribute attribute = new Attribute();
         attribute.setName("name");
