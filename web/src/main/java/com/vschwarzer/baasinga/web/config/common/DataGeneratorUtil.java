@@ -10,9 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Vincent Schwarzer on 27.06.15.
@@ -72,15 +70,15 @@ public class DataGeneratorUtil {
 
         };
 
-        List<Annotation> entityAnnotations = new ArrayList<>();
-        List<Annotation> repositoryAnnotations = new ArrayList<>();
+        Set<Annotation> entityAnnotations = new HashSet<>();
+        Set<Annotation> repositoryAnnotations = new HashSet<>();
 
         for (String an : Arrays.asList(entityAnnotationArray)) {
             Annotation annotation = new Annotation();
             annotation.setName(an);
             annotation.setType(DomainType.MODEL);
 
-            List<Import> imports = new ArrayList();
+            Set<Import> imports = new HashSet<>();
             Import importModel = new Import();
             importModel.setPackageName(annotationImportArray[0]);
             importDAO.create(importModel);
@@ -94,7 +92,7 @@ public class DataGeneratorUtil {
             Annotation annotation = new Annotation();
             annotation.setName(an);
             annotation.setType(DomainType.REPOSITORY);
-            List<Import> imports = new ArrayList();
+            Set<Import> imports = new HashSet();
             Import importModel = new Import();
             importModel.setPackageName(annotationImportArray[1]);
             importDAO.create(importModel);
@@ -105,8 +103,8 @@ public class DataGeneratorUtil {
         }
 
 
-        List<Import> entityImports = new ArrayList<>();
-        List<Import> repositoryImports = new ArrayList<>();
+        Set<Import> entityImports = new HashSet<>();
+        Set<Import> repositoryImports = new HashSet<>();
 
         for (String packageName : Arrays.asList(entityImportArray)) {
             Import importClass = new Import();

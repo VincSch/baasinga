@@ -1,5 +1,5 @@
 <!-- Create application -->
-<form action="#" th:action="@{/build/application}" th:object="${app}" method="post" role="form" class="form-horizontal">
+<form action="#" th:action="@{/application}" th:object="${app}" method="post" role="form" class="form-horizontal">
     <h2>About you're application</h2>
 
     <div class="row">
@@ -46,7 +46,7 @@
                     <label class="col-sm-3 control-label" for="Description"><b>Description</b></label>
 
                     <div class="col-sm-9">
-                        <textarea rows="8" type="text" placeholder="" id="Description" class="form-control"/>
+                        <textarea th:field="*{description}" rows="8" type="text" placeholder="" id="Description" class="form-control"/>
                     </div>
                 </div>
             </div>

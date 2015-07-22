@@ -2,7 +2,7 @@ package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.common.RelationType;
-import com.vschwarzer.baasinga.domain.model.render.Model;
+import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
 
@@ -26,6 +26,10 @@ public class RelationTrace extends AbstractBaseAuditEntity {
     @Enumerated(EnumType.ORDINAL)
     private RelationType relationType;
 
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "versionId", referencedColumnName = "id")
+    private Version version;
+
     public ModelTrace getOwner() {
         return owner;
     }
@@ -48,5 +52,13 @@ public class RelationTrace extends AbstractBaseAuditEntity {
 
     public void setRelationType(RelationType relationType) {
         this.relationType = relationType;
+    }
+
+    public Version getVersion() {
+        return version;
+    }
+
+    public void setVersion(Version version) {
+        this.version = version;
     }
 }

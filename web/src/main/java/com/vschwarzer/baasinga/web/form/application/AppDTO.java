@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class AppDTO {
 
-    public AppDTO(){
+    public AppDTO() {
 
     }
 
@@ -17,6 +17,7 @@ public class AppDTO {
     private String version = "";
     private Boolean cloudEnabled = false;
     private Boolean secEnabled = false;
+    private String description = "";
     private List<ModelDTO> models = new ArrayList<>();
 
     public String getName() {
@@ -57,6 +58,14 @@ public class AppDTO {
 
     public void setSecEnabled(Boolean secEnabled) {
         this.secEnabled = secEnabled;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<ModelDTO> getModels() {

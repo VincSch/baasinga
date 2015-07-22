@@ -5,15 +5,15 @@ import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for applications history
  *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
-//@Entity
-//@Table(name = "ba_application_trace")
+@Entity
+@Table(name = "ba_application_trace")
 public class ApplicationTrace extends AbstractBaseAuditEntity {
 
 
@@ -34,10 +34,10 @@ public class ApplicationTrace extends AbstractBaseAuditEntity {
     private User user;
 
     @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
-    private List<ModelTrace> models;
+    private Set<ModelTrace> models;
 
     @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
-    private List<RepositoryTrace> repositories;
+    private Set<RepositoryTrace> repositories;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -83,19 +83,19 @@ public class ApplicationTrace extends AbstractBaseAuditEntity {
         this.user = user;
     }
 
-    public List<ModelTrace> getModels() {
+    public Set<ModelTrace> getModels() {
         return models;
     }
 
-    public void setModels(List<ModelTrace> models) {
+    public void setModels(Set<ModelTrace> models) {
         this.models = models;
     }
 
-    public List<RepositoryTrace> getRepositories() {
+    public Set<RepositoryTrace> getRepositories() {
         return repositories;
     }
 
-    public void setRepositories(List<RepositoryTrace> repositories) {
+    public void setRepositories(Set<RepositoryTrace> repositories) {
         this.repositories = repositories;
     }
 

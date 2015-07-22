@@ -1,6 +1,7 @@
 package com.vschwarzer.baasinga.web.controller;
 
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
+import com.vschwarzer.baasinga.web.common.Endpoints;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,7 @@ public class DashboardController extends BaseController {
     @Autowired
     ApplicationDAO applicationDAO;
 
-    @RequestMapping("/dashboard")
+    @RequestMapping(Endpoints.Dashboard)
     public String show(ModelMap model) {
         model.addAttribute("user", getSessionUser());
         model.addAttribute("applications", applicationDAO.findAll());

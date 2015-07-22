@@ -4,7 +4,6 @@ import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.common.RelationType;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Entity class for relations.
@@ -25,6 +24,10 @@ public class Relation extends AbstractBaseAuditEntity {
 
     @Enumerated(EnumType.ORDINAL)
     private RelationType relationType;
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "versionId", referencedColumnName = "id")
+    private Version version;
 
     public Model getOwner() {
         return owner;
@@ -48,5 +51,13 @@ public class Relation extends AbstractBaseAuditEntity {
 
     public void setRelationType(RelationType relationType) {
         this.relationType = relationType;
+    }
+
+    public Version getVersion() {
+        return version;
+    }
+
+    public void setVersion(Version version) {
+        this.version = version;
     }
 }

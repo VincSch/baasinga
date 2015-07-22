@@ -4,7 +4,7 @@ import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for applications.
@@ -27,15 +27,18 @@ public class Application extends AbstractBaseAuditEntity{
     @Column(nullable = false)
     private boolean secEnabled;
 
+    @Column(nullable = true)
+    private String description;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
     @OneToMany(mappedBy="application", fetch = FetchType.EAGER)
-    private List<Model> models;
+    private Set<Model> models;
 
     @OneToMany(mappedBy="application", fetch = FetchType.EAGER)
-    private List<Repository> repositories;
+    private Set<Repository> repositories;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -73,6 +76,14 @@ public class Application extends AbstractBaseAuditEntity{
         this.secEnabled = secEnabled;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public User getUser() {
         return user;
     }
@@ -81,19 +92,19 @@ public class Application extends AbstractBaseAuditEntity{
         this.user = user;
     }
 
-    public List<Model> getModels() {
+    public Set<Model> getModels() {
         return models;
     }
 
-    public void setModels(List<Model> models) {
+    public void setModels(Set<Model> models) {
         this.models = models;
     }
 
-    public List<Repository> getRepositories() {
+    public Set<Repository> getRepositories() {
         return repositories;
     }
 
-    public void setRepositories(List<Repository> repositories) {
+    public void setRepositories(Set<Repository> repositories) {
         this.repositories = repositories;
     }
 

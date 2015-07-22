@@ -8,8 +8,19 @@ import java.util.List;
  */
 public class ModelDTO {
 
+    private String id;
     private String name = "";
     private List<AttributeDTO> attributes = new ArrayList<>();
+    private List<RelationDTO> relations = new ArrayList<>();
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -25,5 +36,13 @@ public class ModelDTO {
 
     public void setAttributes(List<AttributeDTO> attributes) {
         this.attributes = attributes;
+    }
+
+    public List<RelationDTO> getRelations() {
+        return relations;
+    }
+
+    public void setRelations(List<RelationDTO> relations) {
+        this.relations = relations;
     }
 }

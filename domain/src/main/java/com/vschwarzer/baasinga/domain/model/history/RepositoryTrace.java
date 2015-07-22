@@ -6,15 +6,15 @@ import com.vschwarzer.baasinga.domain.model.render.Import;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for repositories history
  *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
-//@Entity
-//@Table(name = "ba_repository_trace")
+@Entity
+@Table(name = "ba_repository_trace")
 public class RepositoryTrace extends AbstractBaseAuditEntity {
 
     @Column
@@ -34,13 +34,13 @@ public class RepositoryTrace extends AbstractBaseAuditEntity {
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
     @OrderColumn(name = "id")
-    private List<Annotation> annotations;
+    private Set<Annotation> annotations;
 
     @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
-    private List<MethodTrace> methods;
+    private Set<MethodTrace> methods;
 
     @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
-    private List<AttributeTrace> attributes;
+    private Set<AttributeTrace> attributes;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_repository_import_trace",
@@ -48,7 +48,7 @@ public class RepositoryTrace extends AbstractBaseAuditEntity {
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
     @OrderColumn(name = "id")
-    private List<Import> imports;
+    private Set<Import> imports;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -79,35 +79,35 @@ public class RepositoryTrace extends AbstractBaseAuditEntity {
         this.model = model;
     }
 
-    public List<Annotation> getAnnotations() {
+    public Set<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> annotations) {
+    public void setAnnotations(Set<Annotation> annotations) {
         this.annotations = annotations;
     }
 
-    public List<MethodTrace> getMethods() {
+    public Set<MethodTrace> getMethods() {
         return methods;
     }
 
-    public void setMethods(List<MethodTrace> methods) {
+    public void setMethods(Set<MethodTrace> methods) {
         this.methods = methods;
     }
 
-    public List<AttributeTrace> getAttributes() {
+    public Set<AttributeTrace> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<AttributeTrace> attributes) {
+    public void setAttributes(Set<AttributeTrace> attributes) {
         this.attributes = attributes;
     }
 
-    public List<Import> getImports() {
+    public Set<Import> getImports() {
         return imports;
     }
 
-    public void setImports(List<Import> imports) {
+    public void setImports(Set<Import> imports) {
         this.imports = imports;
     }
 

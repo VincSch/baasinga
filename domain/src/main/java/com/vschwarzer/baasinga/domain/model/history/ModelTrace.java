@@ -3,18 +3,18 @@ package com.vschwarzer.baasinga.domain.model.history;
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.render.Annotation;
 import com.vschwarzer.baasinga.domain.model.render.Import;
-import com.vschwarzer.baasinga.domain.model.render.Relation;
+import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for models history
  *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
-//@Entity
-//@Table(name = "ba_model_trace")
+@Entity
+@Table(name = "ba_model_trace")
 public class ModelTrace extends AbstractBaseAuditEntity {
 
     @Column(nullable = false)
@@ -30,13 +30,13 @@ public class ModelTrace extends AbstractBaseAuditEntity {
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
     @OrderColumn(name = "id")
-    private List<Annotation> annotations;
+    private Set<Annotation> annotations;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private List<RelationTrace> relations;
+    private Set<RelationTrace> relations;
 
     @OneToMany(mappedBy = "model", fetch = FetchType.EAGER)
-    private List<AttributeTrace> attributes;
+    private Set<AttributeTrace> attributes;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_model_import_trace",
@@ -44,7 +44,7 @@ public class ModelTrace extends AbstractBaseAuditEntity {
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
     @OrderColumn(name = "id")
-    private List<Import> imports;
+    private Set<Import> imports;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -66,35 +66,35 @@ public class ModelTrace extends AbstractBaseAuditEntity {
         this.application = application;
     }
 
-    public List<Annotation> getAnnotations() {
+    public Set<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> annotations) {
+    public void setAnnotations(Set<Annotation> annotations) {
         this.annotations = annotations;
     }
 
-    public List<AttributeTrace> getAttributes() {
+    public Set<AttributeTrace> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<AttributeTrace> attributes) {
+    public void setAttributes(Set<AttributeTrace> attributes) {
         this.attributes = attributes;
     }
 
-    public List<RelationTrace> getRelations() {
+    public Set<RelationTrace> getRelations() {
         return relations;
     }
 
-    public void setRelations(List<RelationTrace> relations) {
+    public void setRelations(Set<RelationTrace> relations) {
         this.relations = relations;
     }
 
-    public List<Import> getImports() {
+    public Set<Import> getImports() {
         return imports;
     }
 
-    public void setImports(List<Import> imports) {
+    public void setImports(Set<Import> imports) {
         this.imports = imports;
     }
 

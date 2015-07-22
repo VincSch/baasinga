@@ -3,17 +3,18 @@ package com.vschwarzer.baasinga.domain.model.history;
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.render.Annotation;
 import com.vschwarzer.baasinga.domain.model.render.Attribute;
+import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for attributes history
  *
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
-//@Entity
-//@Table(name = "ba_attribute_trace")
+@Entity
+@Table(name = "ba_attribute_trace")
 public class AttributeTrace extends AbstractBaseAuditEntity {
 
     @Column(nullable = false)
@@ -29,7 +30,7 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
     @OrderColumn(name = "id")
-    private List<Annotation> annotations;
+    private Set<Annotation> annotations;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -59,11 +60,11 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
         this.dataType = dataType;
     }
 
-    public List<Annotation> getAnnotations() {
+    public Set<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> annotations) {
+    public void setAnnotations(Set<Annotation> annotations) {
         this.annotations = annotations;
     }
 

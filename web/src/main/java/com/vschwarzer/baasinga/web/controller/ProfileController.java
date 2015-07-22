@@ -1,12 +1,7 @@
 package com.vschwarzer.baasinga.web.controller;
 
-import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
-import com.vschwarzer.baasinga.web.form.application.AppDTO;
-import com.vschwarzer.baasinga.web.form.application.AttributeDTO;
-import com.vschwarzer.baasinga.web.form.application.ChangePasswordDTO;
-import com.vschwarzer.baasinga.web.form.application.ModelDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vschwarzer.baasinga.web.form.common.ChangePasswordDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.vschwarzer.baasinga.web.form.application;
+package com.vschwarzer.baasinga.web.form.common;
 
 /**
  * Created by Vincent Schwarzer on 18.07.15.
