@@ -1,9 +1,9 @@
-package com.vschwarzer.baasinga.web.form.application;
+package com.vschwarzer.baasinga.domain.dto.application;
 
 /**
  * Created by Vincent Schwarzer on 08.07.15.
  */
-public class AttributeDTO {
+public class AttributeDTO extends BaseDTO{
 
     private String name = "";
 

@@ -1,13 +1,9 @@
-package com.vschwarzer.baasinga.web.form.application;
-
-import com.sun.javafx.sg.prism.NGShape;
-import com.vschwarzer.baasinga.domain.model.common.RelationType;
-import com.vschwarzer.baasinga.domain.model.render.Model;
+package com.vschwarzer.baasinga.domain.dto.application;
 
 /**
  * Created by Vincent Schwarzer on 18.07.15.
  */
-public class RelationDTO {
+public class RelationDTO extends BaseDTO{
 
     private String owner = "";
     private String child = "";

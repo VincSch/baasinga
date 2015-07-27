@@ -1,4 +1,4 @@
-package com.vschwarzer.baasinga.web.form.application;
+package com.vschwarzer.baasinga.domain.dto.application;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Vincent Schwarzer on 08.07.15.
  */
-public class AppDTO {
+public class AppDTO extends BaseDTO{
 
     public AppDTO() {
 

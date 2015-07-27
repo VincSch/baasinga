@@ -1,7 +1,7 @@
 package com.vschwarzer.baasinga.web.controller;
 
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
-import com.vschwarzer.baasinga.web.form.common.ChangePasswordDTO;
+import com.vschwarzer.baasinga.domain.dto.common.ChangePasswordDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;

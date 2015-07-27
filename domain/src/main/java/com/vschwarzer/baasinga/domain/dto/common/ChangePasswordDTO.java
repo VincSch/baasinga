@@ -1,4 +1,4 @@
-package com.vschwarzer.baasinga.web.form.common;
+package com.vschwarzer.baasinga.domain.dto.common;
 
 /**
  * Created by Vincent Schwarzer on 18.07.15.

@@ -1,22 +1,21 @@
 package com.vschwarzer.baasinga.web.controller;
 
 import com.vschwarzer.baasinga.domain.model.authentication.User;
-import com.vschwarzer.baasinga.domain.model.common.RelationType;
 import com.vschwarzer.baasinga.domain.model.render.Application;
-import com.vschwarzer.baasinga.domain.model.render.Relation;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.repository.render.VersionDAO;
+import com.vschwarzer.baasinga.service.ApplicationService;
 import com.vschwarzer.baasinga.service.generator.ApplicationGenerator;
 import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import com.vschwarzer.baasinga.web.common.Endpoints;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
-import com.vschwarzer.baasinga.web.controller.common.RequestParser;
-import com.vschwarzer.baasinga.web.form.application.AppDTO;
-import com.vschwarzer.baasinga.web.form.application.AttributeDTO;
-import com.vschwarzer.baasinga.web.form.application.ModelDTO;
-import com.vschwarzer.baasinga.web.form.application.RelationDTO;
+import com.vschwarzer.baasinga.web.controller.common.RequestHelper;
+import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
+import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
+import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
+import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by vs on 21.05.15.
@@ -36,7 +33,7 @@ import java.util.List;
 public class ApplicationController extends BaseController {
 
     @Autowired
-    RequestParser requestParser;
+    RequestHelper requestHelper;
     @Autowired
     TemplateRenderer templateRenderer;
     @Autowired
@@ -49,11 +46,13 @@ public class ApplicationController extends BaseController {
     ApplicationDAO applicationDAO;
     @Autowired
     VersionDAO versionDAO;
+    @Autowired
+    ApplicationService applicationService;
 
     public String show(ModelMap model) {
         model.addAttribute("user", getSessionUser());
         model.addAttribute("versions", versionDAO.findAll());
-        model.addAttribute("allRelationTypes", getAsList());
+        model.addAttribute("allRelationTypes", requestHelper.relationTypeList());
         model.addAttribute("content", "application/content");
         return "index/index";
     }
@@ -69,8 +68,11 @@ public class ApplicationController extends BaseController {
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_Save}, method = RequestMethod.POST)
     public String processForm(final AppDTO app) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (user != null)
-            LOG.info("firstname" + user.getFirstName());
+
+        String mode;
+        mode = (app.getId() != null && !app.getId().isEmpty()) ? "EDIT MODE" : "NEW MODE";
+
+        LOG.info(mode);
         LOG.info(app.getName());
         LOG.info(String.valueOf(app.getPort()));
         LOG.info(app.getVersion());
@@ -85,6 +87,8 @@ public class ApplicationController extends BaseController {
 
         }
 
+        //TODO
+        applicationService.storeApplication(app);
         return "redirect:" + Endpoints.Dashboard;
     }
 
@@ -121,8 +125,8 @@ public class ApplicationController extends BaseController {
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_RemoveAttribute})
     public String removeAttributeFromModel(final AppDTO app, final HttpServletRequest req, ModelMap model) {
         final String reqString = req.getParameter("removeAttribute");
-        int modelId = requestParser.getModelIndex(reqString);
-        int attribtueId = requestParser.getAttributeOrRelationIndex(reqString);
+        int modelId = requestHelper.getModelIndex(reqString);
+        int attribtueId = requestHelper.getAttributeOrRelationIndex(reqString);
         app.getModels().get(modelId).getAttributes().remove(attribtueId);
         model.addAttribute("app", app);
         return show(model);
@@ -139,8 +143,8 @@ public class ApplicationController extends BaseController {
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_RemoveRelation})
     public String removeRelationFromModel(final AppDTO app, final HttpServletRequest req, ModelMap model) {
         final String reqString = req.getParameter("removeRelation");
-        int modelId = requestParser.getModelIndex(reqString);
-        int relationId = requestParser.getAttributeOrRelationIndex(reqString);
+        int modelId = requestHelper.getModelIndex(reqString);
+        int relationId = requestHelper.getAttributeOrRelationIndex(reqString);
         app.getModels().get(modelId).getRelations().remove(relationId);
         model.addAttribute("app", app);
         return show(model);
@@ -150,7 +154,7 @@ public class ApplicationController extends BaseController {
     public String editApp(@PathVariable(value = "appId") final String appId, ModelMap model) {
         int appIdAsInt = Integer.valueOf(appId);
         Application app = applicationDAO.findOne(appIdAsInt);
-        model.addAttribute("app", app);
+        model.addAttribute("app", requestHelper.parseToDTO(app));
         return show(model);
     }
 
@@ -161,14 +165,6 @@ public class ApplicationController extends BaseController {
         model.addAttribute("applications", applicationDAO.findAll());
         model.addAttribute("content", "application/details/content");
         return "index/index";
-    }
-
-    private List<RelationType> getAsList() {
-        List<RelationType> relationTypes = new ArrayList<>();
-        relationTypes.add(RelationType.OneToOne);
-        relationTypes.add(RelationType.ManyToOne);
-
-        return relationTypes;
     }
 }
 
