@@ -1,14 +1,13 @@
 package com.vschwarzer.baasinga.web.controller.common;
 
-import com.vschwarzer.baasinga.domain.model.common.RelationType;
-import com.vschwarzer.baasinga.domain.model.render.Application;
-import com.vschwarzer.baasinga.domain.model.render.Attribute;
-import com.vschwarzer.baasinga.domain.model.render.Model;
-import com.vschwarzer.baasinga.domain.model.render.Relation;
 import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
 import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
 import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
 import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.model.common.RelationType;
+import com.vschwarzer.baasinga.domain.model.render.Application;
+import com.vschwarzer.baasinga.domain.model.render.Attribute;
+import com.vschwarzer.baasinga.domain.model.render.Model;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -34,6 +33,8 @@ public class RequestHelper {
         List<RelationType> relationTypes = new ArrayList<>();
         relationTypes.add(RelationType.OneToOne);
         relationTypes.add(RelationType.ManyToOne);
+        relationTypes.add(RelationType.OneToMany);
+        relationTypes.add(RelationType.ManyToMany);
 
         return relationTypes;
     }
@@ -56,21 +57,21 @@ public class RequestHelper {
             modelDTO.setName(model.getName());
 
             List<AttributeDTO> attributeDTOs = new ArrayList<>();
-            for (Attribute attribute : model.getAttributes()) {
-                AttributeDTO attributeDTO = new AttributeDTO();
-                attributeDTO.setId(attribute.getId().toString());
-                attributeDTO.setName(attribute.getName());
-                attributeDTOs.add(attributeDTO);
-            }
-
             List<RelationDTO> relationDTOs = new ArrayList<>();
-            for (Relation relation : model.getRelations()) {
-                RelationDTO relationDTO = new RelationDTO();
-                relationDTO.setId(relation.getId().toString());
-                relationDTO.setChild(indexOf(application, relation.getChild()));
-                relationDTO.setOwner(indexOf(application, relation.getOwner()));
-                relationDTO.setRelationType(relation.getRelationType().name());
-                relationDTOs.add(relationDTO);
+            for (Attribute attribute : model.getAttributes()) {
+                if (attribute.getAttributeType().equals(Attribute.AttributeType.NORMAL)) {
+                    AttributeDTO attributeDTO = new AttributeDTO();
+                    attributeDTO.setId(attribute.getId().toString());
+                    attributeDTO.setName(attribute.getName());
+                    attributeDTOs.add(attributeDTO);
+                } else {
+                    RelationDTO relationDTO = new RelationDTO();
+                    relationDTO.setId(attribute.getId().toString());
+                    relationDTO.setChild(indexOf(application, attribute.getChild()));
+                    relationDTO.setOwner(indexOf(application, attribute.getModel()));
+                    relationDTO.setRelationType(attribute.getRelationType().name());
+                    relationDTOs.add(relationDTO);
+                }
             }
 
             modelDTO.setAttributes(attributeDTOs);

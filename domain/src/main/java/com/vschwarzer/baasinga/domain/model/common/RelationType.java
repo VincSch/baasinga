@@ -7,8 +7,8 @@ public enum RelationType {
 
     OneToMany(1L),
     OneToOne(2L),
-    ManyToOne(3L);
-    //ManyToMany(4L);
+    ManyToOne(3L),
+    ManyToMany(4L);
 
     private Long id;
 

@@ -24,12 +24,11 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
     @Enumerated(EnumType.ORDINAL)
     private Attribute.DataType dataType;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_attribute_annotation_trace",
             joinColumns = @JoinColumn(unique = false, name = "attributeId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
     private Set<Annotation> annotations;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)

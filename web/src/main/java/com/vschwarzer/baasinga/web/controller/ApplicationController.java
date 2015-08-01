@@ -1,6 +1,9 @@
 package com.vschwarzer.baasinga.web.controller;
 
-import com.vschwarzer.baasinga.domain.model.authentication.User;
+import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
+import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
+import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
+import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
@@ -12,12 +15,7 @@ import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import com.vschwarzer.baasinga.web.common.Endpoints;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
 import com.vschwarzer.baasinga.web.controller.common.RequestHelper;
-import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
-import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
-import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
-import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,28 +65,13 @@ public class ApplicationController extends BaseController {
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_Save}, method = RequestMethod.POST)
     public String processForm(final AppDTO app) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String mode;
-        mode = (app.getId() != null && !app.getId().isEmpty()) ? "EDIT MODE" : "NEW MODE";
-
-        LOG.info(mode);
-        LOG.info(app.getName());
-        LOG.info(String.valueOf(app.getPort()));
-        LOG.info(app.getVersion());
-        LOG.info(String.valueOf(app.getCloudEnabled()));
-        LOG.info(String.valueOf(app.getSecEnabled()));
-
-        for (ModelDTO model : app.getModels()) {
-            LOG.info(model.getName());
-            for (AttributeDTO attribute : model.getAttributes()) {
-                LOG.info(attribute.getName());
-            }
-
+        if (app.getId() != null && !app.getId().isEmpty()) {
+            applicationService.updateApplication(app, getSessionUser());
+        } else {
+            applicationService.createApplication(app, getSessionUser());
         }
 
-        //TODO
-        applicationService.storeApplication(app);
         return "redirect:" + Endpoints.Dashboard;
     }
 

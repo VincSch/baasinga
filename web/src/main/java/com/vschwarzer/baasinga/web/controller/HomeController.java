@@ -53,7 +53,7 @@ public class HomeController extends BaseController {
 
     @RequestMapping("/insert")
     public String insertTestData(ModelMap model) {
-        dataGeneratorUtil.addTestApplication();
+        dataGeneratorUtil.insertCommonData();
         model.addAttribute("title", "Prototyp Maven CLI Tests");
         model.addAttribute("content", "index/content");
         return "index/index";

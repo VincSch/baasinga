@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 /**
@@ -46,84 +47,13 @@ public class DataGeneratorUtil {
     @Autowired
     AnnotationDAO annotationDAO;
 
-    @Autowired
-    RelationDAO relationDAO;
 
+    @Transactional
+    public void insertCommonData() {
 
-    public void addTestApplication() {
-        String[] entityAnnotationArray = {
-                "@Entity"
-        };
-
-        String[] repositoryAnnoationArray = {
-                "@RestResource"
-        };
-
-        String[] repositoryImportArray = {
-                "com.baasinga.api.model.Person",
-                "org.springframework.data.repository.CrudRepository",
-        };
-
-        String[] entityImportArray = {
-
-        };
-
-        String[] annotationImportArray = {
-                "javax.persistence.Entity",
-                "org.springframework.data.rest.core.annotation.RestResource"
-
-        };
-
-        Set<Annotation> entityAnnotations = new HashSet<>();
-        Set<Annotation> repositoryAnnotations = new HashSet<>();
-
-        for (String an : Arrays.asList(entityAnnotationArray)) {
-            Annotation annotation = new Annotation();
-            annotation.setName(an);
-            annotation.setType(DomainType.MODEL);
-
-            Set<Import> imports = new HashSet<>();
-            Import importModel = new Import();
-            importModel.setPackageName(annotationImportArray[0]);
-            importDAO.create(importModel);
-            imports.add(importModel);
-            annotation.setImports(imports);
-            annotationDAO.create(annotation);
-            entityAnnotations.add(annotation);
-        }
-
-        for (String an : Arrays.asList(repositoryAnnoationArray)) {
-            Annotation annotation = new Annotation();
-            annotation.setName(an);
-            annotation.setType(DomainType.REPOSITORY);
-            Set<Import> imports = new HashSet();
-            Import importModel = new Import();
-            importModel.setPackageName(annotationImportArray[1]);
-            importDAO.create(importModel);
-            imports.add(importModel);
-            annotation.setImports(imports);
-            annotationDAO.create(annotation);
-            repositoryAnnotations.add(annotation);
-        }
-
-
-        Set<Import> entityImports = new HashSet<>();
-        Set<Import> repositoryImports = new HashSet<>();
-
-        for (String packageName : Arrays.asList(entityImportArray)) {
-            Import importClass = new Import();
-            importClass.setPackageName(packageName);
-            importDAO.create(importClass);
-            entityImports.add(importClass);
-        }
-
-        for (String packageName : Arrays.asList(repositoryImportArray)) {
-            Import importClass = new Import();
-            importClass.setPackageName(packageName);
-            importDAO.create(importClass);
-            repositoryImports.add(importClass);
-        }
-
+        /**
+         * Create system user and first version
+         */
         User user = new User();
         user.setAccountNonLocked(true);
         user.setEnabled(true);
@@ -137,54 +67,131 @@ public class DataGeneratorUtil {
         Version version = new Version();
         version.setName("1.0");
         version.setDescription("TestVersion");
+        version.setCreatedBy(user);
         versionDAO.create(version);
 
-        Application application = new Application();
-        application.setName("TestApp");
-        application.setCloudEnabled(false);
-        application.setSecEnabled(false);
-        application.setVersion(version);
-        application.setUser(user);
-        applicationDAO.create(application);
+        String[] importArray = {
+                "org.springframework.data.repository.CrudRepository",
+                "javax.persistence.Entity",
+                "org.springframework.data.rest.core.annotation.RestResource",
+                "javax.persistence.ManyToOne",
+                "javax.persistence.OneToOne",
+                "javax.persistence.OneToMany",
+                "javax.persistence.ManyToMany"
+        };
 
-        Model model = new Model();
-        model.setName("Person");
-        model.setVersion(version);
-        model.setApplication(application);
-        model.setImports(entityImports);
-        model.setAnnotations(entityAnnotations);
-        modelDAO.create(model);
+        Map<String, Import> importMap = new HashMap<>();
+        for (String packageName : Arrays.asList(importArray)) {
+            Import importClass = new Import();
+            importClass.setPackageName(packageName);
+            importClass.setCreatedBy(user);
+            importDAO.create(importClass);
+            importMap.put(packageName, importClass);
+        }
 
-        Model model2 = new Model();
-        model2.setName("Contact");
-        model2.setVersion(version);
-        model2.setApplication(application);
-        model2.setImports(entityImports);
-        //model2.setAnnotations(entityAnnotations);
-        modelDAO.create(model2);
 
-        Relation relation = new Relation();
-        relation.setVersion(version);
-        relation.setChild(model2);
-        relation.setOwner(model);
-        relation.setRelationType(RelationType.OneToMany);
-        relationDAO.create(relation);
+        Annotation entity = new Annotation();
+        entity.setName("@Entity");
+        entity.setType(DomainType.MODEL);
+        Set<Import> importSet = new HashSet<>();
+        importSet.add(importMap.get("javax.persistence.Entity"));
+        entity.setImports(importSet);
+        entity.setCreatedBy(user);
+        annotationDAO.create(entity);
 
-        Attribute attribute = new Attribute();
-        attribute.setName("name");
-        attribute.setVersion(version);
-        attribute.setDataType(Attribute.DataType.STRING);
-        attribute.setModel(model);
-        attributeDAO.create(attribute);
 
-        Repository repository = new Repository();
-        repository.setName(model.getName() + "Repository");
-        repository.setModel(model);
-        repository.setVersion(version);
-        repository.setApplication(application);
-        repository.setImports(repositoryImports);
-        repository.setAnnotations(repositoryAnnotations);
-        repositoryDAO.create(repository);
+        Annotation repository = new Annotation();
+        repository.setName("@RestResource");
+        repository.setType(DomainType.REPOSITORY);
+        Set<Import> importSet2 = new HashSet<>();
+        importSet2.add(importMap.get("org.springframework.data.rest.core.annotation.RestResource"));
+        repository.setImports(importSet2);
+        repository.setCreatedBy(user);
+        annotationDAO.create(repository);
+
+        Annotation manytoone = new Annotation();
+        manytoone.setName("@ManyToOne");
+        manytoone.setType(DomainType.MODEL);
+        Set<Import> importSet3 = new HashSet<>();
+        importSet3.add(importMap.get("javax.persistence.ManyToOne"));
+        manytoone.setImports(importSet3);
+        manytoone.setCreatedBy(user);
+        annotationDAO.create(manytoone);
+
+        Annotation onetoone = new Annotation();
+        onetoone.setName("@OneToOne");
+        onetoone.setType(DomainType.MODEL);
+        Set<Import> importSet4 = new HashSet<>();
+        importSet4.add(importMap.get("javax.persistence.OneToOne"));
+        onetoone.setImports(importSet4);
+        onetoone.setCreatedBy(user);
+        annotationDAO.create(onetoone);
+
+        Annotation onetomany = new Annotation();
+        onetomany.setName("@OneToMany");
+        onetomany.setType(DomainType.MODEL);
+        Set<Import> importSet5 = new HashSet<>();
+        importSet5.add(importMap.get("javax.persistence.OneToMany"));
+        onetomany.setImports(importSet5);
+        onetomany.setCreatedBy(user);
+        annotationDAO.create(onetomany);
+
+        Annotation manytomany = new Annotation();
+        manytomany.setName("@ManyToMany");
+        manytomany.setType(DomainType.MODEL);
+        Set<Import> importSet6 = new HashSet<>();
+        importSet6.add(importMap.get("javax.persistence.ManyToMany"));
+        manytomany.setImports(importSet6);
+        manytomany.setCreatedBy(user);
+        annotationDAO.create(manytomany);
+
+
+//        Application application = new Application();
+//        application.setName("TestApp");
+//        application.setCloudEnabled(false);
+//        application.setSecEnabled(false);
+//        application.setVersion(version);
+//        application.setUser(user);
+//        applicationDAO.create(application);
+//
+//        Model model = new Model();
+//        model.setName("Person");
+//        model.setVersion(version);
+//        model.setApplication(application);
+//        model.setImports(entityImports);
+//        model.setAnnotations(entityAnnotations);
+//        modelDAO.create(model);
+//
+//        Model model2 = new Model();
+//        model2.setName("Contact");
+//        model2.setVersion(version);
+//        model2.setApplication(application);
+//        model2.setImports(entityImports);
+//        //model2.setAnnotations(entityAnnotations);
+//        modelDAO.create(model2);
+//
+//        Relation relation = new Relation();
+//        relation.setVersion(version);
+//        relation.setChild(model2);
+//        relation.setOwner(model);
+//        relation.setRelationType(RelationType.OneToMany);
+//        relationDAO.create(relation);
+//
+//        Attribute attribute = new Attribute();
+//        attribute.setName("name");
+//        attribute.setVersion(version);
+//        attribute.setDataType(Attribute.DataType.STRING);
+//        attribute.setModel(model);
+//        attributeDAO.create(attribute);
+//
+//        Repository repository = new Repository();
+//        repository.setName(model.getName() + "Repository");
+//        repository.setModel(model);
+//        repository.setVersion(version);
+//        repository.setApplication(application);
+//        repository.setImports(repositoryImports);
+//        repository.setAnnotations(repositoryAnnotations);
+//        repositoryDAO.create(repository);
 
     }
 }

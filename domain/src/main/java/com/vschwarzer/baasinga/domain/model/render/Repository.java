@@ -25,12 +25,11 @@ public class Repository extends AbstractBaseAuditEntity {
     @JoinColumn(name = "modelId", referencedColumnName = "id")
     private Model model;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_repository_annotation",
             joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
     private Set<Annotation> annotations;
 
     @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
@@ -39,12 +38,11 @@ public class Repository extends AbstractBaseAuditEntity {
     @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
     private Set<Attribute> attributes;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_repository_import",
             joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
-    @OrderColumn(name = "id")
     private Set<Import> imports;
 
     @ManyToOne(fetch = FetchType.EAGER)

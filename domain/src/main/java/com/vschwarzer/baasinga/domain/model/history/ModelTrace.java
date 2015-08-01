@@ -24,12 +24,11 @@ public class ModelTrace extends AbstractBaseAuditEntity {
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private ApplicationTrace application;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_model_annotation_trace",
             joinColumns = @JoinColumn(unique = false, name = "modelId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
     private Set<Annotation> annotations;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
@@ -38,12 +37,11 @@ public class ModelTrace extends AbstractBaseAuditEntity {
     @OneToMany(mappedBy = "model", fetch = FetchType.EAGER)
     private Set<AttributeTrace> attributes;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_model_import_trace",
             joinColumns = @JoinColumn(unique = false, name = "modelId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
-    @OrderColumn(name = "id")
     private Set<Import> imports;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)

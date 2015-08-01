@@ -16,6 +16,7 @@
             <div class="col-sm-5">
                 <div class="basic-login">
                     <div th:if="${error != null}"  class="alert alert-danger" role="alert" th:text="${error}"></div>
+                    <div th:if="${success != null}"  class="alert alert-success" role="alert" th:text="${success}"></div>
                     <form role="form" th:action="@{/j_spring_security_check}" method="post">
                         <div class="form-group">
                             <label for="username"><i class="icon-user"></i> <b>Username or Email</b></label>

@@ -1,6 +1,7 @@
 package com.vschwarzer.baasinga.domain.model.render;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import com.vschwarzer.baasinga.domain.model.common.RelationType;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -21,12 +22,18 @@ public class Attribute extends AbstractBaseAuditEntity {
     @Enumerated(EnumType.ORDINAL)
     private DataType dataType;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private AttributeType attributeType;
+
+    @Enumerated(EnumType.ORDINAL)
+    private RelationType relationType;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_attribute_annotation",
             joinColumns = @JoinColumn(unique = false, name = "attributeId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
     private Set<Annotation> annotations;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -36,6 +43,10 @@ public class Attribute extends AbstractBaseAuditEntity {
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "modelId", referencedColumnName = "id")
     private Model model;
+
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "childId", referencedColumnName = "id")
+    private Model child;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "repositoryId", referencedColumnName = "id")
@@ -55,6 +66,30 @@ public class Attribute extends AbstractBaseAuditEntity {
 
     public void setDataType(DataType dataType) {
         this.dataType = dataType;
+    }
+
+    public AttributeType getAttributeType() {
+        return attributeType;
+    }
+
+    public void setAttributeType(AttributeType attributeType) {
+        this.attributeType = attributeType;
+    }
+
+    public RelationType getRelationType() {
+        return relationType;
+    }
+
+    public void setRelationType(RelationType relationType) {
+        this.relationType = relationType;
+    }
+
+    public Model getChild() {
+        return child;
+    }
+
+    public void setChild(Model child) {
+        this.child = child;
     }
 
     public Set<Annotation> getAnnotations() {
@@ -94,7 +129,8 @@ public class Attribute extends AbstractBaseAuditEntity {
         STRING(0L, "String"),
         INTEGER(1L, "int"),
         BOOLEAN(2L, "boolean"),
-        DOUBLE(3L, "double");
+        DOUBLE(3L, "double"),
+        MODEL(4L, "mdoel");
 
         private Long id;
         private String name;
@@ -117,6 +153,29 @@ public class Attribute extends AbstractBaseAuditEntity {
 
         public String getName() {
             return name;
+        }
+    }
+
+    public enum AttributeType {
+
+        RELATION(0L),
+        NORMAL(1L);
+
+        private Long id;
+
+        AttributeType(Long id) {
+            this.id = id;
+        }
+
+        public static AttributeType getById(Long id) {
+            for (AttributeType e : values()) {
+                if (e.id.equals(id)) return e;
+            }
+            return null;
+        }
+
+        public Long getId() {
+            return id;
         }
     }
 }

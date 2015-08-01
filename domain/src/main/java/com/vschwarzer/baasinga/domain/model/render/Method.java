@@ -27,12 +27,11 @@ public class Method extends AbstractBaseAuditEntity {
     @JoinColumn(name = "repositoryId", referencedColumnName = "id")
     private Repository repository;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_method_annotation",
             joinColumns = @JoinColumn(unique = false, name = "methodId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
     private Set<Annotation> annotations;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)

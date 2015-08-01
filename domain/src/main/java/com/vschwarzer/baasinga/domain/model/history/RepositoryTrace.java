@@ -28,12 +28,11 @@ public class RepositoryTrace extends AbstractBaseAuditEntity {
     @JoinColumn(name = "modelId", referencedColumnName = "id")
     private ModelTrace model;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_repository_annotation_trace",
             joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
     private Set<Annotation> annotations;
 
     @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
@@ -42,12 +41,11 @@ public class RepositoryTrace extends AbstractBaseAuditEntity {
     @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
     private Set<AttributeTrace> attributes;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_repository_import_trace",
             joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
-    @OrderColumn(name = "id")
     private Set<Import> imports;
 
     @ManyToOne(fetch = FetchType.EAGER)

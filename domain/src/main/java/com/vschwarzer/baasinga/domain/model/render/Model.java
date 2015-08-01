@@ -21,26 +21,21 @@ public class Model extends AbstractBaseAuditEntity{
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private Application application;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_model_annotation",
-            joinColumns = @JoinColumn(unique = false, name = "modelId"),
+            joinColumns = @JoinColumn(name = "modelId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
     private Set<Annotation> annotations;
-
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private Set<Relation> relations;
 
     @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
     private Set<Attribute> attributes;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_model_import",
             joinColumns = @JoinColumn(unique = false, name = "modelId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
-    @OrderColumn(name = "id")
     private Set<Import> imports;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -77,14 +72,6 @@ public class Model extends AbstractBaseAuditEntity{
 
     public void setAttributes(Set<Attribute> attributes) {
         this.attributes = attributes;
-    }
-
-    public Set<Relation> getRelations() {
-        return relations;
-    }
-
-    public void setRelations(Set<Relation> relations) {
-        this.relations = relations;
     }
 
     public Set<Import> getImports() {
