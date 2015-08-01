@@ -3,7 +3,7 @@ package com.vschwarzer.baasinga.domain.model.render;
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for models.
@@ -21,24 +21,22 @@ public class Model extends AbstractBaseAuditEntity{
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private Application application;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_model_annotation",
-            joinColumns = @JoinColumn(unique = false, name = "modelId"),
+            joinColumns = @JoinColumn(name = "modelId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
-    private List<Annotation> annotations;
+    private Set<Annotation> annotations;
 
     @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
-    private List<Attribute> attributes;
+    private Set<Attribute> attributes;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_model_import",
             joinColumns = @JoinColumn(unique = false, name = "modelId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
-    @OrderColumn(name = "id")
-    private List<Import> imports;
+    private Set<Import> imports;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -60,27 +58,27 @@ public class Model extends AbstractBaseAuditEntity{
         this.application = application;
     }
 
-    public List<Annotation> getAnnotations() {
+    public Set<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> annotations) {
+    public void setAnnotations(Set<Annotation> annotations) {
         this.annotations = annotations;
     }
 
-    public List<Attribute> getAttributes() {
+    public Set<Attribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<Attribute> attributes) {
+    public void setAttributes(Set<Attribute> attributes) {
         this.attributes = attributes;
     }
 
-    public List<Import> getImports() {
+    public Set<Import> getImports() {
         return imports;
     }
 
-    public void setImports(List<Import> imports) {
+    public void setImports(Set<Import> imports) {
         this.imports = imports;
     }
 

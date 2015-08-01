@@ -1,6 +1,6 @@
 package com.vschwarzer.baasinga.repository.authorization.impl;
 
-import com.vschwarzer.baasinga.domain.model.UserRole;
+import com.vschwarzer.baasinga.domain.model.authentication.UserRole;
 import com.vschwarzer.baasinga.repository.GenericDAOImpl;
 import com.vschwarzer.baasinga.repository.authorization.UserRoleDAO;
 import org.springframework.stereotype.Repository;

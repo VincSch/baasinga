@@ -3,7 +3,7 @@ package com.vschwarzer.baasinga.domain.model.render;
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for methods.
@@ -27,13 +27,12 @@ public class Method extends AbstractBaseAuditEntity {
     @JoinColumn(name = "repositoryId", referencedColumnName = "id")
     private Repository repository;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_method_annotation",
             joinColumns = @JoinColumn(unique = false, name = "methodId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
-    private List<Annotation> annotations;
+    private Set<Annotation> annotations;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -47,11 +46,11 @@ public class Method extends AbstractBaseAuditEntity {
         this.version = version;
     }
 
-    public List<Annotation> getAnnotations() {
+    public Set<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> annotations) {
+    public void setAnnotations(Set<Annotation> annotations) {
         this.annotations = annotations;
     }
 

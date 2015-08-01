@@ -2,9 +2,10 @@ package com.vschwarzer.baasinga.domain.model.render;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
+import com.vschwarzer.baasinga.domain.model.common.RelationType;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for annotations.
@@ -21,18 +22,16 @@ public class Annotation extends AbstractBaseAuditEntity {
     @Column(nullable = true)
     private String value;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_annotation_import",
             joinColumns = @JoinColumn(unique = false, name = "annotationId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
-    @OrderColumn(name = "id")
-    private List<Import> imports;
+    private Set<Import> imports;
 
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private DomainType type;
-
 
     public String getName() {
 
@@ -59,11 +58,11 @@ public class Annotation extends AbstractBaseAuditEntity {
         this.type = type;
     }
 
-    public List<Import> getImports() {
+    public Set<Import> getImports() {
         return imports;
-}
+    }
 
-    public void setImports(List<Import> imports) {
+    public void setImports(Set<Import> imports) {
         this.imports = imports;
     }
 }

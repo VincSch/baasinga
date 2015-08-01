@@ -3,7 +3,7 @@ package com.vschwarzer.baasinga.domain.model.render;
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Entity class for repositories.
@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "ba_repository")
-public class Repository extends AbstractBaseAuditEntity{
+public class Repository extends AbstractBaseAuditEntity {
 
     @Column
     private String name;
@@ -25,27 +25,25 @@ public class Repository extends AbstractBaseAuditEntity{
     @JoinColumn(name = "modelId", referencedColumnName = "id")
     private Model model;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_repository_annotation",
             joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
-    @OrderColumn(name = "id")
-    private List<Annotation> annotations;
+    private Set<Annotation> annotations;
 
-    @OneToMany(mappedBy="repository",fetch = FetchType.EAGER)
-    private List<Method> methods;
+    @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
+    private Set<Method> methods;
 
-    @OneToMany(mappedBy="repository", fetch = FetchType.EAGER)
-    private List<Attribute> attributes;
+    @OneToMany(mappedBy = "repository", fetch = FetchType.EAGER)
+    private Set<Attribute> attributes;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_repository_import",
             joinColumns = @JoinColumn(unique = false, name = "repositoryId"),
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
-    @OrderColumn(name = "id")
-    private List<Import> imports;
+    private Set<Import> imports;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -76,35 +74,35 @@ public class Repository extends AbstractBaseAuditEntity{
         this.model = model;
     }
 
-    public List<Annotation> getAnnotations() {
+    public Set<Annotation> getAnnotations() {
         return annotations;
     }
 
-    public void setAnnotations(List<Annotation> annotations) {
+    public void setAnnotations(Set<Annotation> annotations) {
         this.annotations = annotations;
     }
 
-    public List<Method> getMethods() {
+    public Set<Method> getMethods() {
         return methods;
     }
 
-    public void setMethods(List<Method> methods) {
+    public void setMethods(Set<Method> methods) {
         this.methods = methods;
     }
 
-    public List<Attribute> getAttributes() {
+    public Set<Attribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(List<Attribute> attributes) {
+    public void setAttributes(Set<Attribute> attributes) {
         this.attributes = attributes;
     }
 
-    public List<Import> getImports() {
+    public Set<Import> getImports() {
         return imports;
     }
 
-    public void setImports(List<Import> imports) {
+    public void setImports(Set<Import> imports) {
         this.imports = imports;
     }
 

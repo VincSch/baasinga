@@ -12,6 +12,7 @@ public interface MethodDAO extends GenericDAO<Method> {
 
     /**
      * Find an Method by its name
+     *
      * @param name Method name
      * @return Method
      */

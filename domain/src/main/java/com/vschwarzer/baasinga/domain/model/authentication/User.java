@@ -1,4 +1,4 @@
-package com.vschwarzer.baasinga.domain.model;
+package com.vschwarzer.baasinga.domain.model.authentication;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import org.springframework.security.core.GrantedAuthority;

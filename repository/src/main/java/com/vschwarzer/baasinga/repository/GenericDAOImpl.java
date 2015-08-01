@@ -1,5 +1,7 @@
 package com.vschwarzer.baasinga.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,6 +23,7 @@ import java.util.List;
 public abstract class GenericDAOImpl<T extends Serializable> implements
         GenericDAO<T> {
 
+    protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
     private Class<T> clazz;
 
     @PersistenceContext

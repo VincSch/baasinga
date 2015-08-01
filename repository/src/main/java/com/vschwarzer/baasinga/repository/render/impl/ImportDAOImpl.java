@@ -5,6 +5,7 @@ import com.vschwarzer.baasinga.repository.GenericDAOImpl;
 import com.vschwarzer.baasinga.repository.render.ImportDAO;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
@@ -27,11 +28,18 @@ public class ImportDAOImpl extends GenericDAOImpl<Import> implements ImportDAO {
 
     @Override
     public Import findByPackage(String name) {
+        Import imp = null;
         String queryString = "SELECT import FROM Import import "
-                + "WHERE import.package = :name";
+                + "WHERE import.packageName = :name";
 
         Query query = createQuery(queryString);
         query.setParameter("name", name);
-        return (Import) query.getSingleResult();
+        try {
+            imp = (Import) query.getSingleResult();
+        } catch (NoResultException nrex) {
+            LOG.info("No Import for package name: " + name + " found!");
+        } finally {
+            return imp;
+        }
     }
 }

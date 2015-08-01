@@ -1,6 +1,6 @@
 package com.vschwarzer.baasinga.web.controller;
 
-import com.vschwarzer.baasinga.domain.model.User;
+import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
@@ -9,8 +9,6 @@ import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import com.vschwarzer.baasinga.web.config.common.DataGeneratorUtil;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Created by vs on 21.05.15.
  */
 @Controller
-public class HomeController extends BaseController{
+public class HomeController extends BaseController {
 
     @Autowired
     TemplateRenderer templateRenderer;
@@ -37,6 +35,7 @@ public class HomeController extends BaseController{
 
     @RequestMapping("/")
     public String showHome(ModelMap model) {
+        model.addAttribute("user", getSessionUser());
         model.addAttribute("title", "Prototyp Maven CLI Tests");
         model.addAttribute("content", "index/content");
         return "index/index";
@@ -44,7 +43,7 @@ public class HomeController extends BaseController{
 
 
     @RequestMapping("/generate")
-    public String generate(ModelMap model){
+    public String generate(ModelMap model) {
         User user = userDAO.findByEmail("vs@stroodel.com");
         Application application = applicationDAO.findByUser(user);
         applicationGenerator.generateApplication(application);
@@ -53,8 +52,8 @@ public class HomeController extends BaseController{
     }
 
     @RequestMapping("/insert")
-    public String insertTestData(ModelMap model){
-        dataGeneratorUtil.addTestApplication();
+    public String insertTestData(ModelMap model) {
+        dataGeneratorUtil.insertCommonData();
         model.addAttribute("title", "Prototyp Maven CLI Tests");
         model.addAttribute("content", "index/content");
         return "index/index";

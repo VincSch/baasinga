@@ -12,6 +12,7 @@ public interface RepositoryDAO extends GenericDAO<Repository> {
 
     /**
      * Find an repository by its name
+     *
      * @param name repository name
      * @return repository
      */

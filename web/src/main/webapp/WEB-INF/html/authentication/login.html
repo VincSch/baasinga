@@ -1,0 +1,50 @@
+
+<!-- Page Title -->
+<div class="section section-breadcrumbs" xmlns="http://www.w3.org/1999/html">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Login</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="basic-login">
+                    <div th:if="${error != null}"  class="alert alert-danger" role="alert" th:text="${error}"></div>
+                    <div th:if="${success != null}"  class="alert alert-success" role="alert" th:text="${success}"></div>
+                    <form role="form" th:action="@{/j_spring_security_check}" method="post">
+                        <div class="form-group">
+                            <label for="username"><i class="icon-user"></i> <b>Username or Email</b></label>
+                            <input class="form-control" th:name="username" id="username" type="text" placeholder=""/>
+                        </div>
+                        <div class="form-group">
+                            <label for="password"><i class="icon-lock"></i> <b>Password</b></label>
+                            <input class="form-control" th:name="password" id="password" type="password" placeholder=""/>
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox"> Remember me </input>
+                            </label>
+                            <a href="page-password-reset.html" class="forgot-password">Forgot password?</a>
+                            <button type="submit" class="btn pull-right">Login</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-7 social-login">
+
+                <div class="clearfix"></div>
+                <div class="not-member">
+                    <p>Not a member? <a href="/signup">Register here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
