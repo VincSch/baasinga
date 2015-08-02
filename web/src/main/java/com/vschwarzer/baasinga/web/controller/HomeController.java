@@ -1,7 +1,6 @@
 package com.vschwarzer.baasinga.web.controller;
 
 import com.vschwarzer.baasinga.domain.model.authentication.User;
-import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.service.generator.ApplicationGenerator;

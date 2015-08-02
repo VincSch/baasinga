@@ -6,11 +6,7 @@ import java.util.List;
 /**
  * Created by Vincent Schwarzer on 08.07.15.
  */
-public class AppDTO extends BaseDTO{
-
-    public AppDTO() {
-
-    }
+public class AppDTO extends BaseDTO {
 
     private String name = "";
     private String port = "";
@@ -19,6 +15,9 @@ public class AppDTO extends BaseDTO{
     private Boolean secEnabled = false;
     private String description = "";
     private List<ModelDTO> models = new ArrayList<>();
+    public AppDTO() {
+
+    }
 
     public String getName() {
         return name;

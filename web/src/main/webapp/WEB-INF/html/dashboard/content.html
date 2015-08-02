@@ -9,7 +9,12 @@
 </div>
 <div class="section">
     <div class="container">
-
+        <div class="row">
+            <div class="col-md-12">
+                <div th:if="${error != null}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+                <div th:if="${success != null}" class="alert alert-success" role="alert" th:text="${success}"></div>
+            </div>
+        </div>
         <div th:include="dashboard/navigation"></div>
 
         <div class="row">

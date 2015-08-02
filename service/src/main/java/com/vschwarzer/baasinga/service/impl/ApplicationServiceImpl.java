@@ -1,14 +1,14 @@
 package com.vschwarzer.baasinga.service.impl;
 
 import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
-import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
-import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
-import com.vschwarzer.baasinga.domain.model.render.*;
-import com.vschwarzer.baasinga.repository.render.*;
+import com.vschwarzer.baasinga.domain.model.render.Application;
+import com.vschwarzer.baasinga.domain.model.render.Model;
+import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.service.ApplicationService;
-import com.vschwarzer.baasinga.service.common.AbstractService;
-import com.vschwarzer.baasinga.service.common.ApplicationUtil;
+import com.vschwarzer.baasinga.service.common.BaseService;
+import com.vschwarzer.baasinga.service.util.ApplicationCreateUtil;
+import com.vschwarzer.baasinga.service.util.ApplicationUpdateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +20,13 @@ import java.util.*;
  */
 @Service
 @Transactional
-public class ApplicationServiceImpl extends AbstractService implements ApplicationService {
+public class ApplicationServiceImpl extends BaseService implements ApplicationService {
 
     @Autowired
-    ApplicationUtil applicationUtil;
+    ApplicationCreateUtil applicationCreateUtil;
+
+    @Autowired
+    ApplicationUpdateUtil applicationUpdateUtil;
 
     @Autowired
     ApplicationDAO applicationDAO;
@@ -31,13 +34,14 @@ public class ApplicationServiceImpl extends AbstractService implements Applicati
 
     @Override
     public void createApplication(AppDTO appDTO, User user) {
-        LOG.info("Creating new application with name " + appDTO.getName() + " for user " + user.getFirstName() + " " + user.getLastName() + "with id=" + user.getId());
-        applicationUtil.createApplication(appDTO, user);
+        LOG.info("Creating new application with name " + appDTO.getName() + " for user " + user.getFirstName() + " " + user.getLastName() + " with id=" + user.getId());
+        applicationCreateUtil.createApplication(appDTO, user);
     }
 
     @Override
     public void updateApplication(AppDTO appDTO, User user) {
-
+        LOG.info("Updating application with name " + appDTO.getName() + " and id = " + appDTO.getId() + " for user " + user.getFirstName() + " " + user.getLastName() + " with id=" + user.getId());
+        applicationUpdateUtil.updateApplication(appDTO, user);
     }
 
     @Override

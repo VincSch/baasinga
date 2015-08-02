@@ -68,20 +68,23 @@ public class ApplicationController extends BaseController {
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_Save}, method = RequestMethod.POST)
     public String processForm(ModelMap model, final AppDTO app) {
 
-        if (!applicationService.applicationWithNameAlreadyExists(app.getName(), getSessionUser())) {
-            if (app.getId() != null && !app.getId().isEmpty()) {
-                applicationService.updateApplication(app, getSessionUser());
-                model.addAttribute("content", "dashboard/content");
+        if (app.getId() != null && !app.getId().isEmpty()) {
+            applicationService.updateApplication(app, getSessionUser());
+            model.addAttribute("success", "Successfuly updated application with name " + app.getName());
+            dashboardController.show(model);
+            return "redirect:/dashboard";
+        } else {
+            if (!applicationService.applicationWithNameAlreadyExists(app.getName(), getSessionUser())) {
+                applicationService.createApplication(app, getSessionUser());
+                model.addAttribute("success", "Successfuly created application with name " + app.getName());
                 dashboardController.show(model);
             } else {
-                applicationService.createApplication(app, getSessionUser());
-                dashboardController.show(model);
+                model.addAttribute("error", "An application with name " + app.getName() + " already exists!");
+                model.addAttribute("app", app);
+                show(model);
             }
-        } else {
-            model.addAttribute("error", "An application with name " + app.getName() + " already exists!");
-            model.addAttribute("app", app);
-            show(model);
         }
+
 
         return "index/index";
     }

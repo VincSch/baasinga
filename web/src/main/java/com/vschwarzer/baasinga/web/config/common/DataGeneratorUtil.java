@@ -2,8 +2,9 @@ package com.vschwarzer.baasinga.web.config.common;
 
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
-import com.vschwarzer.baasinga.domain.model.common.RelationType;
-import com.vschwarzer.baasinga.domain.model.render.*;
+import com.vschwarzer.baasinga.domain.model.render.Annotation;
+import com.vschwarzer.baasinga.domain.model.render.Import;
+import com.vschwarzer.baasinga.domain.model.render.Version;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.*;
 import org.springframework.beans.factory.annotation.Autowired;

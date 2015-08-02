@@ -6,7 +6,7 @@ import com.vschwarzer.baasinga.domain.dto.common.RegisterDTO;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.service.AuthenticationService;
-import com.vschwarzer.baasinga.service.common.AbstractService;
+import com.vschwarzer.baasinga.service.common.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * Created by Vincent Schwarzer on 27.07.15.
  */
 @Service
-public class AuthenticationServiceImpl extends AbstractService implements AuthenticationService {
+public class AuthenticationServiceImpl extends BaseService implements AuthenticationService {
 
     @Autowired
     UserDAO userDAO;

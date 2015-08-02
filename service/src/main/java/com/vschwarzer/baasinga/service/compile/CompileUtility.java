@@ -18,7 +18,7 @@ import java.net.URLClassLoader;
 @Service
 public class CompileUtility {
 
-    public boolean compile(){
+    public boolean compile() {
 // Prepare source somehow.
         String source = "package test; public class Test { static { System.out.println(\"hello\"); } public Test() { System.out.println(\"world\"); } }";
 

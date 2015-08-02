@@ -2,7 +2,7 @@ package com.vschwarzer.baasinga.service.generator;
 
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.*;
-import com.vschwarzer.baasinga.service.common.AbstractService;
+import com.vschwarzer.baasinga.service.common.BaseService;
 import com.vschwarzer.baasinga.service.generator.common.Constants;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
@@ -24,16 +24,15 @@ import java.util.Set;
  * Generator entry point
  */
 @Service
-public class ApplicationGeneratorImpl extends AbstractService implements ApplicationGenerator {
+public class ApplicationGeneratorImpl extends BaseService implements ApplicationGenerator {
 
     private final Logger LOG = LoggerFactory.getLogger(ApplicationGeneratorImpl.class);
-
+    @Autowired
+    MavenCompiler mavenCompiler;
     @Autowired
     private DirectoryUtil directoryUtil;
     @Autowired
     private TemplateRenderer templateRenderer;
-    @Autowired
-    MavenCompiler mavenCompiler;
 
     @Override
     public void generateApplication(Application application) {

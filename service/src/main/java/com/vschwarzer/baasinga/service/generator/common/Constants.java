@@ -13,7 +13,6 @@ public final class Constants {
     public static final String JAVA_FILE_ENDING = ".java";
 
 
-
     /**
      * Path's
      */
@@ -29,7 +28,7 @@ public final class Constants {
      * Template names
      */
     public static final String APP_CONFIG_TEMPLATE = "/classes/AppConfiguration.ftl";
-    public static final String POM_TEMPLATE= "/config/pom.ftl";
+    public static final String POM_TEMPLATE = "/config/pom.ftl";
     public static final String WEBAPP_INITIALIZER_TEMPLATE = "/classes/WebAppInitializer.ftl";
     public static final String ABSTRACT_ENTITY_TEMPLATE = "/classes/AbstractEntity.ftl";
     public static final String ENTITY_TEMPLATE = "/classes/Entity.ftl";
@@ -41,14 +40,14 @@ public final class Constants {
     public static final String APP_CONFIG_TARGET_FILENAME = "AppConfiguration.java";
     public static final String WEBAPP_INITIALIZER_TARGET_FILENAME = "WebAppInitializer.java";
     public static final String ABSTRACT_ENTITY_TARGET_FILENAME = "AbstractEntity.java";
-    public static final String LOG4J_PROPERTIES= "/config/log4j.properties";
+    public static final String LOG4J_PROPERTIES = "/config/log4j.properties";
     public static final String POM_TARGET_FILENAME = "pom.xml";
 
     /**
      * POM Versions
      */
     public static final String SPRING_FW_VERSION = "4.1.6.RELEASE";
-    public static final String SPRING_MVC_VERSION= "2.3.0.RELEASE";
+    public static final String SPRING_MVC_VERSION = "2.3.0.RELEASE";
     public static final String SPRING_DATA_JPA_VERSION = "1.8.0.RELEASE";
     public static final String PROJECT_ENCODING = "UTF8";
     public static final String HIBERNATE_VERSION = "4.3.7.Final";

@@ -12,12 +12,12 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ba_model")
-public class Model extends AbstractBaseAuditEntity{
+public class Model extends AbstractBaseAuditEntity {
 
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private Application application;
 
@@ -28,7 +28,7 @@ public class Model extends AbstractBaseAuditEntity{
     )
     private Set<Annotation> annotations;
 
-    @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "model", fetch = FetchType.EAGER)
     private Set<Attribute> attributes;
 
     @ManyToMany(fetch = FetchType.EAGER)

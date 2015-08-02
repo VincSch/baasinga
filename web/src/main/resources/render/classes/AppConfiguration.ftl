@@ -20,32 +20,32 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class AppConfiguration {
 
-    @Bean
-    public DataSource dataSource() {
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        return builder.setType(EmbeddedDatabaseType.HSQL).build();
-    }
+@Bean
+public DataSource dataSource() {
+EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+return builder.setType(EmbeddedDatabaseType.HSQL).build();
+}
 
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setDatabase(Database.HSQL);
-        vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setShowSql(true);
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-        factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan(getClass().getPackage().getName());
-        factory.setDataSource(dataSource());
+@Bean
+public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+vendorAdapter.setDatabase(Database.HSQL);
+vendorAdapter.setGenerateDdl(true);
+vendorAdapter.setShowSql(true);
+LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+factory.setJpaVendorAdapter(vendorAdapter);
+factory.setPackagesToScan(getClass().getPackage().getName());
+factory.setDataSource(dataSource());
 
-        return factory;
-    }
+return factory;
+}
 
 
-    @Bean
-    public PlatformTransactionManager transactionManager() {
-        JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(entityManagerFactory().getObject());
-        return txManager;
-    }
+@Bean
+public PlatformTransactionManager transactionManager() {
+JpaTransactionManager txManager = new JpaTransactionManager();
+txManager.setEntityManagerFactory(entityManagerFactory().getObject());
+return txManager;
+}
 
 }

@@ -2,7 +2,7 @@ package com.vschwarzer.baasinga.service.generator.engine.impl;
 
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.Application;
-import com.vschwarzer.baasinga.service.common.AbstractService;
+import com.vschwarzer.baasinga.service.common.BaseService;
 import com.vschwarzer.baasinga.service.generator.common.Constants;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import com.vschwarzer.baasinga.service.generator.config.PathConfig;
@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by Vincent Schwarzer on 19.06.15.
  */
 @Service
-public class TemplateRendererImpl extends AbstractService implements TemplateRenderer {
+public class TemplateRendererImpl extends BaseService implements TemplateRenderer {
 
     @Autowired
     PathConfig pathConfig;

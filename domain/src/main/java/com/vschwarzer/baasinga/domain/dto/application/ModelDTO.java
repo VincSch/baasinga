@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Vincent Schwarzer on 08.07.15.
  */
-public class ModelDTO extends BaseDTO{
+public class ModelDTO extends BaseDTO {
 
     private String name = "";
     private List<AttributeDTO> attributes = new ArrayList<>();

@@ -1,4 +1,4 @@
-package com.vschwarzer.baasinga.service.common;
+package com.vschwarzer.baasinga.service.util;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseEntity;
 import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
@@ -12,7 +12,7 @@ import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.repository.render.*;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -20,35 +20,27 @@ import java.util.*;
 /**
  * Created by Vincent Schwarzer on 29.07.15.
  */
-@Service
+@Component
 @Transactional
-public class ApplicationUtil extends AbstractService {
-
-    @Autowired
-    AnnotationDAO annotationDAO;
-
-    @Autowired
-    ModelDAO modelDAO;
-
-    @Autowired
-    AttributeDAO attributeDAO;
-
-    @Autowired
-    DirectoryUtil directoryUtil;
-
-    @Autowired
-    ImportDAO importDAO;
-
-    @Autowired
-    RepositoryDAO repositoryDAO;
-
-    @Autowired
-    VersionDAO versionDAO;
-
-    @Autowired
-    ApplicationDAO applicationDAO;
+public class ApplicationCreateUtil extends BaseUtil {
 
     private final String START_VERSION = "1.0";
+    @Autowired
+    AnnotationDAO annotationDAO;
+    @Autowired
+    ModelDAO modelDAO;
+    @Autowired
+    AttributeDAO attributeDAO;
+    @Autowired
+    DirectoryUtil directoryUtil;
+    @Autowired
+    ImportDAO importDAO;
+    @Autowired
+    RepositoryDAO repositoryDAO;
+    @Autowired
+    VersionDAO versionDAO;
+    @Autowired
+    ApplicationDAO applicationDAO;
 
     public void createApplication(AppDTO appDTO, User user) {
         Version version = versionDAO.findByName(START_VERSION);
