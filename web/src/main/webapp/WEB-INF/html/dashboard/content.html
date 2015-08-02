@@ -16,22 +16,17 @@
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <!-- Default panel contents -->
-                    <div class="panel-heading">Quick-View</div>
+                    <div class="panel-heading">Statistics</div>
                     <div class="panel-body">
                         <div class="list-group">
                             <a class="list-group-item" href="#">
-                                <i class="fa fa-comment fa-fw"></i> Applications
-                                    <span class="pull-right badge small">10
+                                <i class="fa fa-comment fa-fw"></i> Overall applications
+                                    <span class="pull-right badge small" th:text="${overAllApps}">10
                                     </span>
                             </a>
                             <a class="list-group-item" href="#">
-                                <i class="fa fa-comment fa-fw"></i> Models
-                                    <span class="pull-right badge small">30
-                                    </span>
-                            </a>
-                            <a class="list-group-item" href="#">
-                                <i class="fa fa-comment fa-fw"></i> Relations
-                                    <span class="pull-right badge small">5
+                                <i class="fa fa-comment fa-fw"></i> Overall models
+                                    <span class="pull-right badge small" th:text="${overAllModels}">30
                                     </span>
                             </a>
                         </div>
@@ -94,7 +89,7 @@
                                     <div class="badge" th:text="${app.version.name}"></div>
                                 </td>
                                 <td align="center">
-                                    <div class="badge" th:text="30"></div>
+                                    <div class="badge" th:text="${app.getModels().size()}"></div>
                                 </td>
                                 <td align="center"><a title="See details" class="glyphicon glyphicon-zoom-in"
                                                       th:href="@{/application/details/{id}/(id=${app.id})}"></a></td>

@@ -1,7 +1,8 @@
 <div class="section section-breadcrumbs">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
+                <h1>Application details</h1>
             </div>
         </div>
     </div>
@@ -51,31 +52,35 @@
                             </thead>
                             <tbody>
                             <tr th:each="app : ${applications}">
-                                <td align="center" th:text="${app.name}"></td>
+                                <td align="center"><a href="" th:text="${app.name}"></a></td>
                                 <td align="center">
                                     <h3 class="glyphicon glyphicon-ok-circle" th:if="${app.secEnabled}"></h3>
+
                                     <h3 class="glyphicon glyphicon-remove-circle"
-                                          th:unless="${app.secEnabled}"></h3>
+                                        th:unless="${app.secEnabled}"></h3>
                                 </td>
                                 <td align="center">
                                     <h3 class="glyphicon glyphicon-ok-circle" th:if="${app.cloudEnabled}"></h3>
+
                                     <h3 class="glyphicon glyphicon-remove-circle"
-                                          th:unless="${app.cloudEnabled}"></h3>
+                                        th:unless="${app.cloudEnabled}"></h3>
                                 </td>
                                 <td align="center">
-                                    <a href="" ><div class="badge" th:text="${app.version.name}"></div></a>
+                                    <a href="">
+                                        <div class="badge" th:text="${app.version.name}"></div>
+                                    </a>
                                 </td>
                                 <td align="center">
                                     <div class="badge" th:text="${app.getModels().size()}"></div>
                                 </td>
                                 <td align="center">
-                                    <a href="" ><img width="25px" height="25px" th:src="@{/img/docker-icon-bw.png}" /></a>
+                                    <a href=""><img width="25px" height="25px" th:src="@{/img/docker-icon-bw.png}"/></a>
                                 </td>
                                 <td align="center">
-                                    <a href="" ><h3 class="glyphicon glyphicon-compressed"></h3></a>
+                                    <a href=""><h3 class="glyphicon glyphicon-compressed"></h3></a>
                                 </td>
                                 <td align="center">
-                                    <a href="" ><h3 class="glyphicon glyphicon-folder-open"></h3></a>
+                                    <a href=""><h3 class="glyphicon glyphicon-folder-open"></h3></a>
                                 </td>
                             </tr>
                             </tbody>

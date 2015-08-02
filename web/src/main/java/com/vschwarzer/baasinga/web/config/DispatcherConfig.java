@@ -20,4 +20,6 @@ public class DispatcherConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/img/**").addResourceLocations("/WEB-INF/img/");
         registry.addResourceHandler("/fonts/**").addResourceLocations("/WEB-INF/fonts/");
     }
+
+
 }

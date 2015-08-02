@@ -18,7 +18,7 @@ public class Version extends AbstractBaseAuditEntity {
     @Column
     private String description;
 
-    @Column
+    @Column(unique = true)
     private int versionNumber;
 
     @Column(nullable = false, unique = true)

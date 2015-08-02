@@ -10,13 +10,13 @@ import com.vschwarzer.baasinga.domain.model.authentication.User;
  */
 public interface AuthenticationService {
 
-    public boolean isPasswordMatching(String password, String confirmPassword);
+    boolean isPasswordMatching(String password, String confirmPassword);
 
-    public boolean isEmailTaken(String email);
+    boolean isEmailTaken(String email);
 
-    public void createUser(RegisterDTO registerDTO);
+    void createUser(RegisterDTO registerDTO);
 
-    public void changePassword(User user, ChangePasswordDTO changePasswordDTO);
+    void changePassword(User user, ChangePasswordDTO changePasswordDTO);
 
-    public void changeUserDetails(User user, ChangeProfileDTO changeProfileDTO);
+    void changeUserDetails(User user, ChangeProfileDTO changeProfileDTO);
 }

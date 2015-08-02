@@ -46,6 +46,8 @@ public class ApplicationController extends BaseController {
     VersionDAO versionDAO;
     @Autowired
     ApplicationService applicationService;
+    @Autowired
+    DashboardController dashboardController;
 
     public String show(ModelMap model) {
         model.addAttribute("user", getSessionUser());
@@ -64,15 +66,24 @@ public class ApplicationController extends BaseController {
     }
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_Save}, method = RequestMethod.POST)
-    public String processForm(final AppDTO app) {
+    public String processForm(ModelMap model, final AppDTO app) {
 
-        if (app.getId() != null && !app.getId().isEmpty()) {
-            applicationService.updateApplication(app, getSessionUser());
+        if (!applicationService.applicationWithNameAlreadyExists(app.getName(), getSessionUser())) {
+            if (app.getId() != null && !app.getId().isEmpty()) {
+                applicationService.updateApplication(app, getSessionUser());
+                model.addAttribute("content", "dashboard/content");
+                dashboardController.show(model);
+            } else {
+                applicationService.createApplication(app, getSessionUser());
+                dashboardController.show(model);
+            }
         } else {
-            applicationService.createApplication(app, getSessionUser());
+            model.addAttribute("error", "An application with name " + app.getName() + " already exists!");
+            model.addAttribute("app", app);
+            show(model);
         }
 
-        return "redirect:" + Endpoints.Dashboard;
+        return "index/index";
     }
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_AddModel})

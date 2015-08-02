@@ -66,6 +66,7 @@ public class DataGeneratorUtil {
 
         Version version = new Version();
         version.setName("1.0");
+        version.setVersionNumber(1);
         version.setDescription("TestVersion");
         version.setCreatedBy(user);
         versionDAO.create(version);

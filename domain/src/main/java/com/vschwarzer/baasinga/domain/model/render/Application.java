@@ -15,7 +15,7 @@ import java.util.Set;
 @Table(name = "ba_application")
 public class Application extends AbstractBaseAuditEntity{
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(unique = true)

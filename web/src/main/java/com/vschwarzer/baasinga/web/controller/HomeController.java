@@ -45,8 +45,8 @@ public class HomeController extends BaseController {
     @RequestMapping("/generate")
     public String generate(ModelMap model) {
         User user = userDAO.findByEmail("vs@stroodel.com");
-        Application application = applicationDAO.findByUser(user);
-        applicationGenerator.generateApplication(application);
+        //Application application = applicationDAO.findByUser(user);
+        // applicationGenerator.generateApplication(application);
         model.addAttribute("title", "App wurde generiert");
         return "/index/index";
     }
