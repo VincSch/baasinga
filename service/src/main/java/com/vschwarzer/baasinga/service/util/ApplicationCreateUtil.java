@@ -24,7 +24,7 @@ import java.util.*;
 @Transactional
 public class ApplicationCreateUtil extends BaseUtil {
 
-    private final String START_VERSION = "1.0";
+    private final int START_VERSION = 1;
     @Autowired
     AnnotationDAO annotationDAO;
     @Autowired
@@ -43,7 +43,7 @@ public class ApplicationCreateUtil extends BaseUtil {
     ApplicationDAO applicationDAO;
 
     public void createApplication(AppDTO appDTO, User user) {
-        Version version = versionDAO.findByName(START_VERSION);
+        Version version = versionDAO.findByVersionNumber(START_VERSION);
         Application application = new Application();
         application.setUser(user);
         application.setCreatedBy(user);

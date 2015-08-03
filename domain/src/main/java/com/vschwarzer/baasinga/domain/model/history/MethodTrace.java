@@ -1,6 +1,7 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
 import com.vschwarzer.baasinga.domain.model.render.Annotation;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 
@@ -14,7 +15,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ba_method_trace")
-public class MethodTrace extends AbstractBaseAuditEntity {
+public class MethodTrace extends BaseHistoryEntity {
 
     @Column(nullable = false)
     private String name;

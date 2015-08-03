@@ -2,8 +2,10 @@ package com.vschwarzer.baasinga.service.impl;
 
 import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
+import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.domain.model.render.Model;
+import com.vschwarzer.baasinga.repository.history.ApplicationTraceDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.service.ApplicationService;
 import com.vschwarzer.baasinga.service.common.BaseService;
@@ -30,6 +32,9 @@ public class ApplicationServiceImpl extends BaseService implements ApplicationSe
 
     @Autowired
     ApplicationDAO applicationDAO;
+
+    @Autowired
+    ApplicationTraceDAO applicationTraceDAO;
 
 
     @Override
@@ -69,6 +74,11 @@ public class ApplicationServiceImpl extends BaseService implements ApplicationSe
             result = true;
 
         return result;
+    }
+
+    @Override
+    public List<ApplicationTrace> getApplicationHistoryByUser(Long applicationId, User user) {
+        return applicationTraceDAO.getApplicationHistoryByUser(applicationId, user);
     }
 
 }

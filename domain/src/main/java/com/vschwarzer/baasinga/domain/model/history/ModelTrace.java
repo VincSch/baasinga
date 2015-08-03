@@ -1,6 +1,7 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
 import com.vschwarzer.baasinga.domain.model.render.Annotation;
 import com.vschwarzer.baasinga.domain.model.render.Import;
 import com.vschwarzer.baasinga.domain.model.render.Version;
@@ -15,7 +16,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ba_model_trace")
-public class ModelTrace extends AbstractBaseAuditEntity {
+public class ModelTrace extends BaseHistoryEntity {
 
     @Column(nullable = false)
     private String name;
@@ -30,9 +31,6 @@ public class ModelTrace extends AbstractBaseAuditEntity {
             inverseJoinColumns = @JoinColumn(unique = false, name = "annotationId")
     )
     private Set<Annotation> annotations;
-
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private Set<RelationTrace> relations;
 
     @OneToMany(mappedBy = "model", fetch = FetchType.EAGER)
     private Set<AttributeTrace> attributes;
@@ -78,14 +76,6 @@ public class ModelTrace extends AbstractBaseAuditEntity {
 
     public void setAttributes(Set<AttributeTrace> attributes) {
         this.attributes = attributes;
-    }
-
-    public Set<RelationTrace> getRelations() {
-        return relations;
-    }
-
-    public void setRelations(Set<RelationTrace> relations) {
-        this.relations = relations;
     }
 
     public Set<Import> getImports() {

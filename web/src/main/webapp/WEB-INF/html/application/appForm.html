@@ -14,13 +14,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label"><b>Select a version</b></label>
+                    <label class="col-sm-3 control-label"><b>Version</b></label>
 
                     <div class="col-sm-9">
-                        <select class="form-control" th:field="*{version}">
-                            <option th:each="version : ${versions}"
-                                    th:value="${version.id}"
-                                    th:text="${version.name}">[Placeholder]
+                        <select th:field="*{version}" class="form-control">
+                            <option th:value="*{version}"
+                                    th:text="*{version}">[Placeholder]
                             </option>
                         </select>
                     </div>

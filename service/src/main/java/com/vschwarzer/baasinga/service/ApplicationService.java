@@ -2,6 +2,7 @@ package com.vschwarzer.baasinga.service;
 
 import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
+import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ApplicationService {
     Map<String, Integer> getApplicationAndModelCountForUser(User user);
 
     boolean applicationWithNameAlreadyExists(String name, User user);
+
+    List<ApplicationTrace> getApplicationHistoryByUser(Long applicationId, User user);
 }

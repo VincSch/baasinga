@@ -51,7 +51,6 @@ public class ApplicationController extends BaseController {
 
     public String show(ModelMap model) {
         model.addAttribute("user", getSessionUser());
-        model.addAttribute("versions", versionDAO.findAll());
         model.addAttribute("allRelationTypes", requestHelper.relationTypeList());
         model.addAttribute("content", "application/content");
         return "index/index";
@@ -60,6 +59,7 @@ public class ApplicationController extends BaseController {
     @RequestMapping(Endpoints.Application_New)
     public String newApp(ModelMap model) {
         AppDTO app = new AppDTO();
+        app.setVersion("1.0");
         app.getModels().add(new ModelDTO());
         model.addAttribute("app", app);
         return show(model);
@@ -157,9 +157,9 @@ public class ApplicationController extends BaseController {
 
     @RequestMapping(value = {Endpoints.Application_Details}, method = RequestMethod.GET)
     public String details(@PathVariable(value = "appId") final String appId, ModelMap model) {
-        int appIdAsInt = Integer.valueOf(appId);
+        long appIdAsInt = Long.valueOf(appId);
         model.addAttribute("user", getSessionUser());
-        model.addAttribute("applications", applicationDAO.findAll());
+        model.addAttribute("applications", applicationService.getApplicationHistoryByUser(appIdAsInt, getSessionUser()));
         model.addAttribute("content", "application/details/content");
         return "index/index";
     }
