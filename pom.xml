@@ -28,7 +28,7 @@
         <!-- maven war plugin version version -->
         <war.plugin.version>2.6</war.plugin.version>
         <!-- target jdk version -->
-        <jdk.version>1.7</jdk.version>
+        <jdk.version>1.8</jdk.version>
         <!-- release plugin version -->
         <release.plugin.version>2.5.2</release.plugin.version>
     </properties>
