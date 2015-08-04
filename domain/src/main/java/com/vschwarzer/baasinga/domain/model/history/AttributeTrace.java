@@ -5,6 +5,7 @@ import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
 import com.vschwarzer.baasinga.domain.model.common.RelationType;
 import com.vschwarzer.baasinga.domain.model.render.Annotation;
 import com.vschwarzer.baasinga.domain.model.render.Attribute;
+import com.vschwarzer.baasinga.domain.model.render.Model;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
@@ -47,6 +48,10 @@ public class AttributeTrace extends BaseHistoryEntity {
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "modelId", referencedColumnName = "id")
     private ModelTrace model;
+
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "childId", referencedColumnName = "id")
+    private ModelTrace child;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "repositoryId", referencedColumnName = "id")
@@ -106,6 +111,14 @@ public class AttributeTrace extends BaseHistoryEntity {
 
     public void setModel(ModelTrace model) {
         this.model = model;
+    }
+
+    public ModelTrace getChild() {
+        return child;
+    }
+
+    public void setChild(ModelTrace child) {
+        this.child = child;
     }
 
     public RepositoryTrace getRepository() {

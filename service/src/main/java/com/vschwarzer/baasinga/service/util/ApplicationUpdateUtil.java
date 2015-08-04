@@ -42,7 +42,7 @@ public class ApplicationUpdateUtil extends BaseUtil {
         //createModels(appDTO, application, user);
     }
 
-    private void createApplicationTrace(Application application){
+    private void createApplicationTrace(Application application) {
         ApplicationTrace applicationTrace = new ApplicationTrace();
         applicationTrace.setParentId(application.getId());
         applicationTrace.setName(application.getName());
@@ -51,7 +51,8 @@ public class ApplicationUpdateUtil extends BaseUtil {
         applicationTrace.setSecEnabled(application.isSecEnabled());
         applicationTrace.setVersion(application.getVersion());
         applicationTrace.setUser(application.getUser());
-        application.setCreatedBy(application.getUser());
+        applicationTrace.setCreatedBy(application.getUser());
+        applicationTrace.setDescription(application.getDescription());
         applicationTraceDAO.create(applicationTrace);
         LOG.info("ApplicationTrace " + applicationTrace.getName() + " with id=" + applicationTrace.getId() + " has been created!");
     }

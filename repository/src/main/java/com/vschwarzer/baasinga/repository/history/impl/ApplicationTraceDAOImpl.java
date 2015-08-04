@@ -30,7 +30,8 @@ public class ApplicationTraceDAOImpl extends GenericDAOImpl<ApplicationTrace> im
     @Override
     public List<ApplicationTrace> getApplicationHistoryByUser(Long parentId, User user) {
         String queryString = "SELECT appTrace FROM ApplicationTrace appTrace "
-                + "WHERE appTrace.parentId = :parentId";
+                + "WHERE appTrace.parentId = :parentId "
+                + "ORDER BY appTrace.version.versionNumber ASC";
 
         Query query = createQuery(queryString);
         query.setParameter("parentId", parentId);

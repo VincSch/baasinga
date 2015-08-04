@@ -17,10 +17,10 @@ import java.util.Set;
 @Table(name = "ba_application_trace")
 public class ApplicationTrace extends BaseHistoryEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column
     private int port;
 
     @Column(nullable = false)
@@ -28,6 +28,9 @@ public class ApplicationTrace extends BaseHistoryEntity {
 
     @Column(nullable = false)
     private boolean secEnabled;
+
+    @Column(nullable = true)
+    private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
@@ -105,6 +108,14 @@ public class ApplicationTrace extends BaseHistoryEntity {
 
     public void setVersion(Version version) {
         this.version = version;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

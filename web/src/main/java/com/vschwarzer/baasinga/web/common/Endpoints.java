@@ -29,6 +29,7 @@ public final class Endpoints {
     public static final String Application_New = "/application/new";
     public static final String Application_Edit = "/application/{appId}";
     public static final String Application_Details = "/application/details/{appId}";
+    public static final String Application_Details_Param_Show = "show";
 
     public static final String Application_Param_Save = "save";
     public static final String Application_Param_AddModel = "addModel";

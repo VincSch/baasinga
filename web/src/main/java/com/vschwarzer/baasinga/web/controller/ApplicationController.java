@@ -4,6 +4,7 @@ import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
 import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
 import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
 import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by vs on 21.05.15.
@@ -157,10 +160,23 @@ public class ApplicationController extends BaseController {
 
     @RequestMapping(value = {Endpoints.Application_Details}, method = RequestMethod.GET)
     public String details(@PathVariable(value = "appId") final String appId, ModelMap model) {
-        long appIdAsInt = Long.valueOf(appId);
+        long appIdAsLong = Long.valueOf(appId);
         model.addAttribute("user", getSessionUser());
-        model.addAttribute("applications", applicationService.getApplicationHistoryByUser(appIdAsInt, getSessionUser()));
+        Application application = applicationDAO.findByUserAndId(getSessionUser(), appIdAsLong);
+        List<ApplicationTrace> applicationTraces = applicationService.getApplicationHistoryByUser(appIdAsLong, getSessionUser());
+        List<AppDTO> appDTOs = requestHelper.parseToDTO(applicationTraces);
+        AppDTO currentApp = requestHelper.parseToDTO(application);
+        currentApp.setApplicationStatistic(requestHelper.createHistoryStatistic(application, applicationTraces.get(applicationTraces.size() - 1)));
+        appDTOs.add(currentApp);
+        model.addAttribute("applications", appDTOs);
         model.addAttribute("content", "application/details/content");
+        return "index/index";
+    }
+
+    @RequestMapping(value = {Endpoints.Application_Details}, params = {Endpoints.Application_Details_Param_Show})
+    public String detailsShow(@PathVariable(value = "appId") final String appId, ModelMap model) {
+        model.addAttribute("detailApp", true);
+        details(appId, model);
         return "index/index";
     }
 }
