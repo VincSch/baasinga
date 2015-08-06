@@ -4,9 +4,11 @@ import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
 import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
 import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
 import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.dto.common.ApplicationStatisticDTO;
 import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
+import com.vschwarzer.baasinga.repository.history.ApplicationTraceDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.repository.render.VersionDAO;
 import com.vschwarzer.baasinga.service.ApplicationService;
@@ -46,6 +48,8 @@ public class ApplicationController extends BaseController {
     @Autowired
     ApplicationDAO applicationDAO;
     @Autowired
+    ApplicationTraceDAO applicationTraceDAO;
+    @Autowired
     VersionDAO versionDAO;
     @Autowired
     ApplicationService applicationService;
@@ -70,25 +74,19 @@ public class ApplicationController extends BaseController {
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_Save}, method = RequestMethod.POST)
     public String processForm(ModelMap model, final AppDTO app) {
-
         if (app.getId() != null && !app.getId().isEmpty()) {
             applicationService.updateApplication(app, getSessionUser());
             model.addAttribute("success", "Successfuly updated application with name " + app.getName());
-            dashboardController.show(model);
-            return "redirect:/dashboard";
         } else {
             if (!applicationService.applicationWithNameAlreadyExists(app.getName(), getSessionUser())) {
                 applicationService.createApplication(app, getSessionUser());
                 model.addAttribute("success", "Successfuly created application with name " + app.getName());
-                dashboardController.show(model);
             } else {
                 model.addAttribute("error", "An application with name " + app.getName() + " already exists!");
-                model.addAttribute("app", app);
-                show(model);
             }
         }
-
-
+        model.addAttribute("app", app);
+        show(model);
         return "index/index";
     }
 
@@ -163,19 +161,43 @@ public class ApplicationController extends BaseController {
         long appIdAsLong = Long.valueOf(appId);
         model.addAttribute("user", getSessionUser());
         Application application = applicationDAO.findByUserAndId(getSessionUser(), appIdAsLong);
+
         List<ApplicationTrace> applicationTraces = applicationService.getApplicationHistoryByUser(appIdAsLong, getSessionUser());
+        if (applicationTraces == null)
+            applicationTraces = new ArrayList<>();
+
         List<AppDTO> appDTOs = requestHelper.parseToDTO(applicationTraces);
         AppDTO currentApp = requestHelper.parseToDTO(application);
-        currentApp.setApplicationStatistic(requestHelper.createHistoryStatistic(application, applicationTraces.get(applicationTraces.size() - 1)));
-        appDTOs.add(currentApp);
+
+        if (applicationTraces.isEmpty() || applicationTraces == null) {
+            ApplicationStatisticDTO applicationStatisticDTO = new ApplicationStatisticDTO();
+            applicationStatisticDTO.setModelChange("not available");
+        } else {
+            currentApp.setApplicationStatistic(requestHelper.createHistoryStatistic(application, applicationTraces.get(applicationTraces.size() - 1)));
+        }
+        model.addAttribute("originalApp", currentApp);
         model.addAttribute("applications", appDTOs);
         model.addAttribute("content", "application/details/content");
         return "index/index";
     }
 
-    @RequestMapping(value = {Endpoints.Application_Details}, params = {Endpoints.Application_Details_Param_Show})
-    public String detailsShow(@PathVariable(value = "appId") final String appId, ModelMap model) {
-        model.addAttribute("detailApp", true);
+    @RequestMapping(value = {Endpoints.Application_Details_Show_Original}, method = RequestMethod.GET)
+    public String originalDetail(@PathVariable(value = "appId") final String appId,
+                                 @PathVariable(value = "originalId") final String originalId, ModelMap model) {
+
+        long appIdAsLong = Long.valueOf(originalId);
+        Application application = applicationDAO.findByUserAndId(getSessionUser(), appIdAsLong);
+        model.addAttribute("detailApp", requestHelper.parseToDTO(application));
+        details(appId, model);
+        return "index/index";
+    }
+
+    @RequestMapping(value = {Endpoints.Application_Details_Show_History}, method = RequestMethod.GET)
+    public String historyDetail(@PathVariable(value = "appId") final String appId,
+                                @PathVariable(value = "historyId") final String historyId, ModelMap model) {
+        long appIdAsLong = Long.valueOf(historyId);
+        ApplicationTrace application = applicationTraceDAO.findByUserAndId(getSessionUser(), appIdAsLong);
+        model.addAttribute("detailApp", requestHelper.parseToDTO(application));
         details(appId, model);
         return "index/index";
     }

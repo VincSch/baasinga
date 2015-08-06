@@ -2,6 +2,7 @@ package com.vschwarzer.baasinga.repository.history.impl;
 
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
+import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.domain.model.render.Import;
 import com.vschwarzer.baasinga.repository.GenericDAOImpl;
 import com.vschwarzer.baasinga.repository.history.ApplicationTraceDAO;
@@ -36,5 +37,20 @@ public class ApplicationTraceDAOImpl extends GenericDAOImpl<ApplicationTrace> im
         Query query = createQuery(queryString);
         query.setParameter("parentId", parentId);
         return query.getResultList();
+    }
+
+    @Override
+    /**
+     * {@inheritDoc}
+     */
+    public ApplicationTrace findByUserAndId(User user, Long applicationId) {
+        String queryString = "SELECT application FROM ApplicationTrace application "
+                + "WHERE application.user.id = :userId "
+                + "AND application.id = :applicationId";
+
+        Query query = createQuery(queryString);
+        query.setParameter("userId", user.getId());
+        query.setParameter("applicationId", applicationId);
+        return (ApplicationTrace) query.getSingleResult();
     }
 }
