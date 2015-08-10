@@ -182,7 +182,7 @@ public class RequestHelper {
             if (m.equals(model))
                 return String.valueOf(i);
             else
-                i = i++;
+                i = i +1;
         }
         return "-1";
     }

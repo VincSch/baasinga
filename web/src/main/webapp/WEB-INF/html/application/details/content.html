@@ -151,18 +151,36 @@
 
                             <p th:text="'Name: ' + ${detailApp.name}"></p>
 
-                            <p th:text="'Description: ' + ${detailApp.name}"></p>
+                            <p th:text="'Description: ' + ${detailApp.description}"></p>
 
                             <p th:text="'Created: ' + ${detailApp.createdAt}"></p>
                             <h4>Models:</h4>
-
-                            <div th:each="model,modelStat : ${detailApp.models}">
-                                <p th:text="'Name ' + ${model.name}"></p>
-                                <h4>Attributes</h4>
-
-                                <p th:each="attribute,attributeStat : ${model.attributes}"
-                                   th:text="'Name ' + ${attribute.name}"></p>
-                            </div>
+                            <table align="center" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Attributes</th>
+                                    <th>Relations</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="model,modelStat : ${detailApp.models}">
+                                    <td align="center">
+                                        <p th:text="${model.name}"></p>
+                                    </td>
+                                    <td align="center">
+                                        <p th:each="attribute,attributeStat : ${model.attributes}"
+                                           th:text="${attribute.name} + ' '"></p>
+                                    </td>
+                                    <td align="center">
+                                        <div th:each="relation,relationStat : ${model.relations}">
+                                            <p th:text="${relation.relationType} + ' ' + ${detailApp.models[__${relation.child}__].name}"></p>
+                                            <br/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

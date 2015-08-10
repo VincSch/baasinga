@@ -11,7 +11,7 @@
                 </div>
                 <div class="timeline-panel">
                     <div class="timeline-heading">
-                        <a href="#"><h4 class="timeline-title" th:text="'Version ' + ${app.version}"></h4></a>
+                        <a th:href="@{/application/details/{appId}/history/{historyId}/(appId=${originalApp.id}, historyId=${app.id})}"><h4 class="timeline-title" th:text="'Version ' + ${app.version}"></h4></a>
 
                         <p>
                             <small class="text-muted" th:text="${app.createdAt}"><i class="fa fa-clock-o"></i>
