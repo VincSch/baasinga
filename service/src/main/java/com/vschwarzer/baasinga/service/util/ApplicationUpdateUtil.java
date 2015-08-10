@@ -1,15 +1,14 @@
 package com.vschwarzer.baasinga.service.util;
 
 import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
+import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
 import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
 import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
-import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
-import com.vschwarzer.baasinga.domain.model.history.MethodTrace;
-import com.vschwarzer.baasinga.domain.model.history.ModelTrace;
-import com.vschwarzer.baasinga.domain.model.history.RepositoryTrace;
+import com.vschwarzer.baasinga.domain.model.history.*;
 import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.repository.history.ApplicationTraceDAO;
+import com.vschwarzer.baasinga.repository.history.AttributeTraceDAO;
 import com.vschwarzer.baasinga.repository.history.ModelTraceDAO;
 import com.vschwarzer.baasinga.repository.history.RepositoryTraceDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,8 @@ public class ApplicationUpdateUtil extends BaseUtil {
     ModelTraceDAO modelTraceDAO;
     @Autowired
     RepositoryTraceDAO repositoryTraceDAO;
+    @Autowired
+    AttributeTraceDAO attributeTraceDAO;
 
     public void updateApplication(AppDTO appDTO, User user) {
         Version releaseVersion = releaseNewVersion(appDTO, user);
@@ -71,20 +72,31 @@ public class ApplicationUpdateUtil extends BaseUtil {
                 createRepositoryTrace(user, repository, applicationTrace, modelTrace);
             }
 
-//
-//            //Create the Attributes for this Entity/Model
-//            for (AttributeDTO attributeDTO : modelDTO.getAttributes()) {
-//                createAttribute(application, attributeDTO, user, model);
-//            }
+
+            //Update the Attributes for this Entity/Model
+            for (AttributeDTO attributeDTO : modelDTO.getAttributes()) {
+                if (attributeDTO.getId().isEmpty()) {
+                    createAttribute(application, attributeDTO, user, model);
+                } else {
+                    Attribute attribute = attributeDAO.findOne(Long.valueOf(attributeDTO.getId()));
+                    attribute.setName(attributeDTO.getName().toLowerCase());
+                    attribute.setModel(model);
+                    attribute.setCreatedBy(user);
+                    attribute.setVersion(application.getVersion());
+                    attribute.setAttributeType(Attribute.AttributeType.NORMAL);
+                    attributeDAO.update(attribute);
+                    LOG.info("Attribute " + attribute.getName() + " with id=" + attribute.getId() + " has been updated!");
+                    createAttributeTrace(applicationTrace, user, modelTrace, attribute);
+                }
+            }
 
             relationDTOMap.put(model, modelDTO.getRelations());
-//        }
-//
-//        //After all models have been created, create the corresponding relations
-//        createRelations(appDTO, application, user, relationDTOMap);
         }
 
+        //After all models have been updated, create the corresponding relations
+        //createRelations(appDTO, application, user, relationDTOMap);
     }
+
 
     private ApplicationTrace createApplicationTrace(Application application) {
         ApplicationTrace applicationTrace = new ApplicationTrace();
@@ -135,6 +147,19 @@ public class ApplicationUpdateUtil extends BaseUtil {
         repositoryTrace.setApplication(applicationTrace);
         repositoryTraceDAO.create(repositoryTrace);
         return repositoryTrace;
+    }
+
+    private AttributeTrace createAttributeTrace(ApplicationTrace applicationTrace, User user, ModelTrace modelTrace, Attribute attribute) {
+        AttributeTrace attributeTrace = new AttributeTrace();
+        attributeTrace.setName(attribute.getName());
+        attributeTrace.setDataType(attribute.getDataType());
+        attributeTrace.setAttributeType(attribute.getAttributeType());
+        attributeTrace.setModel(modelTrace);
+        attributeTrace.setAnnotations(attribute.getAnnotations());
+        attributeTrace.setVersion(applicationTrace.getVersion());
+        attributeTrace.setCreatedBy(user);
+        attributeTraceDAO.create(attributeTrace);
+        return attributeTrace;
     }
 
 
