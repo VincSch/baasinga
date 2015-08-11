@@ -81,6 +81,7 @@ public class BaseUtil {
         Repository repository;
         repository = (repo == null) ? new Repository() : repo;
         repository.setModel(model);
+        repository.setApplication(application);
         repository.setVersion(application.getVersion());
         repository.setName(model.getName() + "Repository");
         if (repository.getId() == null)
@@ -161,7 +162,7 @@ public class BaseUtil {
         return attribute;
     }
 
-    private Model getChildForRelation(String childId, AppDTO appDTO, Map<Model, List<RelationDTO>> relationDTOMap) {
+    protected Model getChildForRelation(String childId, AppDTO appDTO, Map<Model, List<RelationDTO>> relationDTOMap) {
         String modelName = appDTO.getModels().get(Integer.valueOf(childId)).getName();
         Model resultModel = null;
         for (Map.Entry<Model, List<RelationDTO>> entry : relationDTOMap.entrySet()) {

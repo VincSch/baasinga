@@ -5,6 +5,8 @@ import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
 import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
 import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
+import com.vschwarzer.baasinga.domain.model.common.DomainType;
+import com.vschwarzer.baasinga.domain.model.common.RelationType;
 import com.vschwarzer.baasinga.domain.model.history.*;
 import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.repository.history.ApplicationTraceDAO;
@@ -93,8 +95,96 @@ public class ApplicationUpdateUtil extends BaseUtil {
             relationDTOMap.put(model, modelDTO.getRelations());
         }
 
-        //After all models have been updated, create the corresponding relations
-        //createRelations(appDTO, application, user, relationDTOMap);
+        //After all models have been updated, update the corresponding relations
+        updateRelations(appDTO, application, applicationTrace, user, relationDTOMap);
+    }
+
+    private void updateRelations(AppDTO appDTO, Application application, ApplicationTrace applicationTrace, User user, Map<Model, List<RelationDTO>> relationDTOMap) {
+        for (Map.Entry<Model, List<RelationDTO>> entry : relationDTOMap.entrySet()) {
+            Model model = entry.getKey();
+            List<RelationDTO> relationDTOs = entry.getValue();
+            for (RelationDTO relationDTO : relationDTOs) {
+                if (relationDTO.getId().isEmpty()) {
+                    createRelation(application, appDTO, model, user, relationDTO, relationDTOMap);
+                } else {
+                    Attribute relation = attributeDAO.findOne(Long.valueOf(relationDTO.getId()));
+                    relation.setAttributeType(Attribute.AttributeType.RELATION);
+                    relation.setVersion(application.getVersion());
+                    relation.setModel(model);
+                    relation.setCreatedBy(user);
+                    relation.setRelationType(RelationType.getById(Long.valueOf(relationDTO.getRelationType())));
+                    relation.setDataType(Attribute.DataType.MODEL);
+                    String childId = relationDTO.getChild();
+                    Model childModel = getChildForRelation(childId, appDTO, relationDTOMap);
+
+                    //Relation to other model has been changed
+                    if (!relation.getChild().equals(childModel)) {
+                        Annotation annotation = null;
+
+                        switch (relation.getRelationType()) {
+                            case OneToOne:
+                                annotation = annotationDAO.findByName("@OneToOne");
+                                break;
+                            case OneToMany:
+                                annotation = annotationDAO.findByName("@OneToMany");
+                                break;
+                            case ManyToOne:
+                                annotation = annotationDAO.findByName("@ManyToOne");
+                                break;
+                            case ManyToMany:
+                                annotation = annotationDAO.findByName("@ManyToMany");
+                                break;
+                        }
+
+                        relation.getAnnotations().remove(annotation);
+                        String modelImportPackageToRemove = directoryUtil.getPackage(DomainType.MODEL) + "." + relation.getChild().getName();
+                        Import importToRemove = getOrCreateModelImport(modelImportPackageToRemove, user);
+                        model.getImports().remove(importToRemove);
+
+                        Set<Annotation> annotations = new HashSet<>();
+                        switch (relation.getRelationType()) {
+                            case OneToOne:
+                                relation.setName(childModel.getName().toLowerCase());
+                                annotations.add(annotationDAO.findByName("@OneToOne"));
+                                relation.setAnnotations(annotations);
+                                break;
+                            case OneToMany:
+                                relation.setName((childModel.getName() + "s").toLowerCase());
+                                annotations.add(annotationDAO.findByName("@OneToMany"));
+                                relation.setAnnotations(annotations);
+                                break;
+                            case ManyToOne:
+                                relation.setName(childModel.getName().toLowerCase());
+                                annotations.add(annotationDAO.findByName("@ManyToOne"));
+                                relation.setAnnotations(annotations);
+                                break;
+                            case ManyToMany:
+                                relation.setName((childModel.getName() + "s").toLowerCase());
+                                annotations.add(annotationDAO.findByName("@ManyToMany"));
+                                relation.setAnnotations(annotations);
+                                break;
+                        }
+
+                        String modelImportPackage = directoryUtil.getPackage(DomainType.MODEL) + "." + childModel.getName();
+                        if (model.getImports() == null) {
+                            Set<Import> imports = new HashSet<>();
+                            imports.add(getOrCreateModelImport(modelImportPackage, user));
+                            model.setImports(imports);
+                        } else {
+                            model.getImports().add(getOrCreateModelImport(modelImportPackage, user));
+                        }
+                        relation.setChild(childModel);
+                        attributeDAO.update(relation);
+                        LOG.info("Relation for " + model.getName() + " to " + childModel.getName() + " with type " + relation.getRelationType().name() + " has been created!");
+
+                        ModelTrace owner = modelTraceDAO.findByAppTraceAndModelId(applicationTrace.getId(), relation.getModel().getId());
+                        createAttributeTrace(applicationTrace, user, owner, relation);
+                    }
+                }
+
+            }
+
+        }
     }
 
 
@@ -119,7 +209,7 @@ public class ApplicationUpdateUtil extends BaseUtil {
         modelTrace.setName(model.getName());
         modelTrace.setParentId(model.getId());
         modelTrace.setVersion(applicationTrace.getVersion());
-        modelTrace.setImports(model.getImports());
+        modelTrace.setImports(new HashSet<Import>(model.getImports()));
         modelTrace.setCreatedBy(user);
         modelTraceDAO.create(modelTrace);
         return modelTrace;
@@ -131,11 +221,11 @@ public class ApplicationUpdateUtil extends BaseUtil {
         repositoryTrace.setVersion(applicationTrace.getVersion());
         repositoryTrace.setName(repository.getName());
         repositoryTrace.setCreatedBy(user);
-        repositoryTrace.setImports(repository.getImports());
-        repositoryTrace.setAnnotations(repository.getAnnotations());
+        repositoryTrace.setImports(new HashSet<Import>(repository.getImports()));
+        repositoryTrace.setAnnotations(new HashSet<Annotation>(repository.getAnnotations()));
         repositoryTrace.setModel(modelTrace);
 
-        //TODO parse methods
+        //TODO parse methods, currently methods are not used at all!
 //        Set<MethodTrace> methodTraces = new HashSet<>();
 //        for(Method method : repository.getMethods()){
 //            MethodTrace methodTrace = new MethodTrace();
@@ -154,8 +244,14 @@ public class ApplicationUpdateUtil extends BaseUtil {
         attributeTrace.setName(attribute.getName());
         attributeTrace.setDataType(attribute.getDataType());
         attributeTrace.setAttributeType(attribute.getAttributeType());
+        if (attribute.getAttributeType().equals(Attribute.AttributeType.RELATION)) {
+            //find the model trace for this relation child by the trace app id and original model id
+            ModelTrace child = modelTraceDAO.findByAppTraceAndModelId(applicationTrace.getId(), attribute.getChild().getId());
+            attributeTrace.setChild(child);
+            attributeTrace.setRelationType(attribute.getRelationType());
+        }
         attributeTrace.setModel(modelTrace);
-        attributeTrace.setAnnotations(attribute.getAnnotations());
+        attributeTrace.setAnnotations(new HashSet<Annotation>(attribute.getAnnotations()));
         attributeTrace.setVersion(applicationTrace.getVersion());
         attributeTrace.setCreatedBy(user);
         attributeTraceDAO.create(attributeTrace);
