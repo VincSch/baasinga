@@ -1,6 +1,5 @@
 package com.vschwarzer.baasinga.repository.render.impl;
 
-import com.vschwarzer.baasinga.domain.model.render.Import;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 import com.vschwarzer.baasinga.repository.GenericDAOImpl;
 import com.vschwarzer.baasinga.repository.render.VersionDAO;

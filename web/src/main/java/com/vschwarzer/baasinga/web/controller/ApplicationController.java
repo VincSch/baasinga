@@ -59,6 +59,7 @@ public class ApplicationController extends BaseController {
     public String show(ModelMap model) {
         model.addAttribute("user", getSessionUser());
         model.addAttribute("allRelationTypes", requestHelper.relationTypeList());
+        model.addAttribute("allSecurityRoles", requestHelper.securityRolesList());
         model.addAttribute("content", "application/content");
         return "index/index";
     }
@@ -67,7 +68,7 @@ public class ApplicationController extends BaseController {
     public String newApp(ModelMap model) {
         AppDTO app = new AppDTO();
         app.setVersion("1.0");
-        app.getModels().add(new ModelDTO());
+        //app.getModels().add(new ModelDTO());
         model.addAttribute("app", app);
         return show(model);
     }

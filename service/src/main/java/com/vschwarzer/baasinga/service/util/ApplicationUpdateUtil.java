@@ -174,12 +174,12 @@ public class ApplicationUpdateUtil extends BaseUtil {
                             model.getImports().add(getOrCreateModelImport(modelImportPackage, user));
                         }
                         relation.setChild(childModel);
-                        attributeDAO.update(relation);
-                        LOG.info("Relation for " + model.getName() + " to " + childModel.getName() + " with type " + relation.getRelationType().name() + " has been created!");
-
-                        ModelTrace owner = modelTraceDAO.findByAppTraceAndModelId(applicationTrace.getId(), relation.getModel().getId());
-                        createAttributeTrace(applicationTrace, user, owner, relation);
                     }
+                    attributeDAO.update(relation);
+                    LOG.info("Relation for " + model.getName() + " to " + childModel.getName() + " with type " + relation.getRelationType().name() + " has been created!");
+
+                    ModelTrace owner = modelTraceDAO.findByAppTraceAndModelId(applicationTrace.getId(), relation.getModel().getId());
+                    createAttributeTrace(applicationTrace, user, owner, relation);
                 }
 
             }
@@ -211,6 +211,7 @@ public class ApplicationUpdateUtil extends BaseUtil {
         modelTrace.setVersion(applicationTrace.getVersion());
         modelTrace.setImports(new HashSet<Import>(model.getImports()));
         modelTrace.setCreatedBy(user);
+        modelTrace.setApplication(applicationTrace);
         modelTraceDAO.create(modelTrace);
         return modelTrace;
     }

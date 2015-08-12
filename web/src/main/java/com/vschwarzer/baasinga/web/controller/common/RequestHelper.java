@@ -7,6 +7,7 @@ import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
 import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
 import com.vschwarzer.baasinga.domain.dto.common.ApplicationStatisticDTO;
 import com.vschwarzer.baasinga.domain.model.common.RelationType;
+import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
 import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
 import com.vschwarzer.baasinga.domain.model.history.AttributeTrace;
 import com.vschwarzer.baasinga.domain.model.history.ModelTrace;
@@ -42,6 +43,15 @@ public class RequestHelper {
         relationTypes.add(RelationType.ManyToMany);
 
         return relationTypes;
+    }
+
+    public List<SecurityRoles> securityRolesList() {
+        List<SecurityRoles> securityRoles = new ArrayList<>();
+        securityRoles.add(SecurityRoles.NONE);
+        securityRoles.add(SecurityRoles.USER);
+        securityRoles.add(SecurityRoles.ADMIN);
+
+        return securityRoles;
     }
 
     public AppDTO parseToDTO(Application application) {
@@ -182,7 +192,7 @@ public class RequestHelper {
             if (m.equals(model))
                 return String.valueOf(i);
             else
-                i = i +1;
+                i = i + 1;
         }
         return "-1";
     }

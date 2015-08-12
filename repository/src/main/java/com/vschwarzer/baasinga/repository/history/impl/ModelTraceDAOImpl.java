@@ -1,6 +1,5 @@
 package com.vschwarzer.baasinga.repository.history.impl;
 
-import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
 import com.vschwarzer.baasinga.domain.model.history.ModelTrace;
 import com.vschwarzer.baasinga.repository.GenericDAOImpl;
 import com.vschwarzer.baasinga.repository.history.ModelTraceDAO;

@@ -2,7 +2,6 @@ package com.vschwarzer.baasinga.repository.history;
 
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
-import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.GenericDAO;
 
 import java.util.List;

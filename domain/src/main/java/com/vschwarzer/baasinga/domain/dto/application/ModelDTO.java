@@ -9,8 +9,10 @@ import java.util.List;
 public class ModelDTO extends BaseDTO {
 
     private String name = "";
+    private String securityRoleId = "";
     private List<AttributeDTO> attributes = new ArrayList<>();
     private List<RelationDTO> relations = new ArrayList<>();
+
 
     public String getName() {
         return name;
@@ -18,6 +20,14 @@ public class ModelDTO extends BaseDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSecurityRoleId() {
+        return securityRoleId;
+    }
+
+    public void setSecurityRoleId(String securityRoleId) {
+        this.securityRoleId = securityRoleId;
     }
 
     public List<AttributeDTO> getAttributes() {

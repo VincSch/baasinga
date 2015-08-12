@@ -2,13 +2,10 @@ package com.vschwarzer.baasinga.repository.history.impl;
 
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
-import com.vschwarzer.baasinga.domain.model.render.Application;
-import com.vschwarzer.baasinga.domain.model.render.Import;
 import com.vschwarzer.baasinga.repository.GenericDAOImpl;
 import com.vschwarzer.baasinga.repository.history.ApplicationTraceDAO;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
