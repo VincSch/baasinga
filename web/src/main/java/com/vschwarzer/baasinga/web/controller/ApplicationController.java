@@ -1,9 +1,6 @@
 package com.vschwarzer.baasinga.web.controller;
 
-import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
-import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
-import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
-import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.dto.application.*;
 import com.vschwarzer.baasinga.domain.dto.common.ApplicationStatisticDTO;
 import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
 import com.vschwarzer.baasinga.domain.model.render.Application;
@@ -69,6 +66,7 @@ public class ApplicationController extends BaseController {
         AppDTO app = new AppDTO();
         app.setVersion("1.0");
         //app.getModels().add(new ModelDTO());
+        app.getApplicationUsers().add(new ApplicationUserDTO());
         model.addAttribute("app", app);
         return show(model);
     }
@@ -89,6 +87,14 @@ public class ApplicationController extends BaseController {
         model.addAttribute("app", app);
         show(model);
         return "index/index";
+    }
+
+    @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_AddUser})
+    public String addAPIUser(final AppDTO app, ModelMap model) {
+        ApplicationUserDTO applicationUserDTO = new ApplicationUserDTO();
+        app.getApplicationUsers().add(applicationUserDTO);
+        model.addAttribute("app", app);
+        return show(model);
     }
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_AddModel})

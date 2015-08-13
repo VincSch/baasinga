@@ -40,6 +40,7 @@ public final class Endpoints {
     public static final String Application_Param_RemoveAttribute = "removeAttribute";
     public static final String Application_Param_AddRelation = "addRelation";
     public static final String Application_Param_RemoveRelation = "removeRelation";
+    public static final String Application_Param_AddUser = "addUser";
 
     public static final String Dashboard = "/dashboard";
 

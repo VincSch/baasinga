@@ -21,6 +21,7 @@ public class AppDTO extends BaseDTO {
     private Date updatedAt = null;
     private String description = "";
     private List<ModelDTO> models = new ArrayList<>();
+    private List<ApplicationUserDTO> applicationUsers = new ArrayList<>();
 
     /**
      * Statistics for the history
@@ -118,5 +119,13 @@ public class AppDTO extends BaseDTO {
 
     public void setApplicationStatistic(ApplicationStatisticDTO applicationStatistic) {
         this.applicationStatistic = applicationStatistic;
+    }
+
+    public List<ApplicationUserDTO> getApplicationUsers() {
+        return applicationUsers;
+    }
+
+    public void setApplicationUsers(List<ApplicationUserDTO> applicationUsers) {
+        this.applicationUsers = applicationUsers;
     }
 }
