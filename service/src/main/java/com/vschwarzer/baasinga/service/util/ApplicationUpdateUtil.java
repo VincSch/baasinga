@@ -1,18 +1,13 @@
 package com.vschwarzer.baasinga.service.util;
 
-import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
-import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
-import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
-import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.dto.application.*;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.common.RelationType;
+import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
 import com.vschwarzer.baasinga.domain.model.history.*;
 import com.vschwarzer.baasinga.domain.model.render.*;
-import com.vschwarzer.baasinga.repository.history.ApplicationTraceDAO;
-import com.vschwarzer.baasinga.repository.history.AttributeTraceDAO;
-import com.vschwarzer.baasinga.repository.history.ModelTraceDAO;
-import com.vschwarzer.baasinga.repository.history.RepositoryTraceDAO;
+import com.vschwarzer.baasinga.repository.history.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +29,8 @@ public class ApplicationUpdateUtil extends BaseUtil {
     RepositoryTraceDAO repositoryTraceDAO;
     @Autowired
     AttributeTraceDAO attributeTraceDAO;
+    @Autowired
+    ApplicationUserTraceDAO applicationUserTraceDAO;
 
     public void updateApplication(AppDTO appDTO, User user) {
         Version releaseVersion = releaseNewVersion(appDTO, user);
@@ -47,6 +44,14 @@ public class ApplicationUpdateUtil extends BaseUtil {
         application.setVersion(releaseVersion);
         applicationDAO.update(application);
         LOG.info("Application " + application.getName() + " with id=" + application.getId() + " has been updated!");
+        for (ApplicationUserDTO applicationUserDTO : appDTO.getApplicationUsers()) {
+            if (applicationUserDTO.getId().isEmpty()) {
+                createOrUpdateApiUser(application, applicationUserDTO, user, null);
+            } else {
+                ApplicationUser applicationUser = applicationUserDAO.findOne(Long.valueOf(applicationUserDTO.getId()));
+                createOrUpdateApiUser(application, applicationUserDTO, user, applicationUser);
+            }
+        }
         updateModels(appDTO, application, applicationTrace, user);
     }
 
@@ -65,6 +70,7 @@ public class ApplicationUpdateUtil extends BaseUtil {
                 model.setVersion(application.getVersion());
                 model.setApplication(application);
                 model.setUpdatedBy(user);
+                model.setSecurityRoles(SecurityRoles.getById(Long.valueOf(modelDTO.getSecurityRoleId())));
                 modelDAO.update(model);
                 LOG.info("Model " + model.getName() + " with id=" + model.getId() + " has been updated!");
                 modelTrace = createModelTrace(user, model, applicationTrace);
@@ -200,6 +206,17 @@ public class ApplicationUpdateUtil extends BaseUtil {
         applicationTrace.setCreatedBy(application.getUser());
         applicationTrace.setDescription(application.getDescription());
         applicationTraceDAO.create(applicationTrace);
+        for (ApplicationUser applicationUser : application.getApplicationUsers()) {
+            ApplicationUserTrace applicationUserTrace = new ApplicationUserTrace();
+            applicationUserTrace.setApplication(applicationTrace);
+            applicationUserTrace.setVersion(application.getVersion());
+            applicationUserTrace.setUsername(applicationUser.getUsername());
+            applicationUserTrace.setPassword(applicationUser.getPassword());
+            applicationUserTrace.setSecurityRoles(applicationUser.getSecurityRoles());
+            applicationUserTrace.setCreatedBy(application.getUser());
+            applicationUserTraceDAO.create(applicationUserTrace);
+
+        }
         LOG.info("ApplicationTrace " + applicationTrace.getName() + " with id=" + applicationTrace.getId() + " has been created!");
         return applicationTrace;
     }
@@ -212,6 +229,7 @@ public class ApplicationUpdateUtil extends BaseUtil {
         modelTrace.setImports(new HashSet<Import>(model.getImports()));
         modelTrace.setCreatedBy(user);
         modelTrace.setApplication(applicationTrace);
+        modelTrace.setSecurityRoles(model.getSecurityRoles());
         modelTraceDAO.create(modelTrace);
         return modelTrace;
     }

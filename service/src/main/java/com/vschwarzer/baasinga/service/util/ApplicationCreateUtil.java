@@ -1,9 +1,6 @@
 package com.vschwarzer.baasinga.service.util;
 
-import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
-import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
-import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
-import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.dto.application.*;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.render.*;
 import org.springframework.stereotype.Component;
@@ -33,6 +30,9 @@ public class ApplicationCreateUtil extends BaseUtil {
         application.setPort(getNextAvailablePort());
         applicationDAO.create(application);
         LOG.info("Application " + application.getName() + " with id=" + application.getId() + " has been created!");
+        for (ApplicationUserDTO applicationUserDTO : appDTO.getApplicationUsers()) {
+            createOrUpdateApiUser(application, applicationUserDTO, user, null);
+        }
         createModels(appDTO, application, user);
     }
 

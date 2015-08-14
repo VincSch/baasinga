@@ -79,10 +79,10 @@
         </div>
         <div style="margin-top:20px;" class="row" th:each="user,userStat : *{applicationUsers}">
             <div class="col-sm-12">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="contact-form-wrapper">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="username"><b>User name:</b></label>
+                            <label class="col-sm-3 control-label" for="username"><b>Name:</b></label>
 
                             <div class="col-sm-9">
                                 <input type="text" th:field="*{applicationUsers[__${userStat.index}__].name}"
@@ -94,16 +94,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="contact-form-wrapper">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="password"><b>Password</b></label>
+                            <label class="col-sm-3 control-label" for="password"><b>Password:</b></label>
 
                             <div class="col-sm-9">
                                 <input type="text" th:field="*{applicationUsers[__${userStat.index}__].password}"
                                        placeholder="" id="password" class="form-control"/>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label class="col-sm-3 control-label" for="role"><b>Role:</b></label>
+
+                    <div class="col-sm-9">
+                        <select id="role" th:field="*{applicationUsers[__${userStat.index}__].roleId}"
+                                size="1">
+
+                            <option th:each="role : ${allSecurityRoles}" th:value="${role.id}"
+                                    th:text="${role.name()}"></option>
+
+                        </select>
                     </div>
                 </div>
             </div>

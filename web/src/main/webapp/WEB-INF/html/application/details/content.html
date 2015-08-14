@@ -153,6 +153,8 @@
 
                             <p th:text="'Description: ' + ${detailApp.description}"></p>
 
+                            <p th:text="'Secured: ' + ${detailApp.secEnabled}"></p>
+
                             <p th:text="'Created: ' + ${detailApp.createdAt}"></p>
                             <h4>Models:</h4>
                             <table align="center" class="table table-bordered table-striped">
@@ -161,6 +163,7 @@
                                     <th>Name</th>
                                     <th>Attributes</th>
                                     <th>Relations</th>
+                                    <th>Secured</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -177,6 +180,34 @@
                                             <p th:text="${relation.relationType} + ' ' + ${detailApp.models[__${relation.child}__].name}"></p>
                                             <br/>
                                         </div>
+                                    </td>
+                                    <td align="center">
+                                        <p th:text="${model.getRoleById(model.securityRoleId)}"></p>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>API user:</h4>
+
+                            <table align="center" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Password</th>
+                                    <th>Role</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user,userStat : ${detailApp.applicationUsers}">
+                                    <td align="center">
+                                        <p th:text="${user.name}"></p>
+                                    </td>
+                                    <td align="center">
+                                        <p>*******</p>
+                                    </td>
+                                    <td align="center">
+                                        <p th:text="${user.getRoleById(user.roleId)}"></p>
                                     </td>
                                 </tr>
                                 </tbody>

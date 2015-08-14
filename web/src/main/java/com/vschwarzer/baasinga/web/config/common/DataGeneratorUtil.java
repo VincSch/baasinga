@@ -8,6 +8,7 @@ import com.vschwarzer.baasinga.domain.model.render.Version;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -74,6 +75,7 @@ public class DataGeneratorUtil {
 
         String[] importArray = {
                 "org.springframework.data.repository.CrudRepository",
+                "org.springframework.security.access.prepost.PreAuthorize",
                 "javax.persistence.Entity",
                 "org.springframework.data.rest.core.annotation.RestResource",
                 "javax.persistence.ManyToOne",
@@ -101,7 +103,6 @@ public class DataGeneratorUtil {
         entity.setCreatedBy(user);
         annotationDAO.create(entity);
 
-
         Annotation repository = new Annotation();
         repository.setName("@RestResource");
         repository.setType(DomainType.REPOSITORY);
@@ -110,6 +111,16 @@ public class DataGeneratorUtil {
         repository.setImports(importSet2);
         repository.setCreatedBy(user);
         annotationDAO.create(repository);
+
+        Annotation repositorySec = new Annotation();
+        repositorySec.setName("@PreAuthorize");
+        repositorySec.setValue("(\"hasRole('PLACEHOLDER')\")");
+        repositorySec.setType(DomainType.REPOSITORY);
+        Set<Import> importSet8 = new HashSet<>();
+        importSet8.add(importMap.get("org.springframework.security.access.prepost.PreAuthorize"));
+        repositorySec.setImports(importSet8);
+        repositorySec.setCreatedBy(user);
+        annotationDAO.create(repositorySec);
 
         Annotation manytoone = new Annotation();
         manytoone.setName("@ManyToOne");

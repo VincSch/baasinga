@@ -1,5 +1,7 @@
 package com.vschwarzer.baasinga.domain.dto.application;
 
+import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,4 +47,5 @@ public class ModelDTO extends BaseDTO {
     public void setRelations(List<RelationDTO> relations) {
         this.relations = relations;
     }
+
 }

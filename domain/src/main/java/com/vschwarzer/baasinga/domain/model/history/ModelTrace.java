@@ -2,6 +2,7 @@ package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
+import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
 import com.vschwarzer.baasinga.domain.model.render.Annotation;
 import com.vschwarzer.baasinga.domain.model.render.Import;
 import com.vschwarzer.baasinga.domain.model.render.Version;
@@ -41,6 +42,9 @@ public class ModelTrace extends BaseHistoryEntity {
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
     private Set<Import> imports;
+
+    @Enumerated(EnumType.ORDINAL)
+    private SecurityRoles securityRoles;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -84,6 +88,14 @@ public class ModelTrace extends BaseHistoryEntity {
 
     public void setImports(Set<Import> imports) {
         this.imports = imports;
+    }
+
+    public SecurityRoles getSecurityRoles() {
+        return securityRoles;
+    }
+
+    public void setSecurityRoles(SecurityRoles securityRoles) {
+        this.securityRoles = securityRoles;
     }
 
     public Version getVersion() {

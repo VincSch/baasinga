@@ -1,19 +1,18 @@
-package com.vschwarzer.baasinga.domain.model.render;
+package com.vschwarzer.baasinga.domain.model.history;
 
-import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
-import com.vschwarzer.baasinga.domain.model.common.RelationType;
+import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
 import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
+import com.vschwarzer.baasinga.domain.model.render.*;
+import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
 
 /**
- * Entity class for applications.
- *
- * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
+ * Created by Vincent Schwarzer on 13.08.15.
  */
 @Entity
-@Table(name = "ba_applicationuser")
-public class ApplicationUser extends AbstractBaseAuditEntity {
+@Table(name = "ba_applicationuser_trace")
+public class ApplicationUserTrace extends BaseHistoryEntity {
 
     @Column(nullable = false)
     private String username;
@@ -26,7 +25,7 @@ public class ApplicationUser extends AbstractBaseAuditEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
-    private Application application;
+    private ApplicationTrace application;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -48,20 +47,20 @@ public class ApplicationUser extends AbstractBaseAuditEntity {
         this.password = password;
     }
 
+    public ApplicationTrace getApplication() {
+        return application;
+    }
+
+    public void setApplication(ApplicationTrace application) {
+        this.application = application;
+    }
+
     public SecurityRoles getSecurityRoles() {
         return securityRoles;
     }
 
     public void setSecurityRoles(SecurityRoles securityRoles) {
         this.securityRoles = securityRoles;
-    }
-
-    public Application getApplication() {
-        return application;
-    }
-
-    public void setApplication(Application application) {
-        this.application = application;
     }
 
     public Version getVersion() {

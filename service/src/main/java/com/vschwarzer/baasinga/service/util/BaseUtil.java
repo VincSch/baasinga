@@ -1,13 +1,11 @@
 package com.vschwarzer.baasinga.service.util;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseEntity;
-import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
-import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
-import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
-import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.dto.application.*;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.common.RelationType;
+import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
 import com.vschwarzer.baasinga.domain.model.render.*;
 import com.vschwarzer.baasinga.repository.render.*;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
@@ -42,6 +40,8 @@ public class BaseUtil {
     protected ImportDAO importDAO;
     @Autowired
     protected RepositoryDAO repositoryDAO;
+    @Autowired
+    protected ApplicationUserDAO applicationUserDAO;
 
 
     protected Model createModel(Application application, ModelDTO modelDTO, User user) {
@@ -50,6 +50,7 @@ public class BaseUtil {
         model.setVersion(application.getVersion());
         model.setApplication(application);
         model.setCreatedBy(user);
+        model.setSecurityRoles(SecurityRoles.getById(Long.valueOf(modelDTO.getSecurityRoleId())));
 
         //Set Imports
         Set<Import> imports = new HashSet<>();
@@ -61,6 +62,25 @@ public class BaseUtil {
         modelDAO.create(model);
         LOG.info("Model " + model.getName() + " with id=" + model.getId() + " has been created!");
         return model;
+    }
+
+    protected ApplicationUser createOrUpdateApiUser(Application application, ApplicationUserDTO applicationUserDTO, User user, ApplicationUser apiUser) {
+        ApplicationUser applicationUser;
+        applicationUser = (apiUser == null) ? new ApplicationUser() : apiUser;
+        applicationUser.setUsername(applicationUserDTO.getName());
+        applicationUser.setPassword(applicationUserDTO.getPassword());
+        applicationUser.setVersion(application.getVersion());
+        applicationUser.setApplication(application);
+        applicationUser.setSecurityRoles(SecurityRoles.getById(Long.valueOf(applicationUserDTO.getRoleId())));
+        if (applicationUser.getId() == null) {
+            applicationUser.setCreatedBy(user);
+            applicationUserDAO.create(applicationUser);
+        }
+        {
+            applicationUser.setUpdatedBy(user);
+            applicationUserDAO.update(applicationUser);
+        }
+        return applicationUser;
     }
 
     protected Attribute createAttribute(Application application, AttributeDTO attributeDTO, User user, AbstractBaseEntity entity) {
@@ -78,6 +98,7 @@ public class BaseUtil {
     }
 
     protected void createOrUpdateRepository(Application application, User user, Model model, Repository repo) {
+        Annotation secAnnotation = annotationDAO.findByName("@PreAuthorize");
         Repository repository;
         repository = (repo == null) ? new Repository() : repo;
         repository.setModel(model);
@@ -89,24 +110,30 @@ public class BaseUtil {
         else
             repository.setUpdatedBy(user);
 
-        Set<Annotation> annotations = new HashSet<>();
-
-        if (application.isSecEnabled()) {
-            boolean doSomething = true;
-        } else {
-            annotations.add(annotationDAO.findByName("@RestResource"));
-        }
-
-        String modelImportPackage = directoryUtil.getPackage(DomainType.MODEL) + "." + model.getName();
-        Import modelImport = getOrCreateModelImport(modelImportPackage, user);
-        Set<Import> imports = new HashSet<>();
-        imports.add(modelImport);
-        repository.setImports(imports);
-
         if (repository.getId() == null) {
+            Set<Annotation> annotations = new HashSet<>();
+            if (application.isSecEnabled() && !model.getSecurityRoles().getId().equals(SecurityRoles.NONE.getId())) {
+                annotations.add(secAnnotation);
+            }
+            annotations.add(annotationDAO.findByName("@RestResource"));
+            String modelImportPackage = directoryUtil.getPackage(DomainType.MODEL) + "." + model.getName();
+            Import modelImport = getOrCreateModelImport(modelImportPackage, user);
+            Set<Import> imports = new HashSet<>();
+            imports.add(modelImport);
+            repository.setAnnotations(annotations);
+            repository.setImports(imports);
             repositoryDAO.create(repository);
             LOG.info("Repository " + repository.getName() + " with id=" + repository.getId() + " has been created!");
         } else {
+            if (!application.isSecEnabled() || model.getSecurityRoles().getId().equals(SecurityRoles.NONE.getId())) {
+                if (repository.getAnnotations().contains(secAnnotation))
+                    repository.getAnnotations().remove(secAnnotation);
+            }
+
+            if (application.isSecEnabled() && !model.getSecurityRoles().getId().equals(SecurityRoles.NONE.getId())) {
+                repository.getAnnotations().add(secAnnotation);
+            }
+
             repositoryDAO.update(repository);
             LOG.info("Repository " + repository.getName() + " with id=" + repository.getId() + " has been updated!");
         }

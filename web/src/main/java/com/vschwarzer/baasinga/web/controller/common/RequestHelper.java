@@ -1,17 +1,16 @@
 package com.vschwarzer.baasinga.web.controller.common;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseEntity;
-import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
-import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
-import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
-import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.dto.application.*;
 import com.vschwarzer.baasinga.domain.dto.common.ApplicationStatisticDTO;
 import com.vschwarzer.baasinga.domain.model.common.RelationType;
 import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
 import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
+import com.vschwarzer.baasinga.domain.model.history.ApplicationUserTrace;
 import com.vschwarzer.baasinga.domain.model.history.AttributeTrace;
 import com.vschwarzer.baasinga.domain.model.history.ModelTrace;
 import com.vschwarzer.baasinga.domain.model.render.Application;
+import com.vschwarzer.baasinga.domain.model.render.ApplicationUser;
 import com.vschwarzer.baasinga.domain.model.render.Attribute;
 import com.vschwarzer.baasinga.domain.model.render.Model;
 import org.springframework.stereotype.Component;
@@ -67,11 +66,24 @@ public class RequestHelper {
         appDTO.setPort(String.valueOf(application.getPort()));
         appDTO.setId(application.getId().toString());
 
+        List<ApplicationUserDTO> applicationUsers = new ArrayList<>();
+        for (ApplicationUser appUser : application.getApplicationUsers()) {
+            ApplicationUserDTO applicationUserDTO = new ApplicationUserDTO();
+            applicationUserDTO.setId(appUser.getId().toString());
+            applicationUserDTO.setName(appUser.getUsername());
+            applicationUserDTO.setPassword(appUser.getPassword());
+            applicationUserDTO.setRoleId(String.valueOf(appUser.getSecurityRoles().getId()));
+            applicationUsers.add(applicationUserDTO);
+        }
+
+        appDTO.setApplicationUsers(applicationUsers);
+
         List<ModelDTO> modelDTOs = new ArrayList<>();
         for (Model model : application.getModels()) {
             ModelDTO modelDTO = new ModelDTO();
             modelDTO.setId(model.getId().toString());
             modelDTO.setName(model.getName());
+            modelDTO.setSecurityRoleId(String.valueOf(model.getSecurityRoles().getId()));
 
             List<AttributeDTO> attributeDTOs = new ArrayList<>();
             List<RelationDTO> relationDTOs = new ArrayList<>();
@@ -133,11 +145,23 @@ public class RequestHelper {
         appDTO.setId(applicationTrace.getId().toString());
         appDTO.setParentId(String.valueOf(applicationTrace.getParentId()));
 
+        List<ApplicationUserDTO> applicationUsers = new ArrayList<>();
+        for (ApplicationUserTrace appUser : applicationTrace.getApplicationUsers()) {
+            ApplicationUserDTO applicationUserDTO = new ApplicationUserDTO();
+            applicationUserDTO.setName(appUser.getUsername());
+            applicationUserDTO.setPassword(appUser.getPassword());
+            applicationUserDTO.setRoleId(appUser.getSecurityRoles().getId().toString());
+            applicationUsers.add(applicationUserDTO);
+        }
+
+        appDTO.setApplicationUsers(applicationUsers);
+
         List<ModelDTO> modelDTOs = new ArrayList<>();
         for (ModelTrace modelTrace : applicationTrace.getModels()) {
             ModelDTO modelDTO = new ModelDTO();
             modelDTO.setId(modelTrace.getId().toString());
             modelDTO.setName(modelTrace.getName());
+            modelDTO.setSecurityRoleId(modelTrace.getSecurityRoles().getId().toString());
 
             List<AttributeDTO> attributeDTOs = new ArrayList<>();
             List<RelationDTO> relationDTOs = new ArrayList<>();

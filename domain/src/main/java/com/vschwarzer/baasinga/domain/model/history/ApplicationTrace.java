@@ -3,6 +3,7 @@ package com.vschwarzer.baasinga.domain.model.history;
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
+import com.vschwarzer.baasinga.domain.model.render.ApplicationUser;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
@@ -41,6 +42,9 @@ public class ApplicationTrace extends BaseHistoryEntity {
 
     @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
     private Set<RepositoryTrace> repositories;
+
+    @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
+    private Set<ApplicationUserTrace> applicationUsers;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -116,6 +120,14 @@ public class ApplicationTrace extends BaseHistoryEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<ApplicationUserTrace> getApplicationUsers() {
+        return applicationUsers;
+    }
+
+    public void setApplicationUsers(Set<ApplicationUserTrace> applicationUsers) {
+        this.applicationUsers = applicationUsers;
     }
 }
 
