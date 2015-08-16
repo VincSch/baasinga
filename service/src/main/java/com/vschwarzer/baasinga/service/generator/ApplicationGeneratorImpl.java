@@ -26,7 +26,6 @@ import java.util.Set;
 @Service
 public class ApplicationGeneratorImpl extends BaseService implements ApplicationGenerator {
 
-    private final Logger LOG = LoggerFactory.getLogger(ApplicationGeneratorImpl.class);
     @Autowired
     MavenCompiler mavenCompiler;
     @Autowired
@@ -43,8 +42,7 @@ public class ApplicationGeneratorImpl extends BaseService implements Application
         compileApplication(application);
     }
 
-    @Override
-    public void compileApplication(Application application) {
+    private void compileApplication(Application application) {
         mavenCompiler.cleanInstall(directoryUtil.getMavenRootDir(application));
     }
 
@@ -95,6 +93,11 @@ public class ApplicationGeneratorImpl extends BaseService implements Application
             Map<String, Object> data = new HashMap<String, Object>();
             data.put("package", directoryUtil.getPackage(DomainType.REPOSITORY));
             data.put("imports", gatherRepositoryImports(repository));
+            for (Annotation annotation : repository.getAnnotations()) {
+                if (annotation.getName().equals("@PreAuthorize")) {
+                    annotation.setValue(annotation.getValue().replace("PLACEHOLDER", "ROLE_" + repository.getModel().getSecurityRoles().name()));
+                }
+            }
             data.put("annotations", repository.getAnnotations());
             data.put("interfaceName", repository.getName());
             data.put("modelName", repository.getModel().getName());

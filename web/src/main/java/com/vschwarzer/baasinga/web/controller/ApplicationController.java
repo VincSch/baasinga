@@ -35,8 +35,6 @@ public class ApplicationController extends BaseController {
     @Autowired
     RequestHelper requestHelper;
     @Autowired
-    TemplateRenderer templateRenderer;
-    @Autowired
     MavenCompiler mavenCompiler;
     @Autowired
     ApplicationGenerator applicationGenerator;
@@ -207,6 +205,13 @@ public class ApplicationController extends BaseController {
         model.addAttribute("detailApp", requestHelper.parseToDTO(application));
         details(appId, model);
         return "index/index";
+    }
+
+    @RequestMapping(value = {Endpoints.Application_Download}, method = RequestMethod.GET)
+    public void downloadAsZIP(@PathVariable(value = "appId") final String appId, ModelMap model) {
+        long appIdAsLong = Long.valueOf(appId);
+        Application application = applicationDAO.findOne(appIdAsLong);
+        applicationGenerator.generateApplication(application);
     }
 }
 

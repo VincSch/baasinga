@@ -8,6 +8,4 @@ import com.vschwarzer.baasinga.domain.model.render.Application;
 public interface ApplicationGenerator {
 
     void generateApplication(Application application);
-
-    void compileApplication(Application application);
 }

@@ -83,7 +83,8 @@ public class RequestHelper {
             ModelDTO modelDTO = new ModelDTO();
             modelDTO.setId(model.getId().toString());
             modelDTO.setName(model.getName());
-            modelDTO.setSecurityRoleId(String.valueOf(model.getSecurityRoles().getId()));
+            if (application.isSecEnabled())
+                modelDTO.setSecurityRoleId(String.valueOf(model.getSecurityRoles().getId()));
 
             List<AttributeDTO> attributeDTOs = new ArrayList<>();
             List<RelationDTO> relationDTOs = new ArrayList<>();

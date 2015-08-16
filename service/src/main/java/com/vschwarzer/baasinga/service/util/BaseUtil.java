@@ -50,7 +50,8 @@ public class BaseUtil {
         model.setVersion(application.getVersion());
         model.setApplication(application);
         model.setCreatedBy(user);
-        model.setSecurityRoles(SecurityRoles.getById(Long.valueOf(modelDTO.getSecurityRoleId())));
+        if (application.isSecEnabled())
+            model.setSecurityRoles(SecurityRoles.getById(Long.valueOf(modelDTO.getSecurityRoleId())));
 
         //Set Imports
         Set<Import> imports = new HashSet<>();
@@ -115,10 +116,12 @@ public class BaseUtil {
             if (application.isSecEnabled() && !model.getSecurityRoles().getId().equals(SecurityRoles.NONE.getId())) {
                 annotations.add(secAnnotation);
             }
-            annotations.add(annotationDAO.findByName("@RestResource"));
+            //TODO Seems to be not needed when using spring boot jpa starter
+            //annotations.add(annotationDAO.findByName("@RestResource"));
             String modelImportPackage = directoryUtil.getPackage(DomainType.MODEL) + "." + model.getName();
             Import modelImport = getOrCreateModelImport(modelImportPackage, user);
             Set<Import> imports = new HashSet<>();
+            imports.add(importDAO.findByPackage("org.springframework.data.repository.CrudRepository"));
             imports.add(modelImport);
             repository.setAnnotations(annotations);
             repository.setImports(imports);
