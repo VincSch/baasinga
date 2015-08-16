@@ -78,6 +78,7 @@ public class DataGeneratorUtil {
                 "org.springframework.security.access.prepost.PreAuthorize",
                 "javax.persistence.Entity",
                 "org.springframework.data.rest.core.annotation.RestResource",
+                "java.util.List",
                 "javax.persistence.ManyToOne",
                 "javax.persistence.OneToOne",
                 "javax.persistence.OneToMany",
@@ -145,6 +146,7 @@ public class DataGeneratorUtil {
         onetomany.setType(DomainType.MODEL);
         Set<Import> importSet5 = new HashSet<>();
         importSet5.add(importMap.get("javax.persistence.OneToMany"));
+        importSet5.add(importMap.get("java.util.List"));
         onetomany.setImports(importSet5);
         onetomany.setCreatedBy(user);
         annotationDAO.create(onetomany);
@@ -154,6 +156,7 @@ public class DataGeneratorUtil {
         manytomany.setType(DomainType.MODEL);
         Set<Import> importSet6 = new HashSet<>();
         importSet6.add(importMap.get("javax.persistence.ManyToMany"));
+        importSet6.add(importMap.get("java.util.List"));
         manytomany.setImports(importSet6);
         manytomany.setCreatedBy(user);
         annotationDAO.create(manytomany);

@@ -8,6 +8,9 @@ import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import freemarker.template.TemplateException;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,27 @@ public class ApplicationGeneratorImpl extends BaseService implements Application
         renderEntites(application);
         renderRepositories(application);
         compileApplication(application);
+    }
+
+    @Override
+    public String getJarDownloadURL(Application application) {
+        String appRootDir = directoryUtil.getMavenRootDir(application);
+        String filePath = appRootDir + "/target/" + application.getName() + "-" + application.getVersion().getName() + ".jar";
+        return filePath;
+    }
+
+    @Override
+    public String getSourceDownloadURL(Application application) {
+        //create zip
+        String destinationPath = directoryUtil.getAppRootDir(application) + application.getName() + "-" + application.getVersion().getName() + "-Source.zip";
+        try {
+            ZipFile zipFile = new ZipFile(destinationPath);
+            zipFile.createZipFileFromFolder(directoryUtil.getMavenRootDir(application), new ZipParameters(), false, 0);
+        } catch (ZipException e) {
+            LOG.error("Something went wrong while trying to compress the source folder for application " + application.getName() + "-" + application.getVersion().getName());
+            e.printStackTrace();
+        }
+        return destinationPath;
     }
 
     private void compileApplication(Application application) {

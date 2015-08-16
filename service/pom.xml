@@ -15,8 +15,14 @@
         <baasinga.repository>1.0-SNAPSHOT</baasinga.repository>
         <spring.context>4.1.6.RELEASE</spring.context>
         <slf4j.version>1.7.12</slf4j.version>
+        <zip4j.version>1.3.2</zip4j.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>net.lingala.zip4j</groupId>
+            <artifactId>zip4j</artifactId>
+            <version>${zip4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>

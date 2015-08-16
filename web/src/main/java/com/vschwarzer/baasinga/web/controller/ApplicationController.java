@@ -16,13 +16,17 @@ import com.vschwarzer.baasinga.web.common.Endpoints;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
 import com.vschwarzer.baasinga.web.controller.common.RequestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -207,11 +211,23 @@ public class ApplicationController extends BaseController {
         return "index/index";
     }
 
-    @RequestMapping(value = {Endpoints.Application_Download}, method = RequestMethod.GET)
-    public void downloadAsZIP(@PathVariable(value = "appId") final String appId, ModelMap model) {
+    @RequestMapping(value = {Endpoints.Application_Download_Exe}, method = RequestMethod.GET, produces = "application/java-archive")
+    @ResponseBody
+    public FileSystemResource downloadExe(@Param(value = "appId") final String appId) {
         long appIdAsLong = Long.valueOf(appId);
         Application application = applicationDAO.findOne(appIdAsLong);
         applicationGenerator.generateApplication(application);
+        return new FileSystemResource(new File(applicationGenerator.getJarDownloadURL(application)));
     }
+
+    @RequestMapping(value = {Endpoints.Application_Download_Source}, method = RequestMethod.GET, produces = "application/zip")
+    @ResponseBody
+    public FileSystemResource downloadSource(@Param(value = "appId") final String appId) {
+        long appIdAsLong = Long.valueOf(appId);
+        Application application = applicationDAO.findOne(appIdAsLong);
+        applicationGenerator.generateApplication(application);
+        return new FileSystemResource(new File(applicationGenerator.getSourceDownloadURL(application)));
+    }
+
 }
 

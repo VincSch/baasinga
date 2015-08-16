@@ -41,6 +41,7 @@ public final class Constants {
     public static final String SECURITY_CONFIG_TARGET_FILENAME = "SecurityConfiguration.java";
     public static final String ABSTRACT_ENTITY_TARGET_FILENAME = "AbstractEntity.java";
     public static final String LOG4J_PROPERTIES = "/config/log4j.properties";
+    public static final String APPLICATION_PROPERTIES = "/config/application.properties";
     public static final String POM_TARGET_FILENAME = "pom.xml";
 
     /**

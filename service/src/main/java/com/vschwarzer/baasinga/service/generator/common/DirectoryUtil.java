@@ -21,7 +21,7 @@ public class DirectoryUtil {
     PathConfig pathConfig;
 
     public void createMavenProjectStructure(Application app) throws IOException {
-        String mavenRootDir = pathConfig.outputDir + "/" + app.getName();
+        String mavenRootDir = getMavenRootDir(app);
         String srcMainJavaDir = mavenRootDir + Constants.MVN_JAVA_DIR;
         String srcMainResourceDir = mavenRootDir + Constants.MVN_RESOURCE_DIR;
         String rootPackageDir = srcMainJavaDir + Constants.ROOT_PACKAGE_NAME;
@@ -38,10 +38,15 @@ public class DirectoryUtil {
         File sourceFile = new File(getTemplateDir() + "/" + Constants.LOG4J_PROPERTIES);
         File destFile = new File(getResourceDir(app) + "/" + Constants.LOG4J_PROPERTIES);
         FileUtils.copyFile(sourceFile, destFile);
+
+        //add application properties
+        File sourcePropFile = new File(getTemplateDir() + "/" + Constants.APPLICATION_PROPERTIES);
+        File destPropFile = new File(getResourceDir(app) + "/" + Constants.APPLICATION_PROPERTIES);
+        FileUtils.copyFile(sourcePropFile, destPropFile);
     }
 
     public String getMavenRootDir(Application application) {
-        return pathConfig.outputDir + "/" + application.getName();
+        return pathConfig.outputDir + "/" + application.getId() + "/" + application.getName() + "-" + application.getVersion().getName();
     }
 
     public String getResourceDir(Application application) {
@@ -82,6 +87,10 @@ public class DirectoryUtil {
 
     public String getTemplateDir() {
         return pathConfig.templateRootDir + Constants.TEMPLATE_SUB_DIR;
+    }
+
+    public String getAppRootDir(Application application) {
+        return pathConfig.outputDir + "/" + application.getId() + "/";
     }
 
     private String parseToPackage(String path) {

@@ -122,11 +122,13 @@
                                     <a href=""><img width="25px" height="25px" th:src="@{/img/docker-icon-bw.png}"/></a>
                                 </td>
                                 <td align="center">
-                                    <a th:href="@{/application/download/{appId}/(appId=${originalApp.id})}"><h3
-                                            class="glyphicon glyphicon-compressed"></h3></a>
+                                    <a th:href="@{|/application/download/exe/${originalApp.name}-${originalApp.version}.jar?appId=${originalApp.id}|}">
+                                        <h3
+                                                class="glyphicon glyphicon-compressed"></h3></a>
                                 </td>
                                 <td align="center">
-                                    <a href=""><h3 class="glyphicon glyphicon-folder-open"></h3></a>
+                                    <a th:href="@{|/application/download/source/${originalApp.name}-${originalApp.version}-Source.zip?appId=${originalApp.id}|}">
+                                        <h3 class="glyphicon glyphicon-folder-open"></h3></a>
                                 </td>
                             </tr>
                             </tbody>

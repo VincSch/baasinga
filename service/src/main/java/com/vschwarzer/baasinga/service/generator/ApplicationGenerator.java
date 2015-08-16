@@ -8,4 +8,8 @@ import com.vschwarzer.baasinga.domain.model.render.Application;
 public interface ApplicationGenerator {
 
     void generateApplication(Application application);
+
+    String getJarDownloadURL(Application application);
+
+    String getSourceDownloadURL(Application application);
 }
