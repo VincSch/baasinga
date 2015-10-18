@@ -14,26 +14,25 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label"><b>Select a version</b></label>
+                    <label class="col-sm-3 control-label"><b>Version</b></label>
 
                     <div class="col-sm-9">
-                        <select class="form-control" th:field="*{version}">
-                            <option th:each="version : ${versions}"
-                                    th:value="${version.id}"
-                                    th:text="${version.name}">[Placeholder]
+                        <select th:field="*{version}" class="form-control">
+                            <option th:value="*{version}"
+                                    th:text="*{version}">[Placeholder]
                             </option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" for="secEnabled"><b>Deploy?</b></label>
+                    <label class="col-sm-3 control-label" for="secEnabled"><b>Secure?</b></label>
 
                     <div class="col-sm-9">
                         <input type="checkbox" id="secEnabled" th:field="*{secEnabled}"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" for="cloudEnabled"><b>Secure?</b></label>
+                    <label class="col-sm-3 control-label" for="cloudEnabled"><b>Deploy?</b></label>
 
                     <div class="col-sm-9">
                         <input type="checkbox" id="cloudEnabled" th:field="*{cloudEnabled}"/>
@@ -68,6 +67,61 @@
         <!-- End Create model Info -->
     </div>
 
+    <div th:if="${app.secEnabled}">
+        <br/>
+
+        <h2>Add API Users</h2>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="btn btn-primary btn-lg pull-right" name="addUser" type="submit">Add new user</button>
+            </div>
+        </div>
+        <div style="margin-top:20px;" class="row" th:each="user,userStat : *{applicationUsers}">
+            <div class="col-sm-12">
+                <div class="col-sm-4">
+                    <div class="contact-form-wrapper">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="username"><b>Name:</b></label>
+
+                            <div class="col-sm-9">
+                                <input type="text" th:field="*{applicationUsers[__${userStat.index}__].name}"
+                                       placeholder="" id="username" class="form-control"/>
+                                <input type="hidden" th:field="*{applicationUsers[__${userStat.index}__].id}"
+                                       placeholder=""
+                                       class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="contact-form-wrapper">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="password"><b>Password:</b></label>
+
+                            <div class="col-sm-9">
+                                <input type="text" th:field="*{applicationUsers[__${userStat.index}__].password}"
+                                       placeholder="" id="password" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <label class="col-sm-3 control-label" for="role"><b>Role:</b></label>
+
+                    <div class="col-sm-9">
+                        <select id="role" th:field="*{applicationUsers[__${userStat.index}__].roleId}"
+                                size="1">
+
+                            <option th:each="role : ${allSecurityRoles}" th:value="${role.id}"
+                                    th:text="${role.name()}"></option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div style="margin-top:20px;" class="form-group pull-right">
         <div class="col-sm-12">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

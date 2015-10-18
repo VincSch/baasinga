@@ -1,11 +1,11 @@
 package com.vschwarzer.baasinga.web.controller;
 
-import com.vschwarzer.baasinga.domain.dto.application.AppDTO;
-import com.vschwarzer.baasinga.domain.dto.application.AttributeDTO;
-import com.vschwarzer.baasinga.domain.dto.application.ModelDTO;
-import com.vschwarzer.baasinga.domain.dto.application.RelationDTO;
+import com.vschwarzer.baasinga.domain.dto.application.*;
+import com.vschwarzer.baasinga.domain.dto.common.ApplicationStatisticDTO;
+import com.vschwarzer.baasinga.domain.model.history.ApplicationTrace;
 import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
+import com.vschwarzer.baasinga.repository.history.ApplicationTraceDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.repository.render.VersionDAO;
 import com.vschwarzer.baasinga.service.ApplicationService;
@@ -16,13 +16,19 @@ import com.vschwarzer.baasinga.web.common.Endpoints;
 import com.vschwarzer.baasinga.web.controller.common.BaseController;
 import com.vschwarzer.baasinga.web.controller.common.RequestHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by vs on 21.05.15.
@@ -33,8 +39,6 @@ public class ApplicationController extends BaseController {
     @Autowired
     RequestHelper requestHelper;
     @Autowired
-    TemplateRenderer templateRenderer;
-    @Autowired
     MavenCompiler mavenCompiler;
     @Autowired
     ApplicationGenerator applicationGenerator;
@@ -43,14 +47,18 @@ public class ApplicationController extends BaseController {
     @Autowired
     ApplicationDAO applicationDAO;
     @Autowired
+    ApplicationTraceDAO applicationTraceDAO;
+    @Autowired
     VersionDAO versionDAO;
     @Autowired
     ApplicationService applicationService;
+    @Autowired
+    DashboardController dashboardController;
 
     public String show(ModelMap model) {
         model.addAttribute("user", getSessionUser());
-        model.addAttribute("versions", versionDAO.findAll());
         model.addAttribute("allRelationTypes", requestHelper.relationTypeList());
+        model.addAttribute("allSecurityRoles", requestHelper.securityRolesList());
         model.addAttribute("content", "application/content");
         return "index/index";
     }
@@ -58,21 +66,37 @@ public class ApplicationController extends BaseController {
     @RequestMapping(Endpoints.Application_New)
     public String newApp(ModelMap model) {
         AppDTO app = new AppDTO();
-        app.getModels().add(new ModelDTO());
+        app.setVersion("1.0");
+        //app.getModels().add(new ModelDTO());
+        app.getApplicationUsers().add(new ApplicationUserDTO());
         model.addAttribute("app", app);
         return show(model);
     }
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_Save}, method = RequestMethod.POST)
-    public String processForm(final AppDTO app) {
-
+    public String processForm(ModelMap model, final AppDTO app) {
         if (app.getId() != null && !app.getId().isEmpty()) {
             applicationService.updateApplication(app, getSessionUser());
+            model.addAttribute("success", "Successfuly updated application with name " + app.getName());
         } else {
-            applicationService.createApplication(app, getSessionUser());
+            if (!applicationService.applicationWithNameAlreadyExists(app.getName(), getSessionUser())) {
+                applicationService.createApplication(app, getSessionUser());
+                model.addAttribute("success", "Successfuly created application with name " + app.getName());
+            } else {
+                model.addAttribute("error", "An application with name " + app.getName() + " already exists!");
+            }
         }
+        model.addAttribute("app", app);
+        show(model);
+        return "index/index";
+    }
 
-        return "redirect:" + Endpoints.Dashboard;
+    @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_AddUser})
+    public String addAPIUser(final AppDTO app, ModelMap model) {
+        ApplicationUserDTO applicationUserDTO = new ApplicationUserDTO();
+        app.getApplicationUsers().add(applicationUserDTO);
+        model.addAttribute("app", app);
+        return show(model);
     }
 
     @RequestMapping(value = Endpoints.Application, params = {Endpoints.Application_Param_AddModel})
@@ -143,11 +167,67 @@ public class ApplicationController extends BaseController {
 
     @RequestMapping(value = {Endpoints.Application_Details}, method = RequestMethod.GET)
     public String details(@PathVariable(value = "appId") final String appId, ModelMap model) {
-        int appIdAsInt = Integer.valueOf(appId);
+        long appIdAsLong = Long.valueOf(appId);
         model.addAttribute("user", getSessionUser());
-        model.addAttribute("applications", applicationDAO.findAll());
+        Application application = applicationDAO.findByUserAndId(getSessionUser(), appIdAsLong);
+
+        List<ApplicationTrace> applicationTraces = applicationService.getApplicationHistoryByUser(appIdAsLong, getSessionUser());
+        if (applicationTraces == null)
+            applicationTraces = new ArrayList<>();
+
+        List<AppDTO> appDTOs = requestHelper.parseToDTO(applicationTraces);
+        AppDTO currentApp = requestHelper.parseToDTO(application);
+
+        if (applicationTraces.isEmpty() || applicationTraces == null) {
+            ApplicationStatisticDTO applicationStatisticDTO = new ApplicationStatisticDTO();
+            applicationStatisticDTO.setModelChange("not available");
+        } else {
+            currentApp.setApplicationStatistic(requestHelper.createHistoryStatistic(application, applicationTraces.get(applicationTraces.size() - 1)));
+        }
+        model.addAttribute("originalApp", currentApp);
+        model.addAttribute("applications", appDTOs);
         model.addAttribute("content", "application/details/content");
         return "index/index";
     }
+
+    @RequestMapping(value = {Endpoints.Application_Details_Show_Original}, method = RequestMethod.GET)
+    public String originalDetail(@PathVariable(value = "appId") final String appId,
+                                 @PathVariable(value = "originalId") final String originalId, ModelMap model) {
+
+        long appIdAsLong = Long.valueOf(originalId);
+        Application application = applicationDAO.findByUserAndId(getSessionUser(), appIdAsLong);
+        model.addAttribute("detailApp", requestHelper.parseToDTO(application));
+        details(appId, model);
+        return "index/index";
+    }
+
+    @RequestMapping(value = {Endpoints.Application_Details_Show_History}, method = RequestMethod.GET)
+    public String historyDetail(@PathVariable(value = "appId") final String appId,
+                                @PathVariable(value = "historyId") final String historyId, ModelMap model) {
+        long appIdAsLong = Long.valueOf(historyId);
+        ApplicationTrace application = applicationTraceDAO.findByUserAndId(getSessionUser(), appIdAsLong);
+        model.addAttribute("detailApp", requestHelper.parseToDTO(application));
+        details(appId, model);
+        return "index/index";
+    }
+
+    @RequestMapping(value = {Endpoints.Application_Download_Exe}, method = RequestMethod.GET, produces = "application/java-archive")
+    @ResponseBody
+    public FileSystemResource downloadExe(@Param(value = "appId") final String appId) {
+        long appIdAsLong = Long.valueOf(appId);
+        Application application = applicationDAO.findOne(appIdAsLong);
+        applicationGenerator.generateApplication(application);
+        return new FileSystemResource(new File(applicationGenerator.getJarDownloadURL(application)));
+    }
+
+    @RequestMapping(value = {Endpoints.Application_Download_Source}, method = RequestMethod.GET, produces = "application/zip")
+    @ResponseBody
+    public FileSystemResource downloadSource(@Param(value = "appId") final String appId) {
+        long appIdAsLong = Long.valueOf(appId);
+        Application application = applicationDAO.findOne(appIdAsLong);
+        applicationGenerator.generateApplication(application);
+        return new FileSystemResource(new File(applicationGenerator.getSourceDownloadURL(application)));
+    }
+
 }
 

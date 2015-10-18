@@ -2,11 +2,13 @@ package com.vschwarzer.baasinga.web.config.common;
 
 import com.vschwarzer.baasinga.domain.model.authentication.User;
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
-import com.vschwarzer.baasinga.domain.model.common.RelationType;
-import com.vschwarzer.baasinga.domain.model.render.*;
+import com.vschwarzer.baasinga.domain.model.render.Annotation;
+import com.vschwarzer.baasinga.domain.model.render.Import;
+import com.vschwarzer.baasinga.domain.model.render.Version;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -66,14 +68,17 @@ public class DataGeneratorUtil {
 
         Version version = new Version();
         version.setName("1.0");
+        version.setVersionNumber(1);
         version.setDescription("TestVersion");
         version.setCreatedBy(user);
         versionDAO.create(version);
 
         String[] importArray = {
                 "org.springframework.data.repository.CrudRepository",
+                "org.springframework.security.access.prepost.PreAuthorize",
                 "javax.persistence.Entity",
                 "org.springframework.data.rest.core.annotation.RestResource",
+                "java.util.List",
                 "javax.persistence.ManyToOne",
                 "javax.persistence.OneToOne",
                 "javax.persistence.OneToMany",
@@ -99,7 +104,6 @@ public class DataGeneratorUtil {
         entity.setCreatedBy(user);
         annotationDAO.create(entity);
 
-
         Annotation repository = new Annotation();
         repository.setName("@RestResource");
         repository.setType(DomainType.REPOSITORY);
@@ -108,6 +112,16 @@ public class DataGeneratorUtil {
         repository.setImports(importSet2);
         repository.setCreatedBy(user);
         annotationDAO.create(repository);
+
+        Annotation repositorySec = new Annotation();
+        repositorySec.setName("@PreAuthorize");
+        repositorySec.setValue("(\"hasRole('PLACEHOLDER')\")");
+        repositorySec.setType(DomainType.REPOSITORY);
+        Set<Import> importSet8 = new HashSet<>();
+        importSet8.add(importMap.get("org.springframework.security.access.prepost.PreAuthorize"));
+        repositorySec.setImports(importSet8);
+        repositorySec.setCreatedBy(user);
+        annotationDAO.create(repositorySec);
 
         Annotation manytoone = new Annotation();
         manytoone.setName("@ManyToOne");
@@ -132,6 +146,7 @@ public class DataGeneratorUtil {
         onetomany.setType(DomainType.MODEL);
         Set<Import> importSet5 = new HashSet<>();
         importSet5.add(importMap.get("javax.persistence.OneToMany"));
+        importSet5.add(importMap.get("java.util.List"));
         onetomany.setImports(importSet5);
         onetomany.setCreatedBy(user);
         annotationDAO.create(onetomany);
@@ -141,6 +156,7 @@ public class DataGeneratorUtil {
         manytomany.setType(DomainType.MODEL);
         Set<Import> importSet6 = new HashSet<>();
         importSet6.add(importMap.get("javax.persistence.ManyToMany"));
+        importSet6.add(importMap.get("java.util.List"));
         manytomany.setImports(importSet6);
         manytomany.setCreatedBy(user);
         annotationDAO.create(manytomany);

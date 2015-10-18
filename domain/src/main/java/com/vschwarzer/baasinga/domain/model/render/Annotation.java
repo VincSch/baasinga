@@ -2,7 +2,6 @@ package com.vschwarzer.baasinga.domain.model.render;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
-import com.vschwarzer.baasinga.domain.model.common.RelationType;
 
 import javax.persistence.*;
 import java.util.Set;

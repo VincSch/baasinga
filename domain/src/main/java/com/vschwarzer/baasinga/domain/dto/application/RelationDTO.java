@@ -3,7 +3,7 @@ package com.vschwarzer.baasinga.domain.dto.application;
 /**
  * Created by Vincent Schwarzer on 18.07.15.
  */
-public class RelationDTO extends BaseDTO{
+public class RelationDTO extends BaseDTO {
 
     private String owner = "";
     private String child = "";

@@ -1,7 +1,7 @@
 package com.vschwarzer.baasinga.web.controller;
 
+import com.vschwarzer.baasinga.domain.dto.common.RegisterDTO;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
-import com.vschwarzer.baasinga.domain.model.render.Application;
 import com.vschwarzer.baasinga.repository.authorization.UserDAO;
 import com.vschwarzer.baasinga.repository.render.ApplicationDAO;
 import com.vschwarzer.baasinga.service.generator.ApplicationGenerator;
@@ -36,7 +36,8 @@ public class HomeController extends BaseController {
     @RequestMapping("/")
     public String showHome(ModelMap model) {
         model.addAttribute("user", getSessionUser());
-        model.addAttribute("title", "Prototyp Maven CLI Tests");
+        model.addAttribute("register", new RegisterDTO());
+        model.addAttribute("title", "Welcome, this is a Beta Version");
         model.addAttribute("content", "index/content");
         return "index/index";
     }
@@ -45,8 +46,8 @@ public class HomeController extends BaseController {
     @RequestMapping("/generate")
     public String generate(ModelMap model) {
         User user = userDAO.findByEmail("vs@stroodel.com");
-        Application application = applicationDAO.findByUser(user);
-        applicationGenerator.generateApplication(application);
+        //Application application = applicationDAO.findByUser(user);
+        // applicationGenerator.generateApplication(application);
         model.addAttribute("title", "App wurde generiert");
         return "/index/index";
     }

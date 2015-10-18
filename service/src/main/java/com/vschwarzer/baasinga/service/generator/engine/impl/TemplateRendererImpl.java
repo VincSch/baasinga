@@ -2,7 +2,7 @@ package com.vschwarzer.baasinga.service.generator.engine.impl;
 
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.Application;
-import com.vschwarzer.baasinga.service.common.AbstractService;
+import com.vschwarzer.baasinga.service.common.BaseService;
 import com.vschwarzer.baasinga.service.generator.common.Constants;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import com.vschwarzer.baasinga.service.generator.config.PathConfig;
@@ -24,7 +24,7 @@ import java.util.Map;
  * Created by Vincent Schwarzer on 19.06.15.
  */
 @Service
-public class TemplateRendererImpl extends AbstractService implements TemplateRenderer {
+public class TemplateRendererImpl extends BaseService implements TemplateRenderer {
 
     @Autowired
     PathConfig pathConfig;
@@ -48,8 +48,9 @@ public class TemplateRendererImpl extends AbstractService implements TemplateRen
         render(Constants.APP_CONFIG_TEMPLATE, data, appConfigOutputPath);
 
         data.put("package", directoryUtil.getRootPackage());
-        String webInitOutputPath = directoryUtil.getApiBaseDir(application) + "/" + Constants.WEBAPP_INITIALIZER_TARGET_FILENAME;
-        render(Constants.WEBAPP_INITIALIZER_TEMPLATE, data, webInitOutputPath);
+        data.put("users", application.getApplicationUsers());
+        String webInitOutputPath = directoryUtil.getApiBaseDir(application) + "/" + Constants.SECURITY_CONFIG_TARGET_FILENAME;
+        render(Constants.SECURITY_CONFIG_TEMPLATE, data, webInitOutputPath);
 
         Map<String, Object> abstractEntityData = new HashMap<String, Object>();
         abstractEntityData.put("package", directoryUtil.getPackage(DomainType.MODEL));
@@ -64,18 +65,12 @@ public class TemplateRendererImpl extends AbstractService implements TemplateRen
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("appName", application.getName());
         data.put("appVersion", application.getVersion().getName());
-        data.put("hibernate", Constants.HIBERNATE_VERSION);
-        data.put("springframework", Constants.SPRING_FW_VERSION);
-        data.put("springdatajpa", Constants.SPRING_DATA_JPA_VERSION);
-        data.put("hsqldb", Constants.HSQLDB_VERSION);
-        data.put("springdatawebmvc", Constants.SPRING_MVC_VERSION);
-        data.put("servlet", Constants.SERVLET_VERSION);
-        data.put("slf4j", Constants.SL4J_VERSION);
-        data.put("logback", Constants.LOGBACK_VERSION);
-        data.put("mavencompiler", Constants.MAVEN_COMPILER_VERSION);
+        data.put("packagingType", Constants.PACKAGING_TYPE);
+        data.put("springframeworkSecurity", Constants.SPRING_SEC_VERSION);
+        data.put("springBootStarterParent", Constants.SPRING_BOOT_STARTER_PARENT);
+        data.put("h2Version", Constants.H2_DB_VERSION);
+        data.put("springBootPluginVersion", Constants.MAVEN_SPRING_BOOT_PLUGIN_VERSION);
         data.put("jdkversion", Constants.TARGET_JDK_VERSION);
-        data.put("warplugin", Constants.MAVEN_WAR_PLUGIN_VERSION);
-
         String outputPath = directoryUtil.getMavenRootDir(application) + "/" + Constants.POM_TARGET_FILENAME;
         render(Constants.POM_TEMPLATE, data, outputPath);
         return true;

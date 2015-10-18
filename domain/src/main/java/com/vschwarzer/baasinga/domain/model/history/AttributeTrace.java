@@ -1,8 +1,11 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
+import com.vschwarzer.baasinga.domain.model.common.RelationType;
 import com.vschwarzer.baasinga.domain.model.render.Annotation;
 import com.vschwarzer.baasinga.domain.model.render.Attribute;
+import com.vschwarzer.baasinga.domain.model.render.Model;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
@@ -15,7 +18,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ba_attribute_trace")
-public class AttributeTrace extends AbstractBaseAuditEntity {
+public class AttributeTrace extends BaseHistoryEntity {
 
     @Column(nullable = false)
     private String name;
@@ -23,6 +26,13 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private Attribute.DataType dataType;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private Attribute.AttributeType attributeType;
+
+    @Enumerated(EnumType.ORDINAL)
+    private RelationType relationType;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_attribute_annotation_trace",
@@ -38,6 +48,10 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "modelId", referencedColumnName = "id")
     private ModelTrace model;
+
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "childId", referencedColumnName = "id")
+    private ModelTrace child;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "repositoryId", referencedColumnName = "id")
@@ -57,6 +71,22 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
 
     public void setDataType(Attribute.DataType dataType) {
         this.dataType = dataType;
+    }
+
+    public Attribute.AttributeType getAttributeType() {
+        return attributeType;
+    }
+
+    public void setAttributeType(Attribute.AttributeType attributeType) {
+        this.attributeType = attributeType;
+    }
+
+    public RelationType getRelationType() {
+        return relationType;
+    }
+
+    public void setRelationType(RelationType relationType) {
+        this.relationType = relationType;
     }
 
     public Set<Annotation> getAnnotations() {
@@ -81,6 +111,14 @@ public class AttributeTrace extends AbstractBaseAuditEntity {
 
     public void setModel(ModelTrace model) {
         this.model = model;
+    }
+
+    public ModelTrace getChild() {
+        return child;
+    }
+
+    public void setChild(ModelTrace child) {
+        this.child = child;
     }
 
     public RepositoryTrace getRepository() {

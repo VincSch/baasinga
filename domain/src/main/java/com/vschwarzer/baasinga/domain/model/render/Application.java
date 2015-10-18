@@ -13,9 +13,9 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ba_application")
-public class Application extends AbstractBaseAuditEntity{
+public class Application extends AbstractBaseAuditEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(unique = true)
@@ -34,10 +34,13 @@ public class Application extends AbstractBaseAuditEntity{
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy="application", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
     private Set<Model> models;
 
-    @OneToMany(mappedBy="application", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
+    private Set<ApplicationUser> applicationUsers;
+
+    @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
     private Set<Repository> repositories;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -98,6 +101,14 @@ public class Application extends AbstractBaseAuditEntity{
 
     public void setModels(Set<Model> models) {
         this.models = models;
+    }
+
+    public Set<ApplicationUser> getApplicationUsers() {
+        return applicationUsers;
+    }
+
+    public void setApplicationUsers(Set<ApplicationUser> applicationUsers) {
+        this.applicationUsers = applicationUsers;
     }
 
     public Set<Repository> getRepositories() {

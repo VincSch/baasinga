@@ -19,7 +19,7 @@ public class ProfileController extends BaseController {
     @Autowired
     AuthenticationService authenticationService;
 
-    @RequestMapping("/profile")
+    @RequestMapping(value = Endpoints.Profile)
     public String profile(ModelMap model) {
         ChangeProfileDTO changeProfileDTO = new ChangeProfileDTO();
         changeProfileDTO.setEmail(getSessionUser().getUsername());

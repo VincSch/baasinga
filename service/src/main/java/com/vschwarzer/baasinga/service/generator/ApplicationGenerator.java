@@ -9,5 +9,7 @@ public interface ApplicationGenerator {
 
     void generateApplication(Application application);
 
-    void compileApplication(Application application);
+    String getJarDownloadURL(Application application);
+
+    String getSourceDownloadURL(Application application);
 }

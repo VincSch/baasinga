@@ -17,4 +17,13 @@ public interface RepositoryDAO extends GenericDAO<Repository> {
      * @return repository
      */
     public Repository findByName(String name);
+
+    /**
+     * Find an repository by its name
+     *
+     * @param appId   application id
+     * @param modelId model id
+     * @return repository or null
+     */
+    public Repository findByAppAndModel(Long appId, Long modelId);
 }

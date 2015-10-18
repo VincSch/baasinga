@@ -3,7 +3,7 @@ package com.vschwarzer.baasinga.domain.dto.application;
 /**
  * Created by Vincent Schwarzer on 08.07.15.
  */
-public class AttributeDTO extends BaseDTO{
+public class AttributeDTO extends BaseDTO {
 
     private String name = "";
 

@@ -6,6 +6,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Vincent Schwarzer on 19.06.15.
  */
-public class AbstractService {
+public class BaseService {
     protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
 }

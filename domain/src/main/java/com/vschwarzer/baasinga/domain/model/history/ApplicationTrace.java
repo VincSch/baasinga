@@ -1,7 +1,9 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
 import com.vschwarzer.baasinga.domain.model.authentication.User;
+import com.vschwarzer.baasinga.domain.model.render.ApplicationUser;
 import com.vschwarzer.baasinga.domain.model.render.Version;
 
 import javax.persistence.*;
@@ -14,13 +16,12 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ba_application_trace")
-public class ApplicationTrace extends AbstractBaseAuditEntity {
+public class ApplicationTrace extends BaseHistoryEntity {
 
-
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
-    @Column(unique = true)
+    @Column
     private int port;
 
     @Column(nullable = false)
@@ -28,6 +29,9 @@ public class ApplicationTrace extends AbstractBaseAuditEntity {
 
     @Column(nullable = false)
     private boolean secEnabled;
+
+    @Column(nullable = true)
+    private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
@@ -38,6 +42,9 @@ public class ApplicationTrace extends AbstractBaseAuditEntity {
 
     @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
     private Set<RepositoryTrace> repositories;
+
+    @OneToMany(mappedBy = "application", fetch = FetchType.EAGER)
+    private Set<ApplicationUserTrace> applicationUsers;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -105,6 +112,22 @@ public class ApplicationTrace extends AbstractBaseAuditEntity {
 
     public void setVersion(Version version) {
         this.version = version;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<ApplicationUserTrace> getApplicationUsers() {
+        return applicationUsers;
+    }
+
+    public void setApplicationUsers(Set<ApplicationUserTrace> applicationUsers) {
+        this.applicationUsers = applicationUsers;
     }
 }
 

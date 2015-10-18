@@ -1,6 +1,8 @@
 package com.vschwarzer.baasinga.domain.model.history;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import com.vschwarzer.baasinga.domain.BaseHistoryEntity;
+import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
 import com.vschwarzer.baasinga.domain.model.render.Annotation;
 import com.vschwarzer.baasinga.domain.model.render.Import;
 import com.vschwarzer.baasinga.domain.model.render.Version;
@@ -15,7 +17,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ba_model_trace")
-public class ModelTrace extends AbstractBaseAuditEntity {
+public class ModelTrace extends BaseHistoryEntity {
 
     @Column(nullable = false)
     private String name;
@@ -31,9 +33,6 @@ public class ModelTrace extends AbstractBaseAuditEntity {
     )
     private Set<Annotation> annotations;
 
-    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
-    private Set<RelationTrace> relations;
-
     @OneToMany(mappedBy = "model", fetch = FetchType.EAGER)
     private Set<AttributeTrace> attributes;
 
@@ -43,6 +42,9 @@ public class ModelTrace extends AbstractBaseAuditEntity {
             inverseJoinColumns = @JoinColumn(unique = false, name = "importId")
     )
     private Set<Import> imports;
+
+    @Enumerated(EnumType.ORDINAL)
+    private SecurityRoles securityRoles;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "versionId", referencedColumnName = "id")
@@ -80,20 +82,20 @@ public class ModelTrace extends AbstractBaseAuditEntity {
         this.attributes = attributes;
     }
 
-    public Set<RelationTrace> getRelations() {
-        return relations;
-    }
-
-    public void setRelations(Set<RelationTrace> relations) {
-        this.relations = relations;
-    }
-
     public Set<Import> getImports() {
         return imports;
     }
 
     public void setImports(Set<Import> imports) {
         this.imports = imports;
+    }
+
+    public SecurityRoles getSecurityRoles() {
+        return securityRoles;
+    }
+
+    public void setSecurityRoles(SecurityRoles securityRoles) {
+        this.securityRoles = securityRoles;
     }
 
     public Version getVersion() {

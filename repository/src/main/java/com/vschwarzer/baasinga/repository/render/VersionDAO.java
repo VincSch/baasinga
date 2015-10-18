@@ -17,4 +17,12 @@ public interface VersionDAO extends GenericDAO<Version> {
      * @return version
      */
     public Version findByName(String name);
+
+    /**
+     * Find an version by its number
+     *
+     * @param number version number
+     * @return version
+     */
+    public Version findByVersionNumber(int number);
 }

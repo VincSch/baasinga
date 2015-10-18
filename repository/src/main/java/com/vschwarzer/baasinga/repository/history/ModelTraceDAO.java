@@ -9,4 +9,6 @@ import com.vschwarzer.baasinga.repository.GenericDAO;
  * @author <a href="mailto:vs@stroodel.com">Vincent Schwarzer</a>
  */
 public interface ModelTraceDAO extends GenericDAO<ModelTrace> {
+
+    ModelTrace findByAppTraceAndModelId(Long appTraceId, Long modelId);
 }

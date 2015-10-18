@@ -1,24 +1,44 @@
 package com.vschwarzer.baasinga.domain.dto.application;
 
+import com.vschwarzer.baasinga.domain.dto.common.ApplicationStatisticDTO;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Vincent Schwarzer on 08.07.15.
  */
-public class AppDTO extends BaseDTO{
+public class AppDTO extends BaseDTO {
 
-    public AppDTO() {
-
-    }
-
+    private String parentId = "";
     private String name = "";
     private String port = "";
     private String version = "";
     private Boolean cloudEnabled = false;
     private Boolean secEnabled = false;
+    private Date createdAt = null;
+    private Date updatedAt = null;
     private String description = "";
     private List<ModelDTO> models = new ArrayList<>();
+    private List<ApplicationUserDTO> applicationUsers = new ArrayList<>();
+
+    /**
+     * Statistics for the history
+     */
+    private ApplicationStatisticDTO applicationStatistic = new ApplicationStatisticDTO();
+
+    public AppDTO() {
+
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     public String getName() {
         return name;
@@ -74,5 +94,38 @@ public class AppDTO extends BaseDTO{
 
     public void setModels(List<ModelDTO> models) {
         this.models = models;
+    }
+
+    public Date getCreatedAt() {
+
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public ApplicationStatisticDTO getApplicationStatistic() {
+        return applicationStatistic;
+    }
+
+    public void setApplicationStatistic(ApplicationStatisticDTO applicationStatistic) {
+        this.applicationStatistic = applicationStatistic;
+    }
+
+    public List<ApplicationUserDTO> getApplicationUsers() {
+        return applicationUsers;
+    }
+
+    public void setApplicationUsers(List<ApplicationUserDTO> applicationUsers) {
+        this.applicationUsers = applicationUsers;
     }
 }

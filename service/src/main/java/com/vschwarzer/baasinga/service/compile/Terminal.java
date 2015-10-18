@@ -17,10 +17,10 @@ import java.io.InputStreamReader;
 public class Terminal {
     private final Logger LOG = LoggerFactory.getLogger(Terminal.class);
 
-    public void mvnCleanInstall(String path){
-        String gitClone =  "git clone git@vschwarzer.com:/home/git/baasinga.git";
-        String [] cmds = {"cleanInstall clean install"};
-        String [] env = {"MVN_HOME"};
+    public void mvnCleanInstall(String path) {
+        String gitClone = "git clone git@vschwarzer.com:/home/git/baasinga.git";
+        String[] cmds = {"cleanInstall clean install"};
+        String[] env = {"MVN_HOME"};
         Process p = null;
         try {
             p = Runtime.getRuntime().exec(cmds, env, new File(path));
@@ -36,7 +36,7 @@ public class Terminal {
 
         String line = "";
         try {
-            while ((line = reader.readLine())!= null) {
+            while ((line = reader.readLine()) != null) {
                 LOG.info(line);
             }
         } catch (IOException e) {

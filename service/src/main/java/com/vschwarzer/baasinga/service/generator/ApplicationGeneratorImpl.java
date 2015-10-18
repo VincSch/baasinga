@@ -2,12 +2,15 @@ package com.vschwarzer.baasinga.service.generator;
 
 import com.vschwarzer.baasinga.domain.model.common.DomainType;
 import com.vschwarzer.baasinga.domain.model.render.*;
-import com.vschwarzer.baasinga.service.common.AbstractService;
+import com.vschwarzer.baasinga.service.common.BaseService;
 import com.vschwarzer.baasinga.service.generator.common.Constants;
 import com.vschwarzer.baasinga.service.generator.common.DirectoryUtil;
 import com.vschwarzer.baasinga.service.generator.engine.TemplateRenderer;
 import com.vschwarzer.baasinga.service.generator.mvn.MavenCompiler;
 import freemarker.template.TemplateException;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +27,14 @@ import java.util.Set;
  * Generator entry point
  */
 @Service
-public class ApplicationGeneratorImpl extends AbstractService implements ApplicationGenerator {
+public class ApplicationGeneratorImpl extends BaseService implements ApplicationGenerator {
 
-    private final Logger LOG = LoggerFactory.getLogger(ApplicationGeneratorImpl.class);
-
+    @Autowired
+    MavenCompiler mavenCompiler;
     @Autowired
     private DirectoryUtil directoryUtil;
     @Autowired
     private TemplateRenderer templateRenderer;
-    @Autowired
-    MavenCompiler mavenCompiler;
 
     @Override
     public void generateApplication(Application application) {
@@ -45,7 +46,27 @@ public class ApplicationGeneratorImpl extends AbstractService implements Applica
     }
 
     @Override
-    public void compileApplication(Application application) {
+    public String getJarDownloadURL(Application application) {
+        String appRootDir = directoryUtil.getMavenRootDir(application);
+        String filePath = appRootDir + "/target/" + application.getName() + "-" + application.getVersion().getName() + ".jar";
+        return filePath;
+    }
+
+    @Override
+    public String getSourceDownloadURL(Application application) {
+        //create zip
+        String destinationPath = directoryUtil.getAppRootDir(application) + application.getName() + "-" + application.getVersion().getName() + "-Source.zip";
+        try {
+            ZipFile zipFile = new ZipFile(destinationPath);
+            zipFile.createZipFileFromFolder(directoryUtil.getMavenRootDir(application), new ZipParameters(), false, 0);
+        } catch (ZipException e) {
+            LOG.error("Something went wrong while trying to compress the source folder for application " + application.getName() + "-" + application.getVersion().getName());
+            e.printStackTrace();
+        }
+        return destinationPath;
+    }
+
+    private void compileApplication(Application application) {
         mavenCompiler.cleanInstall(directoryUtil.getMavenRootDir(application));
     }
 
@@ -96,6 +117,11 @@ public class ApplicationGeneratorImpl extends AbstractService implements Applica
             Map<String, Object> data = new HashMap<String, Object>();
             data.put("package", directoryUtil.getPackage(DomainType.REPOSITORY));
             data.put("imports", gatherRepositoryImports(repository));
+            for (Annotation annotation : repository.getAnnotations()) {
+                if (annotation.getName().equals("@PreAuthorize")) {
+                    annotation.setValue(annotation.getValue().replace("PLACEHOLDER", "ROLE_" + repository.getModel().getSecurityRoles().name()));
+                }
+            }
             data.put("annotations", repository.getAnnotations());
             data.put("interfaceName", repository.getName());
             data.put("modelName", repository.getModel().getName());

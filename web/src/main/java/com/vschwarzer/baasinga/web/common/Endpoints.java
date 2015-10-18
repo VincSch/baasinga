@@ -29,6 +29,10 @@ public final class Endpoints {
     public static final String Application_New = "/application/new";
     public static final String Application_Edit = "/application/{appId}";
     public static final String Application_Details = "/application/details/{appId}";
+    public static final String Application_Details_Show_Original = "/application/details/{appId}/original/{originalId}";
+    public static final String Application_Details_Show_History = "/application/details/{appId}/history/{historyId}";
+    public static final String Application_Download_Exe = "/application/download/exe/{filename}";
+    public static final String Application_Download_Source = "/application/download/source/{filename}";
 
     public static final String Application_Param_Save = "save";
     public static final String Application_Param_AddModel = "addModel";
@@ -38,6 +42,7 @@ public final class Endpoints {
     public static final String Application_Param_RemoveAttribute = "removeAttribute";
     public static final String Application_Param_AddRelation = "addRelation";
     public static final String Application_Param_RemoveRelation = "removeRelation";
+    public static final String Application_Param_AddUser = "addUser";
 
     public static final String Dashboard = "/dashboard";
 

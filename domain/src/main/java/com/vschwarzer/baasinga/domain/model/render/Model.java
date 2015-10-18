@@ -1,6 +1,8 @@
 package com.vschwarzer.baasinga.domain.model.render;
 
 import com.vschwarzer.baasinga.domain.AbstractBaseAuditEntity;
+import com.vschwarzer.baasinga.domain.model.common.RelationType;
+import com.vschwarzer.baasinga.domain.model.common.SecurityRoles;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -12,14 +14,17 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "ba_model")
-public class Model extends AbstractBaseAuditEntity{
+public class Model extends AbstractBaseAuditEntity {
 
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "applicationId", referencedColumnName = "id")
     private Application application;
+
+    @Enumerated(EnumType.ORDINAL)
+    private SecurityRoles securityRoles;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ba_model_annotation",
@@ -28,7 +33,7 @@ public class Model extends AbstractBaseAuditEntity{
     )
     private Set<Annotation> annotations;
 
-    @OneToMany(mappedBy="model", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "model", fetch = FetchType.EAGER)
     private Set<Attribute> attributes;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -48,6 +53,14 @@ public class Model extends AbstractBaseAuditEntity{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public SecurityRoles getSecurityRoles() {
+        return securityRoles;
+    }
+
+    public void setSecurityRoles(SecurityRoles securityRoles) {
+        this.securityRoles = securityRoles;
     }
 
     public Application getApplication() {

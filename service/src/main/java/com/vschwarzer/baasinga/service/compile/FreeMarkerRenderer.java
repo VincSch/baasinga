@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class FreeMarkerRenderer {
 
-    public void renderClass(String pathToTemplate){
+    public void renderClass(String pathToTemplate) {
         //Freemarker configuration object
         Configuration cfg = new Configuration();
         try {
