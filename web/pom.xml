@@ -22,7 +22,7 @@
         <!-- Spring related version -->
         <springframework.version>4.1.6.RELEASE</springframework.version>
         <hsqldb.version>2.3.2</hsqldb.version>
-        <spring-data-jpa.version>1.8.0.RELEASE</spring-data-jpa.version>
+        <spring-data-jpa.version>1.11.23.RELEASE</spring-data-jpa.version>
     </properties>
     <dependencies>
         <dependency>
