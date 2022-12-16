@@ -13,7 +13,7 @@
     <name>Baasinga Web Artifact</name>
 
     <properties>
-        <spring.web.version>4.1.6.RELEASE</spring.web.version>
+        <spring.web.version>5.2.20.RELEASE</spring.web.version>
         <baasinga.service>1.0-SNAPSHOT</baasinga.service>
         <thymeleaf>2.1.4.RELEASE</thymeleaf>
         <servlet-api>3.1.0</servlet-api>
